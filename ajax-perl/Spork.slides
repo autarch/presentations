@@ -1,10 +1,201 @@
 ----
 images_directory: /home/autarch/presentations/ajax-perl/images
-banner_bgcolor: #FFBB33
+banner_bgcolor: #33BBFF
 presentation_topic: Ajax and Perl
-presentation_title: Ajax and Perl Stuff
+presentation_title: Ajax and Perl
 presentation_place: Minneapolis, MN
 presentation_date: October 12, 2005
 ----
-foo
+{image: http://www.wholesalewarehousesupply.com/images/240/CCPC6494.JPG}
+
+== Clean your website
+
+* No, wait, that's wrong ...
+
 ----
+{image: http://www.talariaenterprises.com/images/3491.jpg}
+
+== A well-known Greek hero
+
+* Suitor of Helen of Troy
+* Struck mad by the Athena and committed suicide
++* An analogy for development?
+
+----
+{image: http://www.chinfo.navy.mil/navpalib/images/fire-excel.gif}
+
+== But seriously ...
+
+* Cannot fill up a lightning talk on bad jokes alone
+* AJAX is the hot "new" web technology
+* Not really all that new
+* But nowadays is much more usable than a few years back
+----
+{image: http://www.lifeprint.com/asl101/images-signs/why.gif}
+
+== Why now?
+
+* Widespread browser support for XMLHttpRequest in Javascript
+* Mozilla Firefox, modern IE, Opera, Safari, Konqueror
+* Additionally, fairly widespread support for modern CSS
+* Before version 6, IE's CSS was /really/ buggy
++** Now it's just /somewhat/ buggy
+* Well-known workarounds for most browser issues
+
+----
+{image: http://www.themaninblue.com/images/writing/perspective/2005/03/02/feature.gif}
+
+== XMLHttpRequest
+
+* aka XHR
+* Has very little to do with XML.
+* Allows you to make HTTP requests from the browser using JS ...
+** ... *without* reloading the page
+* AJAX stands for Asynchronous Javascript And XML
+** But XHR can be synchronous
+** And you don't need to use XML
+
+----
+{image: http://www.seismo.unr.edu/ftp/pub/louie/class/100/earth-core.GIF}
+
+== Core of AJAX
+
+* Use XHR to send an HTTP request to the server
+* Server sends some text back
+** Maybe XML, maybe HTML, maybe JSON (Javascript Object Notation)
+* Use DHTML techniques to update page based on server response
+
+----
+{image: http://www.urth.org/~autarch/cool.jpg}
+
+== Why it is cool
+
+* No need for page reload
+* Can be used with timers for automatic updates
+* Allows for much more desktop-like web applications
+
+----
+{image: http://www.meredy.com/lisrobot.jpg}
+
+== Danger, Will Robinson!
+
+* Breaks the back button
+* Can defy user expectations
+** Users expect a page reload when they hit a button
+* A whole new way of doing web apps
+** Not as well explored, lacking standards for UI design
+
+----
+{image: http://static.flickr.com/15/22212274_fcdf7a50fe_m.jpg}
+
+== How I've done it
+
+* VegGuide.Org example
++* Wanted to be able to update known divs on a page
+* Request for appropriate URL like _/ajax/update_filters.txt_
+** should probably be _.json_ instead
+
+----
+{image: http://images.webz.cz/img/waiter.gif}
+
+== Server response
+
+* JSON
+
+    {
+     html: { 'list-of-filters':
+               'blob of <strong>HTML</strong>',
+             'first-five-names':
+               'another blob of <em>HTML</em>'
+           }
+    }
+
+* JSON is just Javascript, in this case an anonymous object.
+
+----
+
+{image: http://esljunction.com/esl-efl-flashcards/images/big/waitress.gif}
+
+== Server side continued
+
+* Uses Mason to generate the blobs of HTML
+* Uses Mason to generate the JSON as well
+
+    {
+     html: { 'list-of-filters': '<% $filters | js %>',
+             'first-five-names': '<% $names | js %>'
+           }
+    }
+
+* Could use any templating system or just a plain old CGI script, obviously
+* AJAX requests look the same as any other request to the server
+
+----
+{image: http://www.planetsunbeam.com/images/clons/clon3.gif}
+
+== Client side
+
+* Uses |HTTP.Request| library from JSAN for cross-platform XHR
+* With XHR, you specify a function to be called when the response arrives
+* The XHR object is passed to the callback
+
+.hilite
+receive_update: function (transport) {
+  var response;
+
+  try { eval("response = " + transport.responseText) }
+  catch (e) { alert(e + "\n" + transport.responseText) }
+
+  for (k in response.html) {
+    var element = document.getElementById(k);
+    if (element) {
+      element.innerHTML = response.html[k];
+    }
+  }
+
+  Formlet.StatusMessageDiv.div.innerHTML =
+   'Filter list has been updated ...';
+  Formlet.StatusMessageDiv.on();
+
+  Formlet.FirstFiveNamesDiv.on();
+}
+
++
+  g+ 4
+  g+ 5
+
++
+  g+ 7
+  g+ 8
+  g+ 9
+  g+ 10
+  g+ 11
+  g+ 12
++
+  g+ 14
+  g+ 15
+  g+ 16
+  g+ 18
+.hilite
+
+----
+
+== Lots of examples out there
+
+* Google Maps & Suggest
+* Writely - web based word processor
+* Flickr
+* many more
+
+----
+
+== Resources
+
+* Wikipedia AJAX page - lots of useful links
+* Ajaxian.com - basically Planet AJAX
+* JSAN - Javascript Archive Network - openjsan.org
+
+----
+
+== Quick questions?
+
