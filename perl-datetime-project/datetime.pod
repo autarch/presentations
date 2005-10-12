@@ -1,0 +1,602 @@
+=head1 The Many Dates and Times of Perl
+
+There are certain areas of development that seem to attract more than
+their fair share of CPAN modules.  The most notorious of these is
+probably templating systems, though DBI wrappers may soon overtake
+them for the dubious honor of having the most redundant modules in one
+development area.  But not far off are date and time related modules.
+If you've ever tried to find a date/time module that actually does
+what you need, you no doubt wished for a signpost in the thicket.
+Well, here it is.
+
+First, we'll go over some basic concepts related to dates and times,
+and also look at what a programmer might want to do with dates and
+times.  Then we'll examine the date and time capabilities of the Perl
+core, followed the major players in the field, the modules that have
+been around a while and have a broad user base.  Then we'll take a
+quick look at everything else.  There really are a staggering number
+of date and time modules available, so this really will be a I<quick>
+look.
+
+Finally, we'll take a look at a project I recently started, the Perl
+DateTime Suite, which aims to produce the definitive set of date and
+time modules for Perl and, over the long term, gradually replace many
+of the modules covered in this article.
+
+=head2 Some Basic Concepts
+
+In order to understand what you might want to do with dates and times,
+it's good to have a handle on some basic concepts.  Here are some
+terms that I'll be using in this article:
+
+=over 4
+
+=item * datetime
+
+This is not a word, but I will use it as a convenient shorthand to
+refer to a date and time together, because they are basically the same
+thing.  Adding time to a date simply increases its granularity.
+
+=item * UTC (also GMT and Zulu)
+
+UTC stands for "Coordinated Universal Time".  It is an international
+standard which is kept using atomic clocks, and is kept to within 0.9
+seconds of the rotation of the earth on its axis in order to work well
+with traditional standards of time-keeping.  UTC time is measured at
+the prime meridian (O degrees longitude).
+
+Time zones around the world are specified as an offset from UTC.  The
+widely used term GMT (Greenwich Mean Time) refers to a time zone that
+is equivalent to UTC.  In other words, it has no offset.
+
+The US military has a set of terms used for time zones around the
+world based on the alphabet (A-Z).  In this system UTC is Z, sometimes
+called "Zulu".
+
+UTC is a good standard for the I<internal> representation of dates and
+times, as it makes comparing datetimes or doing datetime math much
+easier.
+
+=item * Time zones and Daylight Saving Time
+
+Time zones, as mentioned above, are defined as an offset from UTC.
+Most, but I<not> all, time zones are in offsets of whole hours.
+Adelaide, Australia has an offset of nine and a half hours ahead of
+UTC, and Nepal has an offset five hours and forty-five minutes ahead
+of UTC.
+
+Time zones are complicated by the use of Daylight Saving Time, which
+changes the actual offset of a given location to vary over the course
+of the year.  The eastern US has an offset of -0500 from UTC, five
+hours ahead of UTC.  This means that 12:00 (noon) UTC becomes 07:00
+(AM).  However, when Daylight Saving Time is in effect, the offset
+becomes -0400, four hours ahead of UTC.  Because time zones are
+determined by governments, use of Daylight Saving Time, and the base
+offsets, have changed over time, and may change again in the future.
+
+This greatly complicates math when dealing with non-UTC datetimes.  If
+If I have a local datetime for the Eastern US of 2002-10-25 14:15:00
+and I add six months to that datetime, then I will have crossed a DST
+change.
+
+The upshot of all this is that any code that represents time zones as
+I<fixed> offset will probably start producing errors once date math
+gets involved.
+
+The definitive source of time zone offsets and rules is the Olson time
+zone database.  It defines zones according to names like
+"America/New_York", as opposed to "EST".  The latter shorthand is
+commonly used, but it should probably be avoided because these short
+names are not unique or definitive.  For example, there is an "EST" at
+-0500 and +1000.
+
+=item * Local time
+
+The local time is UTC plus the local time zone offset.  While UTC is
+great for internal use, most people want to see datetimes in terms of
+I<their> location.  In a sense, local time is the I<display> format,
+while UTC is the I<storage> format.
+
+=item * The epoch
+
+Epoch is a generic term referring to the "start" of any particular
+system.  For example, the Gregorian calendar's epoch is January 1, 1
+CE.
+
+The epoch system, as used by most operating systems, represents a
+datetime as the number of seconds after a specific date and time.  For
+Unix systems, the epoch began on January 1, 1970 at midnight GMT
+(UTC).  Other systems have different epochs.  Because of this, you
+cannot assume that an epoch time of 2,003,131 means the same thing
+from system to system, because different systems have a different
+"second 0".  Storing a datetime as its epoch is not portable.
+
+Even worse, on most current systems, epochs are represented by a 32
+bit signed integer, which only lets you represent datetimes with a
+range of about 136 years.  On most UNIX systems currently in use, this
+means that the latest date you can represent right now is sometime in
+the year 2038, and the earliest is around 1902.  This doesn't work
+very well if you're trying to represent the birth date of your
+great-great-grandmother.
+
+The upshot of all this is I would strongly recommend I<not> using
+epochs except when you have no other choice.  Of course, you'll often
+have no choice, so it's important to know how this system works.
+
+=item * The Gregorian Calendar
+
+There have been many different calendar systems in use throughout
+history.  The Gregorian calendar is the current generally agreed upon
+international standard for representing dates, and is what you are
+using when you say "August 8, 1999".  Other calendars that are still
+in use include the Hebrew calendar, the Islamic calendar, and the
+Chinese calendar.
+
+Even though the Gregorian calendar wasn't created until 1582, and it
+wasn't adopted world wide until this century, we can still extrapolate
+backwards in time using the Gregorian calendar.
+
+=back
+
+=head2 What Needs Doing with Dates and Times?
+
+There are a lot of things you can do with dates and times, and
+different modules/distributions provide different types of
+functionality.  Broadly speaking, we can consider the following areas
+of functionality:
+
+=over 4
+
+=item * Parsing/Formatting
+
+There are more datetime formats in use in the computing world than you
+can shake a stick at.  You'll often have to parse a datetime in one
+format in order to turn it into something you can work with
+internally, like a bunch of integers or an epoch time.
+
+On the flip side, you'll often have to take some standard
+representation, like an epoch, and convert it to some other format.
+
+=item * Basic representation
+
+A nice datetime object can be quite handy.  These range from
+lightweight wrappers around Perl's C<localtime()> to objects that try
+to provide methods for all possible datetime operations.
+
+=item * Math and calculations
+
+You'll often want to answer questions like "what day is seven days
+after today" or "how much time is there between now and midnight?"
+This is closely related to the task of figuring out the date Easter
+falls on in a given year, or what day of the week Martin Luther King's
+birthday falls on.
+
+=back
+
+There are plenty of other things we can do with datetimes, but these
+are largely elaborations of the above areas of functionality.
+
+=head2 Perl's Built-in Date/Time Functionality
+
+Perl has some built-in functionality for handling dates and times.
+This functionality includes:
+
+=over 4
+
+=item * time()
+
+A function that returns the current epoch time.
+
+=item * localtime() and gmtime()
+
+These functions convert an epoch time into a set of components
+representing the local time.  They both return arrays containing
+things like the hour, minute, month, etc., though some of the values
+returned are awkward to use.  For example, the year is the actual year
+minus 1900.
+
+The C<localtime()> function returns the datetime of your current
+location, based on your system's time zone setting, while the gmtime
+function returns the current UTC datetime.
+
+The C<Time::localtime> and C<Time::gmtime> modules provide a thin
+object layer around C<gmtime()> and C<localtime()> respectively, so
+you can do things like C<< print gmtime()->year >>.  Of course, that
+I<still> prints the year minus 1900.
+
+=item * Time::Local
+
+This core module provide functions that translate from the array of
+components returned by C<localtime()> or C<gmtime()> back to an epoch
+time.
+
+=item * POSIX.pm
+
+The C<POSIX> module included with Perl provides interfaces to several
+common C library functions for datetimes, such as C<strftime()>.  I
+consider this the last refuge for the desperate, because the
+C<POSIX.pm> module is a memory hog, and the C library interface is
+rather un-Perlish.
+
+=back
+
+=head2 The Big Stars
+
+These are the modules that have the longest history, and are the most
+widely used.
+
+=over 4
+
+=item * TimeDate distribution
+
+This distribution, maintained and mostly written by Graham Barr,
+includes three modules.  C<Date::Format> module provides a few
+functions for formatting datetime output, including a C<strftime()>
+similar to the one in the standard C library.  It can work with either
+epoch times, or the array of components returned by Perl's
+C<localtime()> function.
+
+C<Date::Parse> parses a limited set of common datetime formats,
+returning either an epoch time or an array of components.
+
+The distribution also includes a number of language modules which can
+be used to localize both parsing and formatting.
+
+Finally, C<Time::Zone> provides an interface to time zone offsets,
+based on short time zone names like "EST" or "GMT".  As was mentioned
+before, these names are not official or standardized, so they are of
+limited usefulness.
+
+All of these modules are limited by their use of epoch time
+internally, but they are fairly quick and light weight.  For complex
+datetime problems, these modules probably don't automate enough of the
+dirty work.
+
+=item * Time::Piece
+
+Written and maintained by Matt Sergeant, this module is based on an
+interface designed by Larry Wall.  It provides a convenient object API
+for datetimes, though the API is a bit confusing.  For example, C<<
+$time->mon >> returns the month number (1-12) while C<< $time->month
+>> returns the abbreviated name of the month.
+
+It also implements basic parsing and formatting via the use of the
+C-level C<strptime()> and C<strftime()> functions.  The included
+C<Time::Seconds> module allows for basic date math, such as C<<
+$tomorrow = $time + ONE_DAY >>.
+
+The implementation is fairly lightweight, but is limited by its use of
+epoch time as the internal representation.  It is certainly useful,
+but like the TimeDate modules, it doesn't go far enough for more
+complex uses.
+
+As of this writing, Matt Sergeant has released an experimental version
+of C<Time::Piece> based on my C<DateTime.pm> module.  This leaves the
+C<Time::Piece> API unchanged, but allows it to handle dates that
+cannot be represented by a given system's epoch.
+
+=item * Date::Manip
+
+Sullivan Beck's C<Date::Manip> is really huge, weighing in at about
+3,000 lines of code.  As might be expected of that much code, there is
+something for everyone here.  It handles parsing, formatting, date
+math, as well as more esoteric things like recurring datetimes and
+business day calculations.  It should be noted that it's time zone
+support is pretty much the same that provided by C<Time::Zone>.
+
+This module's most unique feature is its very flexible parser, which
+is capable of handling things like "3 weeks ago Monday" or "next
+Sunday".  It also provides some parsing for specifying recurrences,
+like "every 3rd Monday in 2003".
+
+Unlike everything else we've covered so far, this module is not
+limited to epoch times.  It has an entirely functional interface, and
+in my opinion the API could be cleaner.  I dislike the fact that some
+functions do many different things, with the output depending either
+on the argument type(s), explicit flags, or both.
+
+But the biggest problem with this module, which is acknowledged by its
+author, is its size.  It uses lots of memory (about 3MB on my system),
+and is fairly slow to load.  The former makes it problematic for
+mod_perl, and the latter causes problems with CGI scripts.  You can
+find most of its features elsewhere, in slimmer modules, but if size
+and speed are not an issue, this module almost certainly does
+everything you want.
+
+=item * Date::Calc
+
+Steffen Beyer's C<Date::Calc> distribution is where you go when you
+need functionality combined with speed.  This modules offers much of
+the functionality provided by C<Date::Manip>, but the core
+C<Date::Calc> module has a much smaller memory footprint than
+C<Date::Manip> (about 1MB on my box), and much greater speed.  This is
+based its core implementation is in C.
+
+This module provides functions for calculating all sorts of
+date-related information, as well some minimal parsing and formatting
+operations.  The interface requires some hand-holding to use, as every
+function returns one or more elements, never a data structure such as
+a hash, so you have to constantly deal with passing and receiving
+arrays of values.
+
+The distribution also includes a class called C<Date::Calc::Object>,
+which can represent either a datetime I<or> a "delta", the difference
+between two datetimes.  This dual nature is odd, since many of the
+methods applicable to one will not work for the other.  The class
+supports overloading for date math and comparison, so you can do
+things like C<$date + [1, 2, 3]>, which adds one year, two months, and
+three days to the given date.
+
+Finally, there is a C<Date::Calendar> object, which can be used to set
+up a calendar "profile" defining holidays, work days, and partial work
+days in a variety of ways.  This is quite useful if you need to
+calculate a day X business days in the future, while taking account of
+a particular organization's holidays.
+
+None of the modules in this distribution rely on epoch time, though
+they only support positive-numbered years.  Time zone support is
+extremely minimal, and is done only as offsets, without support for
+daylight saving rules.  Localization for a variety of languages is
+implemented for parsing and formatting.
+
+=back
+
+=head2 And a Cast of Thousands ...
+
+It wouldn't be Perl if there weren't at least a dozen other modules
+with overlapping functionality, right?  In this case, there's more
+than two dozen!  For sanity's sake, I've excluded more than a few
+modules, in particular those that either appeared to be unmaintained,
+or those without enough comprehensible documentation for me to figure
+out what the heck they do.  In alphabetical order, those remaining
+are:
+
+=over 4
+
+=item * Astro::Sunrise - Ron Hill
+
+This module provides sunrise and sunset times, given a specific date
+and place.
+
+=item * Astro::Time - Chris Phillips
+
+Contains a number of functions useful when dealing with datetimes as
+they are used in astronomy.
+
+=item * Class::Date - BalE<0xE1>zs SzabE<0xF3>
+
+This is basically the C<Time::Piece> API plus more stuff.  It appears
+to provide complete time zone support based on the Olson database, by
+way of C<POSIX.pm>.  It is epoch-limited.
+
+=item * Date::Business - Richard DeSimine
+
+A simple interface for doing date math with business dates.  In other
+words, weekends don't count, and you can define your own holidays.
+This module is epoch-limited.
+
+=item * Date::Convert - Mordechai Abzug
+
+Converts dates between the Gregorian, Hebrew, and Julian calendars.
+
+=item * Date::Convert::French_Rev - Jean Forget
+
+Converts to and from the French Revolutionary calendar.
+
+=item * Date::Day - John Von Essen
+
+Tells you the day of the week for a given date.
+
+=item * Date::DayofWeek - Rich Bowen
+
+Does exactly the same thing as C<Date::Day> but only for years
+1500-2699.  On the flip side, it uses a cuter algorithm.
+
+=item * Date::Decade - Michael Diekmann
+
+Provides three decade calculation functions with an API similar to
+that of C<Date::Calc>.
+
+=item * Date::Discordian - Rich Bowen
+
+Converts to and from the Discordian calendar.
+
+=item * Date::Easter - Rich Bowen
+
+Calculates the date Easter falls on in a given year.
+
+=item * Date::Handler - Benoit Beausejour
+
+A date object comparable to C<Time::Piece>, but with a more consistent
+interface.  It implements localization, a variety of date math
+operations, and includes an object for representing datetime spans.
+It provides time zone support based on the native OS implementation,
+which on some systems means support for the Olson database.  It is
+epoch-limited.
+
+=item * Date::ICal - Rich Bowen
+
+A date object that provides a simple API, date math, and iCal
+formatting and parsing (see RFC 2445).  It only support time zones as
+offsets, but it is not epoch-limited.
+
+=item * Date::ISO - Rich Bowen
+
+A subclass of Date::ICal that adds ISO 8601 format parsing and
+formatting.
+
+=item * Date::Japanese::Era - Tatsuhiko Miyagawa
+
+Converts to and from Japanese Era dates.
+
+=item * Date::Japanese::Holiday - Tomohiro Ikebe
+
+Tells you whether or not a given date is a Japanese holiday.
+
+=item * Date::Leapsecond - FlE<0xE1>vio Soibelmann Glock
+
+Converts between UT1 and UTC times.
+
+=item * Date::Leapyear - Rich Bowen
+
+One function to tell you whether or not a given year is a leap year.
+
+=item * Date::Maya - Abigail
+
+Converts between Julian days and the Mayan calendar.
+
+=item * Date::Passover - Rich Bowen
+
+Calculates the dates of Passover and Rosh Hashanah for a given year.
+
+=item * Date::PeriodParser - Simon Cozens
+
+Parses English descriptions of time periods like "this morning" or
+"around two weeks ago" and turns them into pairs of epoch times
+representing the beginning and end of the period.
+
+=item * Date::Range - Tony Bowden
+
+An object for representing a range of dates.  Lets you figure out
+whether two ranges overlap, whether a date is included in a given
+range, and a few other useful things.
+
+=item * Date::Roman - Leo Cacciari
+
+An object for representing dates according to the Roman calendar.
+
+=item * Date::Set - FlE<0xE1>vio Soibelmann Glock
+
+An object that represents sets of datetimes.  A set can be either a
+datetime span, a recurring set of dates, or a fixed set of specific
+datetimes.  It provides set math operations for all of these, as well
+as allowing you to iterate across the members of the set.  Also see
+C<Date::Set::Timezone>.
+
+=item * Date::Simple - John Tobey
+
+A date object that represents dates only, without a time component.
+It provides date math.  It is not epoch-limited.
+
+=item * Date::Tie - FlE<0xE1>vio Soibelmann Glock
+
+A basic date object with date math.  Its functionality is implemented
+via a tied hash interface.  It supports fixed offset time zones, and
+it is epoch-limited.
+
+=item * HTTP::Date - Gisle Aas
+
+This module is part of the LWP distribution.  It parses many common
+datetime formats, including all of those that are used by the HTTP
+protocol.  If C<Date::Parse> doesn't understand all the formats you
+need to deal with, this module provides a good alternative.
+
+=item * Time::Duration - Sean Burke
+
+Given a number of seconds, this module return a human language
+description of the duration.  For example, 3660 seconds would be "1
+hour and 1 minute".
+
+=item * Time::Human - Simon Cozens
+
+Given an epoch time, this module can return a string describing that
+time in colloquial terms, such as "half past nine".  It has hooks for
+localization.
+
+=item * Time::Unix - Nathan Wiger
+
+Loading this module forces Perl's C<time()> function to use the Unix
+epoch system, regardless of the OS on which the code is running.
+
+=item * Time modules - David Muir Sharnoff
+
+This distribution includes C<Time::CTime>, C<Time::ParseDate>, and
+C<Time::Timezone>, which are slightly more powerful versions of Graham
+Barr's C<Date::Format>, C<Date::Parse>, and C<Time::Zone>.
+
+=back
+
+=head2 But Wait, There's More!
+
+Not content to leave well enough alone, I've recently started a
+project to fix what I see as the fundamental problem with the state of
+Perl datetime modules.  That fundamental problem is that despite the
+fact that almost all the possible functionality you could want exists,
+it is scattered over a large number of incompatible modules.
+
+For example, C<Date::Calc> provides good functionality for various
+datetime calculations and date math, but the values it returns are not
+well suited for being passed to C<Date::Format>.  And while
+C<Date::Manip> has powerful parsing, the return value from its parsing
+routine cannot be passed to any other module without further
+massaging.  And so and so on.
+
+For example, if I wanted to parse a date with C<Date::Parse> and then
+calculate the date one week later with C<Date::Calc>, and then format
+it with C<Date::Format>, I'd have to do the following:
+
+  my $time1 = str2time($date_string); # Date::Parse
+
+  # Today() from Date::Calc returns
+  # date information for an epoch time
+  my ($y1, $m1, $d1) = Today($time);
+
+  my ($y2, $m2, $d2) = Add_Delta_Days($y1, $m1, $d1, 7);
+
+  my $time2 = Date_to_Time($y2, $m2, $d2);
+
+  print strftime('%B %d, %Y', $time2);
+
+Of course, I didn't I<have> to use the C<strftime()> function for
+formatting a date.  I could have done it with just C<Date::Calc> as:
+
+  print sprintf('%s %02d %04d',
+                Month_to_Text($m2), $d2, $y2);
+
+But I want convenience.  If I'm dealing with many datetimes and I need
+to parse various inputs, generate different formats, and do lots of
+calculations, then a convenient and uniform API can go a long way
+towards code maintainability.  The extra glue code needed to make
+different modules cooperate can quickly obscure the actual intent of
+the program.
+
+Efforts in the past to herd all the existing module authors towards a
+common API have failed, so rather than try that again, I decided to
+just write even more datetime code.  As we all know, the best way to
+put out a fire is to pour copious amounts of gasoline on it.  In order
+to make my project sound cool, I'm calling it the "Perl DateTime
+Suite", which sounds much better than "more date and time modules".
+
+The goal for this project is to produce a suite of datetime modules
+that do everything you'd ever need related to dates and times.  The
+modules in this suite will cooperate with each other, which means that
+a module that parses datetimes will return a standard object, and a
+module for formatting datetimes will accept that standard object.
+
+So far, this project has attracted interest from a number of people,
+and discussions on the datetime@perl.org list have gone well.
+Recently, I released alpha versions of the core object,
+C<DateTime.pm>, as well as C<DateTime::TimeZone>, which provides
+complete time zone support based on the Olson database.  There is also
+an alpha of C<DateTime::Format::ICal> on CPAN, a module for parsing
+and formatting iCal datetimes and durations.  In the future, look for
+more modules in the suite, all of which will begin with "DateTime::".
+
+=head2 Further Resources and Reading
+
+Some excellent online resources include Claus Tondering's Calendar FAQ
+at http://www.tondering.dk/claus/calendar.html, as well as the US
+Naval Observatory Time Service site at http://tycho.usno.navy.mil/.
+For more information on time zones and the Olson database, see
+http://www.twinsun.com/tz/tz-link.htm.
+
+If you're interested in discussing anything related to Perl and
+datetimes, check out the datetime@perl.org list.  You can subscribe by
+sending a message to datetime-subscribe@perl.org.
+
+=head2 Thanks
+
+Thanks to Jonathan Scott Duff, Nick Tonkin, and Iain Truskett for
+reviewing this article before publication.
+
+=cut

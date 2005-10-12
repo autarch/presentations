@@ -1,0 +1,10 @@
+use strict;
+
+use DateTime;
+
+    my $today = DateTime->today( time_zone => 'floating' );
+    my $oscon = DateTime->new( year => 2005, month => 8, day => 3 );
+
+    my $delta = $oscon->delta_days($today);
+
+    print $delta->delta_days, "\n";

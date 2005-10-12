@@ -1,0 +1,13 @@
+<!-- BEGIN bottom.html -->
+<div id="content"><p />
+ <div class="top_spacer"></div>
+ <ol>
+% foreach my $slide (@slides) {
+  <li> <a href="<% $slide->{slide_name} | h %>"><% $slide->{slide_heading} | h %></a>
+% }
+ </ol>
+</div>
+<!-- END index.html -->
+<%args>
+@slides
+</%args>

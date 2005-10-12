@@ -1,0 +1,21 @@
+<!-- BEGIN start.html -->
+<div id="content"><p />
+ <div class="top_spacer"></div>
+ <center>
+ <h4><% $presentation_title | h %></h4>
+ <p />
+ <h4><% $author_name | h %></h4>
+ <h4><% $author_email | h %></h4>
+ <p />
+ <h4><% $presentation_place | h %></h4>
+ <h4><% $presentation_date | h %></h4>
+ </center>
+</div>
+<!-- END start.html -->
+<%args>
+$presentation_title
+$author_name => ''
+$author_email => ''
+$presentation_place => ''
+$presentation_date => ''
+</%args>

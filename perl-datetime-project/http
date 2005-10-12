@@ -1,0 +1,7 @@
+use strict;
+use DateTime::Format::HTTP;
+
+    print DateTime::Format::HTTP->format_datetime( DateTime->now ), "\n";
+    print DateTime::Format::HTTP->parse_datetime
+              ( 'Tue, 28 Jun 2005 13:52:00 GMT' ), "\n";
+

@@ -1,0 +1,9 @@
+use strict;
+
+use DateTime;
+use DateTime::Calendar::Mayan;
+
+    my $mayan = DateTime::Calendar::Mayan->new( baktun => 13 );
+    my $dt = DateTime->from_object( object => $mayan );
+
+    print $dt->date, "\n";

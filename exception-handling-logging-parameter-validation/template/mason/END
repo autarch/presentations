@@ -1,0 +1,45 @@
+
+=head1 NAME
+
+Spork::Template::Mason - Spork templating with Mason
+
+=head1 SYNOPSIS
+
+  # in your config.yaml file
+
+  template_class: Spork::Template::Mason
+  files_class: Spork::Template::Mason
+
+=head1 DESCRIPTION
+
+At present, this module's only purpose it to provide a default set of
+Mason templates for Spork.  These templates are more or less identical
+to the TT2 templates included in the main Spork distro.  You'll
+probably want to customize these.
+
+=head1 USAGE
+
+Just set "template_class" and "files_class" in your F<config.yaml>
+file to C<Spork::Template::Mason>.
+
+=head1 SUPPORT
+
+Support questions can be sent to me via email.
+
+Please submit bugs to the CPAN RT system at
+http://rt.cpan.org/NoAuth/ReportBug.html?Queue=spork-template-mason or
+via email at bug-spork-template-mason@rt.cpan.org.
+
+=head1 AUTHOR
+
+Dave Rolsky <autarch@urth.org>
+
+=head1 COPYRIGHT
+
+This program is free software; you can redistribute
+it and/or modify it under the same terms as Perl itself.
+
+The full text of the license can be found in the
+LICENSE file included with this module.
+
+=cut

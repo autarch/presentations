@@ -1,0 +1,9 @@
+use DateTime;
+
+    my $dt = DateTime->now( time_zone => 'Asia/Taipei' );
+
+    print $dt->datetime, "\n";
+
+    $dt->set_time_zone( 'Europe/Paris' );
+
+    print $dt->datetime, "\n";

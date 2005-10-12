@@ -1,0 +1,434 @@
+----------------------------------------------
+images_directory: /home/autarch/presentations/mason-intro-spork/images
+logo_image: mason-trowel.png
+banner_bgcolor: #C7C7BC
+presentation_topic: Mason
+presentation_title: Introduction to Mason
+presentation_place: Toronto, Ontario
+presentation_date: June 29, 2005
+----------------------------------------------
+
+{image: http://www.af.mil/news/airman/0597/retire2.jpg}
+
+== Basics
+
+* Text Templating++
++* Fundamental building block - "component", contains text and/or code.
++* A very simple component:
+
+.hilite
+% my $who = 'world';
+Hello, <% $who %>
+
+b+ 1
+       b+    2
+.hilite
+
++* Mason components consist of three basic pieces:
+** text (HTML, XML, etc.)
+** code which generates output
+** inline code
+* Plain text is *always* plain text.
+
+----------------------------------------------
+
+{image: http://www.fastlinkcabling.com/telephone.jpg}
+
+== Component Calls
+
+* Components can call other components
+* For example:
+
+.hilite
+<& header &>
+Some text here.
+<& footer, size => 2, links => \@links &>
+
+b+ 1
+b+ 3
+.hilite
+
+* Component calls are like function calls, and can take arguments.
+
+----------------------------------------------
+
+{image: http://www.hawaii.gov/dbedt/ert/activitybook/pg02-car.gif}
+
+== autohandlers
+
+* An autohandler wraps a request for a component.
+* Make a request for _/view/file-list.html_.
+* Mason looks for _/view/autohandler_ and _/autohandler_.
++* And then each component is executed in order from least to most specific.
+** _/autohandler_
+** _/view/autohandler_
+** _/view/file-list.html_
+
+----------------------------------------------
+
+{image: http://www.hawaii.gov/dbedt/ert/activitybook/pg02-car.gif}
+
+== autohandlers (cont)
+
+* Our _/autohandler_ file might look a bit like this:
+
+.hilite
+<html>
+<head>
+<title>My Totally Wicked Site, Dude!</title>
+</head>
+<body>
+
+% $m->call_next;
+
+</body>
+</html>
+
+b+ 7
+.hilite
+
+----------------------------------------------
+
+{image: http://www.hawaii.gov/dbedt/ert/activitybook/pg02-car.gif}
+
+== autohandler example
+
+* http://www.vegguide.org/contact.mhtml
+
+----------------------------------------------
+
+{image: http://www.wedmart.com/gifts/images/sliders/D.jpg}
+
+== dhandlers
+
+* dhandlers create virtual URLs.
++* Make a request for _/view/files/id-1.html_.
+** but there is no such component.
++* Mason looks for _/view/files/dhandler_ ...
+** ... then _/view/dhandler_ ...
+** ... and finally _/dhandler_.
+
+----------------------------------------------
+
+{image: http://www.census.gov/dmd/www/img/cash.gif}
+
+== Caching
+
+* Integration with [=Cache::Cache] is built-in.
+* You can cache anything:
+
+    $m->cache->set( $key => $value, $expiration );
+
++* But the coolest part is caching a component's output:
+
+.hilite
+<%init>
+return if $m->cache_self($key);
+
+...
+</%init>
+
+<h1>Statistics</h1>
+
+b+ 2
+.hilite
+
+----------------------------------------------
+
+{image: http://www.rpgdreamer.com/screen/ffx/ffxscreen11.jpg}
+
+== Syntax
+
+* So far we've seen:
+** Substitution tags.
+    <% $who %>
+** Substitutions can be escaped:
+.hilite
+<% $html_escape_me | h %> - <% $uri_escape_me | u %>
+
+                     r                          r 1
+.hilite
+
+----------------------------------------------
+
+{image: http://www.rpgdreamer.com/screen/ffx/ffxscreen11.jpg}
+
+== Syntax (cont)
+
+** Perl-lines - a line starting with a percent sign (%).
+    % $m->call_next;
+** Component calls.
+    <& footer, size => 2, links => \@links &>
+
+----------------------------------------------
+
+{image: http://www.rpgdreamer.com/screen/ffx/ffxscreen11.jpg}
+
+== Syntax (cont)
+
+* The rest of Mason's syntax is mostly blocks like this:
+
+    <%perl>
+    my $number = 2 ** 10;
+    </%perl>
+
+----------------------------------------------
+
+{image: http://www.dynamite-it.com/photos/blocks.jpg}
+
+== Blocks
+
+* Most blocks contain pure Perl.
+** but how the Perl is used depends on the block.
+* The pure Perl blocks are [=<%perl>], [=<%init>], [=<%once>], [=<%filter>], [=<%shared>], and [=<%cleanup>].
+
+----------------------------------------------
+
+{image: http://halife.com/living/argument.jpg}
+
+== <%args>
+
+* The most important non-Perl block is [=<%args>].
++* Argument declaration for a component:
+
+.hilite
+    <%args>
+    # Default to 5
+    $size => 5
+    # Required
+    @items
+    # Defaults to an empty hash
+    %labels => ()
+    </%args>
+
++
+    r        b 3
+    r 5
+    r          bb 7
+.hilite
+
+* This looks like real Perl, but it's not.
+** a declaration (name + default) cannot be >1 line.
++* Args become lexically-scoped variables inside the component.
+
+----------------------------------------------
+
+{image: http://www.erwaterpolo.homestead.com/files/er_jv_goalie__1_.jpg}
+
+== Other non-Perl blocks
+
+* [=<%text>] - not parsed for Mason constructs
+* [=<%doc>] - ignored by Mason
+* [=<%def>] and [=<%method] - contain subcomponents and methods
+** ... which are components embedded in other components.
+* [=<%attr>] - simple key-value pairs
+* [=<%flags>] - instructions for Mason
+
+----------------------------------------------
+
+{image: http://www.cnn.com/interactive/career/0102/aleeza/01.eminem.jpg}
+
+== $m
+
+* Saw it with autohandlers ([=call_next()]) and caching ([=cache()], [=cache_self()]).
+* It's the Mason Request object.
+* Has a bunch of handy methods, particularly for calling other components.
+* It's a global available in all components, all the time.
++* Methods include:
+** [=scomp()] - returns component output in a scalar
+
+    my $link = $m->scomp( '/lib/link_to_person.mas', person => $person );
+
+** [=abort()] - stops processing, in its tracks!
+
+    $m->abort unless $user->is_editor;
+
+** ... and many more.
+
+----------------------------------------------
+
+{image: http://www.camosun.bc.ca/~jbritton/globe.gif}
+
+== Other globals
+
+* Mason provide two other globals besides [=$m].
+** [=%ARGS]
+** [=$r]
++* [=%ARGS] contains all of the arguments /passed/ to the component
+** ... but not defaults set by the [=<%args>] block.
+
++* [=$r] is available when Mason runs under mod_perl.
+** this is the Apache request object.
+
+----------------------------------------------
+
+{image: http://aggie-horticulture.tamu.edu/syllabi/319/Figfruitfoliage.jpg}
+
+== Configuration under mod_perl
+
+* The simplest possible mod_perl configuration:
+
+    SetHandler  perl-script
+    PerlHandler HTML::Mason::ApacheHandler
+* *All* requests are handled by Mason.
+** this is probably a bad idea.
++* You probably want to limit what Mason handles:
+
+.hilite
+<LocationMatch "\.mhtml$">
+  SetHandler  perl-script
+  PerlHandler HTML::Mason::ApacheHandler
+</LocationMatch>
+
+r+ 1
+r+ 4
+.hilite
+
+----------------------------------------------
+
+{image: http://aggie-horticulture.tamu.edu/syllabi/319/Figfruitfoliage.jpg}
+
+== Configuration under mod_perl (cont)
+
+* Some more configuration:
+
+    PerlSetVar  MasonCompRoot      /home/dave/htdocs
+    PerlSetVar  MasonDataDir       /home/dave/mason
+    PerlSetVar  MasonAllowGlobal   $User
+
+    <LocationMatch "\.mason$">
+      SetHandler  perl-script
+      PerlHandler HTML::Mason::ApacheHandler
+    </LocationMatch>
+
+----------------------------------------------
+
+{image: http://www.mulix.org/pics/ols-2003/MVC-0022S.JPG}
+
+== MVC(-ish) with MasonX::WebApp
+
+* Model - your code
+* View - Mason components
+* Controller - MasonX::WebApp as a base class
++* The picture came up on Google images searching for "MVC"
+** Why?
+
+----------------------------------------------
+
+{image: http://tooteefrootee.com/images/pics/picture21.jpg}
+
+== MasonX::WebApp Highlights
+
+* Can dispatch direct to object methods
+** Handle form submissions without Mason
+* Can modify parameter before passing control to Mason
+* Integrates session handling
+
+----------------------------------------------
+
+== Attributes
+
+* Components can have attributes
+** static data structures accessed by name
+* An example:
+
+    <%attr>
+    left_column => [ 'stats', 'news' ]
+    </%attr>
+
+----------------------------------------------
+
+== Attributes (cont)
+
+* Available in an autohandler:
+
+.hilite
+<%init>
+my $left = $m->request_comp->attr('left_column');
+</%init>
+
+<div id="left-column">
+% for my $comp (@$left) {
+ <& "/lib/column-boxes/$comp.mas" &>
+% }
+</div>
+
+b+ 2
+g+ 6
+g+ 7
+g+ 8
+.hilite
+
++* Attributes are "inherited" from autohandlers
+
+----------------------------------------------
+
+== Methods
+
+* Similar to attributes, but are entire (embedded) components:
+
+    <%method title>
+     <% $m->request_args->{location} | h %>
+    </%method>
+
+* Also "inherited" from the autohandler
++* Can be called with a special component call syntax:
+
+.hilite
+<h1><& SELF:title &></h1>
+
+    bbbbbbbbbbbbbbbb 1
+.hilite
+
+----------------------------------------------
+
+== Inline filters
+
+* Can pass content to a component call:
+
+.hilite
+<&| /lib/fill_in_form.mas, data => $saved_args &>
+ <form action="/login" method="post">
+  <input name="username" type="text" />
+  <input name="password" type="password" />
+ </form>
+</&>
+
+b+ 1
+b+ 6
+.hilite
+
+----------------------------------------------
+
+== Inline filters (cont)
+
+* Then in _/lib/fill_in_form.mas_:
+
+.hilite
+<%args>
+%data
+</%args>
+
+<%init>
+my $form = $m->content;
+
+my $fif = HTML::FillInForm->new;
+</%init>
+
+<% $fif->fill( scalarref => \$form, fdat => \%data ) %>
+
+b+ 6
+.hilite
+
+----------------------------------------------
+
+{image: http://www.masonbook.com/i/cover_large.jpg}
+
+==  Resources
+
+* Mason HQ (www.masonhq.com) - the Mason site.
+* Embedding Perl in HTML with Mason - the Mason book.
+** Published by O'Reilly, written by Ken Williams and me.
+** Available online at www.masonbook.com
+
+----------------------------------------------

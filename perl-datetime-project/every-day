@@ -1,0 +1,14 @@
+use strict;
+
+use DateTime;
+use DateTime::Event::Recurrence;
+
+    my $recur =
+        DateTime::Event::Recurrence->daily;
+
+    my $dt = DateTime->today;
+    while ( $dt = $recur->next($dt) )
+    {
+        last if $dt->month == 8;
+        print $dt->date, "\n";
+    }

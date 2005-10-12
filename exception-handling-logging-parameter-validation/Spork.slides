@@ -1,0 +1,635 @@
+----------------------------------------------
+images_directory: /home/autarch/presentations/exception-handling-logging-parameter-validation/images
+banner_bgcolor: #FFBB33
+presentation_topic: Exception Handling, Logging, and Parameter Validation
+presentation_title: Exception Handling, Logging, and Parameter Validation
+presentation_place: Toronto, Ontario
+presentation_date: June 28, 2005
+----------------------------------------------
+
+== Failsafe
+
+* Dictionary.com - "capable of compensating automatically and safely for a failure ...".
++* That would be really cool ...
+** .. but too much work
++* Automatic compensation is very difficult ...
+** ... but you can at least fail cleanly.
+
+----------------------------------------------
+
+{image: http://sharon.k12.ma.us/~sandra_dennis/things2.jpg}
+
+== Things Fall Apart
+
+* All code breaks
+** even mine
++* But it should break as cleanly as possible
++* Most importantly, *fail predictably*!
+
+----------------------------------------------
+
+{image: http://www.sternwarte-ueberlingen.de/vortraege/nostradamus/nostradamus.gif}
+
+== Predictability
+
+* Failures should happen because you coded for them
+* Surprises are bad
++* If your code does something important, you should have a code path for failures
++* Fail early, fail often
++* The worst code simply forges blindly ahead
++* That code *will* fail ...
++** ... eventually
++* But it might break something important first
+
+----------------------------------------------
+
+{image: http://www.a-cd.de/images/articles/2004-09-20_160313_billy_joel_innocent_man.jpg}
+
+== "Tell Her About It"
+
+* It's not enough to fail predictably
+** you need to record the failure
++* Debugging a failure in a production system without good logs is very difficult
+
+----------------------------------------------
+
+{image: http://upload.wikimedia.org/wikipedia/en/thumb/c/c3/240px-Chile_Donkey.jpg}
+
+== Assumptions
+
+* Never assume you have good inputs
++* Never assume your fellow developers are interacting with your code correctly
++* Never assume your users will use your system correctly
++* Never assume you will use your code correctly!
++* But *do* assume that your code will receive bad input
+
+----------------------------------------------
+
+{image: http://www.educationnext.org/20014/images/76-1.jpg}
+
+== Be a Failure
+
+* Failing intentionally is better than accidentally
++* An exception guarantees that your failure will be heard
++* Don't forget, your fellow developers are idiots
+** they will forget to check return values
++* Ignoring exceptions requires more work
+
+----------------------------------------------
+
+{image: http://mark.lsds.com/images/records-3_20_2003.jpg}
+
+== Records
+
+* Logging is good
++* Generally, more verbosity is better
+** My personal favorite ...
+
+    open my $fh, '<', $file or die;
+
++* Multiple logging outputs are more reliable
+** you cannot send email to say that sending an email failed
+
+----------------------------------------------
+
+{image: http://www.tc.umn.edu/~puk/cow/lbrown.jpg}
+
+== Now How
+
+* That was why, now how
++* Exceptions
+* Parameter validation
+* Logging
+
+----------------------------------------------
+
+{image: http://www.sillyjokes.co.uk/images/party/decorations/halloween/grim-reaper-wall-grabber.jpg}
+
+== Die, Die, Die!
+
+* Perl has no explicit exception mechanism
++* But it does have the |die()| function and |eval| blocks
++* If a |die()| happens in an eval *block* it is trapped
+** But not seg faults, bus errors, etc.
++* The first argument to |die()| will be available after the block in |$@|
++* Block |eval| is entirely different from |eval $string|
+
+----------------------------------------------
+
+== Very Simple Exceptions
+
+* The simplest case:
+
+    eval { die "I am dead" };
+    warn $@ if length $@;
+    # emits a warning
+
++* |$@| is cleared every time |eval| (string or block) is used.
+
+    eval { die "I am dead" };
+    eval { $x = 1 };
+    warn $@ if length $@;
+    # no warning
+
+* |$@| is be an empty string in this example
++* Note that |$@| is *always* defined!
+
+----------------------------------------------
+
+== "Real" Exceptions
+
+* Before Perl 5.005, $@ could only be a string
+* If you passed a ref to |die()|, it was stringified
++* Since 5.005, if you pass a ref, it is stored as is
++* So now we can do this:
+
+    eval { die { error => 'Bad SQL',
+                 sql => $sql,
+                 bound_vars => \@bound_vars } };
+    if ($@)
+    {
+        warn "Error: $@->{error}\n";
+        warn "SQL: $@->{sql}\n" if exists $@->{sql};
+    }
+
+----------------------------------------------
+
+== "Realer" Exceptions
+
+* But wouldn't you prefer an object?
+
+    eval { die SQLException->new
+                   ( error => 'Bad SQL',
+                     sql => $sql,
+                     bound_vars => \@bound_vars ) };
+    if ($@)
+    {
+        warn "Error: ", $@->error, "\n";
+        warn "SQL: ", $@->sql, "\n"
+            if $@->can('sql');
+    }
+
+----------------------------------------------
+
+== An Important Caveat
+
+* The previous example blindly called methods on |$@|
++* This is a bad idea
+** Perl's built-in exceptions are still thrown as strings
++* Divide by zero in an |eval| block, and |$@| will contain a string
+
+----------------------------------------------
+
+== The Workaround
+
+* Pass |$@| to |UNIVERSAL::isa()|
+** Ugly but effective
+
+    if ($@) {
+        if ( UNIVERSAL::isa( $@, 'Exception' ) ) {
+            warn "Error: ", $@->error, "\n";
+            warn "SQL: ", $@->sql, "\n"
+                if $@->can('sql');
+        }
+        else {
+            warn "Error: $@\n";
+        }
+    }
+
+* Put it in a sub to get it out of the way
+
+----------------------------------------------
+
+== Another Caveat
+
+* Remember - |$@| is cleared every time |eval| is used
++* Copy it before doing stuff:
+
+   if (my $exc = $@)
+   {
+       do_something();
+       handle_exception($exc);
+   }
+
++* Because |do_something()| might use |eval| or call code which uses |eval|
+** This is doubly important if |do_something()| might invoke some other module's code
+
+----------------------------------------------
+
+== Exception Modules on CPAN
+
+* Amazingly, there are *not* a ridiculous number of redundant modules in this area
++* My favorite is |Exception::Class|
++* But I'm biased cause it's mine
++* Also |Error.pm|
+** and |Error::TryCatch|, which reimplements |Error.pm| as a source filter
++* There are some others with really bad docs
++* So too bad for them
+
+----------------------------------------------
+
+== Exception::Class
+
+* Lets you declare a hierarchy of exceptions at compile time:
+
+    use Exception::Class
+        ( 'MyException',
+
+          'AnotherException' =>
+          { isa => 'MyException' },
+
+          'YetAnotherException' =>
+          { isa => 'AnotherException' },
+        );
+
+----------------------------------------------
+
+== Exception::Class
+
+* Declared classes are subclasses of |Exception::Class::Base| by default
+** but you can use your own base class
++* Classes can have arbitrary "fields", for storing information about an exception:
+
+    use Exception::Class
+        ( 'SQLException' =>
+          { fields => [ 'sql', 'bound_values' ] }
+        );
+
+    eval { SQLException->throw
+               ( error => 'bad sql', sql => $sql ) };
+
+    print $@->sql;
+
+----------------------------------------------
+
+== Exception::Class
+
+* It can create a "shorthand" sub for each class:
+
+    use Exception::Class
+        ( 'SQLException' =>
+          { fields => [ 'sql', 'bound_values' ],
+            alias  => 'sql_error' }
+        );
+
+    sql_error error => 'bad sql', sql => $sql;
+
+----------------------------------------------
+
+== Exception::Class
+
+* The base class provides a number of handy methods
+** |pid()|
+** |package()|
+** |file()|
+** |line()|
+** |trace()|
+
+----------------------------------------------
+
+== Exception::Class
+
+* Also provides some syntactic sugar for exception checking:
+
+    if ( my $e = Exception::Class->caught('MyException') )
+    {
+         do_something($e);
+    }
+
+----------------------------------------------
+
+== Exception::Class::TryCatch
+
+* Try/catch syntax for |Exception::Class|:
+
+    eval { may_die() };
+    catch my $err and warn $err->message;
+
+    eval { may_die() };
+    catch my $err, ['BigException', 'SmallException']
+       and warn $err->message;
+
+    try eval { may_die () }
+    and do { cleanup() };
+    catch my $err;
+
+----------------------------------------------
+
+== Exception::Class::TryCatch
+
+* No nested closures, no source filters
++* However, requires that all uses of |try| are followed by a |catch|
+** else havoc ensues
+
+----------------------------------------------
+
+== Error.pm
+
+* Provides more advanced try/catch feature than |eval| and |die()| allow
++* Also includes its own exception base class
++* It does not allow declaration of exceptions
+
+----------------------------------------------
+
+== Error.pm
+
+    use Error qw(:try);
+
+    try {
+        cause_an_error();
+    } catch Error::Bar with {
+        my $error = shift;
+        do_some_cleanup();
+        throw $error; #rethrow
+    } otherwise {
+        panic();
+    } finally {
+        close_some_handle();
+    }; # trailing semi-colon is needed
+
+----------------------------------------------
+
+== The Caveat
+
+* try/catch is implemented with closures
++* A try block that contains another try block will lead to nested closures
++* Perl has historically had memory leakage problems with nested closures
++* Error::TryCatch provides the same syntax, but as a source filter
+** which has its own problems
+
+----------------------------------------------
+
+== Parameter Validation
+
+* The usual state of CPAN
+** many redundant parameter validation modules on CPAN.
++* Also more narrowly focused modules - data type validation (email, credit card)
+
+----------------------------------------------
+
+== Params::Validate
+
+* My contribution to the mess
++* Can validate named or position parameters
++* Simplest form - list the required parameters
+
+    my %p = validate( @_, { foo => 1, # required
+                            bar => 0, # optional
+                          } );
+
+    # first 2 are required, last is optional
+    my @p = validate_pos( @_, 1, 1, 0 );
+
+----------------------------------------------
+
+== Params::Validate
+
+* Can also validate by ...
+** type (scalar, arrayref, glob)
+** class
+** methods (|->can|)
+** regex match
+** callbacks
+
+----------------------------------------------
+
+== Params::Validate
+
+    use Params::Validate qw( validate SCALAR UNDEF );
+
+    my %p =
+       validate
+           ( @_,
+             { foo => { type => SCALAR | UNDEF },
+               bar => { isa => 'Bar' },
+               baz => { can => 'print' },
+               color =>
+               { regex => qr/^(?:red|blue)$/ },
+               number =>
+               { callbacks =>
+                 { 'between 1 and 30' =>
+                   sub { $_[0] >= 1 && $_[0] <= 30 },
+               },
+             } );
+
+----------------------------------------------
+
+== Params::Validate
+
+* Can use callbacks for complex validations:
+
+    validate
+       ( @_,
+         { email =>
+           { callbacks =>
+             { 'email is valid' =>
+               sub { Email::Valid->address( $_[0] ) } },
+           },
+           credit_card =>
+           { callbacks =>
+             { 'credit card is valid' =>
+               sub { Business::CreditCard::validate( $_[0] ) } },
+             },
+           },
+         );
+
+----------------------------------------------
+
+== Params::Validate
+
+* Can also set defaults:
+
+    my %p =
+        validate
+            ( @_,
+              { size => { type => SCALAR,
+                          default => 10 } }
+            );
+
+    # $p{size} is 10 if it wasn't provided
+    # by the caller
+
+----------------------------------------------
+
+== Params::Validate
+
+* Fairly mature, over three years old
++* Is written entirely in XS, so it's fast
++* Validation can be turned off with an env var
+* But I never do this
+
+----------------------------------------------
+
+== Data::FormValidator
+
+* Only loosely related to HTML forms
++* Can have required or optional parameters
+
+    my $results =
+       Date::FormValidator->check
+           ( %params,
+             { required  => [ 'foo', 'bar' ],
+               optional  => [ 'baz' ] } ); 
+
++* HTML-ism ...
+** a value with only whitespace is considered to be missing
+
+----------------------------------------------
+
+== Data::FormValidator
+
+* A parameter can have one or more constraints
+
+    my $results =
+       Date::FormValidator->check
+           ( %params,
+             { required  => [ 'foo', 'bar', 'email' ],
+               constraints => { email => 'email' }
+             } );
+
+* Comes with pre-defined constraints
+** Easy to build custom constraints
+** Some on CPAN
+
+----------------------------------------------
+
+== Data::FormValidator
+
+* Parameters can have defaults
++* Parameter values can be transformed via filters
+** comes with pre-defined filters
+** can build your own
+** some on CPAN
++* Parameters can specify dependencies on other params
++* Validation results are returned as an object
+
+----------------------------------------------
+
+== Other Parameter Validation modules
+
+* |Params::Check| - API is very similar to |Params::Validate|
++* |Data::Validator::Item|
++* |Getargs::Long|
++* |Class::Contract| - design-by-contract
++* Probably more I didn't find
+
+----------------------------------------------
+
+== Logging
+
+* Not many /general-purpose/ logging modules on CPAN
++* General-purpose = one API, many outputs
+
+----------------------------------------------
+
+== Log::Dispatch
+
+* Once more, me first
++* Create a single dispatcher, which holds one or more outputs
++* Comes with screen, file, email, syslog and other outputs
++* Can specify min/max log level per output
+
+----------------------------------------------
+
+== Log::Dispatch
+
+    my $dispatch = Log::Dispatch->new;
+    $dispatch->add( Log::Dispatch::File->new
+                        ( name => 'debug',
+                          file => 'debug.log',
+                          min_level => 'debug' ) );
+
+    $dispatch->add( Log::Dispatch::File->new
+                        ( name => 'error',
+                          file => 'error.log',
+                          min_level => 'error' ) );
+
+    $dispatch->add( Log::Dispatch::Screen->new
+                    ( name => 'screen', 
+                      min_level => 'debug' ) );
+
+    $dispatch->log( level => 'info', message => 'information' );
+
+----------------------------------------------
+
+== Log::Dispatch
+
+* Can specify per-output filters:
+
+    my $dispatch = Log::Dispatch->new;
+    $dispatch->add
+        ( Log::Dispatch::File->new
+              ( name => 'debug',
+                file => 'debug.log',
+                min_level => 'debug',
+                callbacks =>
+                sub { my %p = @_;
+                      $p{message} =
+                          "[$p{level}] $p{message}" }
+              ) ); 
+
+----------------------------------------------
+
+== Log::Dispatch
+
+* Writing new outputs is very simple
++* there are several on CPAN
++* |Log::Dispatch::Config| - configure logging via a text file
+** similar to log4j
+
+----------------------------------------------
+
+== Log::Log4Perl
+
+* Complete log4j style API
++* Configured either from config file or code
++* One message -> many outputs
++* |sprintf|-like pattern language for message formatting
++* Comes with some outputs modules, and can use |Log::Dispatch| outputs
+
+----------------------------------------------
+
+== Log::Log4Perl
+
+* A simple config example:
+
+    log4perl.rootLogger=ERROR, LOGFILE
+    
+    log4perl.appender.LOGFILE = Log::Log4perl::Appender::File
+    log4perl.appender.LOGFILE.filename = /var/log/myerrs.log
+    log4perl.appender.LOGFILE.mode = append
+    
+    log4perl.appender.LOGFILE.layout = PatternLayout
+    log4perl.appender.LOGFILE.layout.ConversionPattern=\
+        [%r] %F %L %c - %m%n
+
+----------------------------------------------
+
+== Log::Log4Perl
+
+* In your code:
+
+    my $log = Log::Log4Perl->get_logger(__PACKAGE__);
+    $log->error("She canna take no, cap'n");
+
+----------------------------------------------
+
+== Log::Log4Perl
+
+* Most full-featured logging module on CPAN
++* Also the most complex
+** fortunately it is well-documented
+
+----------------------------------------------
+
+== Other Logging modules
+
+* |Log::Agent| - no OO, just functions
++* |Log::Channel| - can use |Log::Dispatch| for output
+** Can take over carp/croak from other modules
+
+----------------------------------------------
+
+== Questions?
+
+----------------------------------------------

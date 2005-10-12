@@ -1,0 +1,118 @@
+/* BEGIN slide.css */
+hr {
+    color: #202040;
+    height: 0px;
+    border-top: 0px;
+    border-bottom: 3px #202040 ridge;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+a:link {
+    color: #123422;
+    text-decoration: none;
+}
+
+#topbar a:link {
+    color: blue;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #123333;
+    text-decoration: none;
+}
+
+#topbar a:visited {
+    color: blue;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    margin: 6pt;
+}
+
+div p {
+    margin-top: 12pt;
+    margin-bottom: 12pt;
+    margin-left: 6pt;
+    margin-right: 6pt;
+}
+
+small {
+    font-size: 9pt;
+    font-style: italic;
+}
+
+#topbar {
+    background: <% $banner_bgcolor %>;
+    color: blue;
+    position:absolute;
+    right: 5px;
+    left: 5px;
+    top: 5px;
+    font-size: 150%;
+}
+
+#content {
+    font-size: 120%;
+}
+
+#bottombar {
+    background: <% $banner_bgcolor %>;
+    color: blue;
+    position: fixed;
+    right: 5px;
+    left: 5px;
+    bottom: 5px;
+    height: 50px;
+    z-index: 0;
+}
+
+.top_spacer {
+    height: 0px;
+    margin: 0px 0px 0px 0px;
+    padding: 1px 0px 0px 0px;
+}
+
+.spacer {
+    bottom: 5px;
+    height: 50px;
+}
+
+#content {
+    background:#fff;
+    margin-left: 20px;
+    margin-right:20px;
+    margin-top: 80px;
+}
+
+#logo {
+    position: fixed;
+    right: 40px;
+    bottom: 51px;
+    width: 130px;
+    height: 150px;
+    z-index:3;
+}
+
+.formatter_pre, pre {
+    background: lightgray;
+    border: 1px black solid;
+    padding: 5px;
+    font-size: 120%;
+    width: 700px;
+}
+
+/* END index.css */
+<%args>
+$banner_bgcolor
+</%args>
+
+<%flags>
+inherit => undef
+</%flags>

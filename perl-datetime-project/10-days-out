@@ -1,0 +1,8 @@
+use strict;
+
+use DateTime;
+
+    my $dt = DateTime->today;
+    $dt->add( days => 10 );
+
+    print $dt->date, "\n";
