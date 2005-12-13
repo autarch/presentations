@@ -1,0 +1,688 @@
+<HTML>
+<HEAD>
+  <TITLE>Creating (and Maintaining) Perl Modules</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<H1 ALIGN=CENTER>Creating (and Maintaining) Perl Modules</H1>
+
+<H2 ALIGN=CENTER>Goals</H2>
+
+<P>
+The goal of this web page is to help you write easily maintainable and
+re-usable code.  In Perl, re-usability is implemented through modules,
+which are similar to libraries in other languages.
+</P>
+
+<P>
+This page will guide you through creating your module and documenting
+it, as well as giving you some tips on how to make your code as
+maintainable and re-usable as possible.
+</P>
+
+
+<H2 ALIGN=CENTER>Creating Perl Modules</H2>
+
+<P>Perl modules are those files that end in <TT>.pm</TT>. If you do
+things right, you can make the process of writing, testing, and
+installing your module really slick. You'll also be able to easily
+bundle up your module for testing and installation on other machines,
+or uploading to <A
+HREF="http://www.perl.com/CPAN/README.html">CPAN</A>.</P>
+
+<P>Here are the steps in creating a module:</P>
+
+<UL>
+  <LI><A HREF="#place">Create a place to develop your module</A>
+  <LI><A HREF="#skel">Create skeleton files for your module.</A>
+  <LI><A HREF="#document">Document your module</A>
+  <LI><A HREF="#code">Write some Perl code</A>
+  <LI><A HREF="#tests">Write some tests for your code</A>
+  <LI><A HREF="#install">Install the module</A>
+  <LI><A HREF="#tips">Tips</A>
+</UL>
+
+<H2 ALIGN=CENTER><A NAME="place"></A>Create a place to develop your module</H2>
+
+<P>
+Given our current source control system, the best way to do this is to
+create one directory per module.  Give this directory any name that
+clearly identifies the module that it contains.  See the
+Text-CSVWrapper module for a simple example, or the TPFA:: modules for
+a more involved one.
+</P>
+
+<H2 ALIGN=CENTER><A name="#skel"></A>Create skeleton files for your module</H2>
+
+<P>
+Perl is distributed with a program called <TT>h2xs</TT>.  This
+program, while initially intended to help programmers implement C
+extensions to Perl, can also be used to generate skeleton files for a
+new module.
+</P>
+
+<P>Let's create a module called <TT>NewModule.pm</TT> that doesn't do very
+much. I'll run the <TT>h2xs</TT> program:</P>
+
+<P><TABLE BORDER="1" CELLSPACING="2" CELLPADDING="0">
+<TR>
+<TD BGCOLOR="#ccccff"><PRE>[~/modules],2:05pm% h2xs -AXc -n NewModule
+Writing NewModule/NewModule.pm
+Writing NewModule/Makefile.PL
+Writing NewModule/test.pl
+Writing NewModule/Changes
+Writing NewModule/MANIFEST
+[~/modules],2:05pm% cd NewModule/
+[~/modules/NewModule],2:05pm% ls
+Changes        MANIFEST       Makefile.PL    NewModule.pm   test.pl</PRE>
+</TD></TR>
+</TABLE>
+<BR>
+The <TT><FONT COLOR="#996633">Changes</FONT></TT> file is where you
+might keep track keep track of changes you make to your module as you
+write new versions.  If you're using RCS or CVS version control, you
+shouldn't use the Changes file, since all your history & logs will be
+in revision control and is much more reliable there (you <b>are</b>
+adding detailed revision notes in version control, aren't you?).</P>
+
+<P><TT><FONT COLOR="#996633">MANIFEST</FONT></TT> contains a list of files
+in this directory. If you add new files to the directory, you should also
+add them to the <TT>MANIFEST</TT>. The <TT>MANIFEST</TT> is used to create
+a tarball of your module for distribution, and it's also checked when people
+unpack the tarball and install the module.</P>
+
+<P><TT><FONT COLOR="#996633">Makefile.PL</FONT></TT> is a Perl program used
+to create a Unix Makefile. You'll use this Makefile to test and install
+your module.</P>
+
+<P><TT><FONT COLOR="#996633">NewModule.pm</FONT></TT> is your module. You'll
+write the code here in the next step.</P>
+
+<P><TT><FONT COLOR="#996633">test.pl</FONT></TT> is a Perl program that
+tests your module. You don't run it directly, you type &quot;make test&quot;
+at a Unix prompt and it runs it for you.  We'll develop this test
+suite a little later.</P>
+
+<H2 ALIGN=CENTER><A NAME="document"></A>Document your module</H2>
+
+<P>One of the great things about Perl modules is that they can have
+their documentation right in the same file. Once this module is
+installed, its documentation can be read by typing &quot;<TT>perldoc
+NewModule</TT>&quot; at a Unix prompt. Keeping the code and
+documentation together is a great thing, since it means you'll always
+have the most recent documentation if you've got the most recent code.</p>
+
+<p>Here is some sample documentation.</P>
+
+<P><TABLE BORDER="1" CELLSPACING="2" CELLPADDING="0">
+<TR>
+<TD BGCOLOR="#ccffcc"><PRE>
+=head1 NAME
+
+NewModule - Perl module for hooting
+
+=head1 SYNOPSIS
+
+  use NewModule;
+  my $hootie = new NewModule;
+  $hootie-&gt;verbose(1);
+  $hootie-&gt;hoot;  # Hoots
+  $hootie-&gt;verbose(0);
+  $hootie-&gt;hoot;  # Doesn't hoot
+  
+
+=head1 DESCRIPTION
+
+This module hoots when it's verbose, and doesn't do anything 
+when it's not verbose.  
+
+=head2 Methods
+
+=over 4
+
+=item * $object-&gt;verbose(true or false)
+
+=item * $object-&gt;verbose()
+
+Returns the value of the 'verbose' property.  When called with an
+argument, it also sets the value of the property.  Use a true or false
+Perl value, such as 1 or 0.
+
+=item * $object-&gt;hoot()
+
+Returns a hoot if we're supposed to be verbose.  Otherwise it returns
+nothing.
+
+=back
+
+=head1 AUTHOR
+
+Ken Williams (ken@forum.swarthmore.edu)
+
+=head1 COPYRIGHT
+
+Copyright 1998 Swarthmore College.  All rights reserved.
+
+This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+=head1 SEE ALSO
+
+perl(1).
+
+=cut</PRE>
+</TD></TR>
+</TABLE>
+</P>
+
+<P>
+When you create the module using <TT>h2xs</TT> it will create several
+sections for you automatically.  They are:
+
+<UL>
+  <LI><TT>NAME</TT> - The name of the module and a very short
+  description of what it does.
+  <LI><TT>SYNOPSIS</TT> - This should be a few lines of example code
+  demonstrating how to use the major functions/methods of your module.
+  <LI><TT>DESCRIPTION</TT> - This should be some prose text describing
+  what your module is for.
+  <LI><TT>AUTHOR</TT> - You.
+  <LI><TT>SEE ALSO</TT> - This should point the person reading your
+  docs to other documentation that may be useful (docs for other
+  Modules, C library docs, etc.)
+</UL>
+
+<P>
+One other critical section that you should create is
+<TT>FUNCTIONS</TT> or <TT>METHODS</TT> (depending on whether your code
+is function-based or object-oriented).  This section should list every
+single function or method intended for public use.  At the very
+minimum, these descriptions should list the parameters each
+function/method takes and the return values it can give back.
+</P>
+
+<P>
+Feel free to expand your documentation beyond these sections.  Make
+sure to note any areas where your module does something that might go
+against someone else's assumption.  Also make sure to mention
+limitations of the module that might not be obvious without looking at
+the code.
+</P>
+
+<P>
+<b><font color=red>Your documentation is complete when someone can use
+your module without ever having to look at its contents</font></b>.
+This is very important.  This makes it possible for you to separate
+your module's documented interface from its internal implementation
+(guts).  This is good because it means that you are free to change the
+module's internals as long as the interface remains the same.
+</P>
+
+<H3>POD (Plain Old Documentation)</H3>
+
+<P>
+The <TT>perldoc</TT> program expects your documentation to be in POD
+format.  The pod format has a few (very few) tags that you use to
+markup plain text.  As an aside, the Perl compiler ignores POD
+commands so they can be used for extended comments inside your code.
+</P>
+
+<P>
+Here is a list of some of the tags, with some HTML tags that are
+similar in spirit:
+
+<table border=1>
+<tr>
+  <th>POD tag</th>
+  <th>HTML equivalent</th>
+  <th>Description</th>
+</tr>
+<tr>
+  <td><TT>=head1</TT></td>
+  <td>&lt;H1&gt;</td>
+  <td>Primary heading.</td>
+</tr>
+<tr>
+  <td><TT>=head2</TT></td>
+  <td>&lt;H2&gt;</td>
+  <td>Secondary heading.</td>
+</tr>
+<tr>
+  <td><TT>=over N</TT></td>
+  <td>&lt;UL&gt; or &lt;OL&gt;</td>
+  <td>Indent N spaces until it finds a <TT>=back</TT> tag.  The
+  convention is generally to indent in multiples of 4, so you see
+  <TT>=over&nbsp;4</TT> a lot.</td>
+</tr>
+<tr>
+  <td><TT>=back</TT></td>
+  <td>&lt;/UL&gt; or &lt;/OL&gt;</td>
+  <td>Indicates that you are done with indenting.</td>
+</tr>
+<tr>
+  <td><TT>=item</TT></td>
+  <td>&lt;LI&gt;</td>
+  <td>Indicates a list item.  The convention is to use <TT>=over</TT>
+  to begin a list, and <TT>=back</TT> to end it.  Generally you do
+  <TT>=item&nbsp;*</TT>, which puts bullets in front of you list
+  items.</td>
+x</tr>
+<tr>
+  <td><TT>=cut</TT></td>
+  <td>&lt;/HTML&gt;</td>
+  <td>Indicates the end of a POD section.</td>
+</tr>
+</table>
+
+
+<P>
+For more information on POD, type <TT>perldoc perlpod</TT> at a UNIX
+prompt.  There's not much to POD, and it will behoove you to know it
+inside &amp; out.
+</P>
+
+<H2 ALIGN=CENTER><A NAME="code"></A>Write some Perl code</H2>
+
+<P>What you've got now is a documented, fully functional Perl module
+that doesn't do anything. We've got to write some code in
+<TT>NewModule.pm</TT> to make it do something. This code should
+implement the interface defined in the documentation we just wrote.
+</P>
+
+<P>The <TT>NewModule.pm</TT> file will have this in it already:</P>
+
+<P><TABLE BORDER="1" CELLSPACING="2" CELLPADDING="0">
+<TR>
+<TD BGCOLOR="#ccffcc"><PRE>package NewModule;
+
+use strict;
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
+
+require Exporter;
+
+@ISA = qw(Exporter AutoLoader);
+# Items to export into callers namespace by default. Note: do not export
+# names by default without a very good reason. Use EXPORT_OK instead.
+# Do not simply export all your public functions/methods/constants.
+@EXPORT = qw(
+
+);
+$VERSION = '0.01';
+
+
+# Preloaded methods go here.
+
+# Autoload methods go after =cut, and are processed by the autosplit program.
+
+1;
+__END__</PRE>
+</TD></TR>
+</TABLE>
+</P>
+
+<P>
+Here is a line by line explanation of what this means:
+<UL>
+  <LI><P>
+  <TT>use strict;</TT><BR>
+  This turns on the strict pragmas.  This means that you must declare
+  all your variables (with "my") before using them, you are not
+  allowed to use soft references (also known as symbolic or
+  dynamic references), and that all subroutines used my be
+  preceded by an ampersand (&amp;) or followed by parentheses.
+  </P>
+
+  <P>
+  This is <B>crucial</B> to writing maintainable code for the
+  following reasons:
+  <OL> 
+  <LI>It forces you either declare all your globals in advance or to
+  use lexically scoped variables (the preferred choice).  This leads
+  to cleaner code with cleaner function interfaces and fewer hidden
+  dependancies.
+  <LI>It will help you track down typos in variable names because it
+  will complain about undeclared variables when you make a typo.
+  <LI>It doesn't allow you to use soft references, which are almost
+  never needed and are a maintenance nightmare.
+  </OL>
+  </P>
+
+  <P>
+  It also makes your code run a bit faster, because the Perl
+  interpreter can do some optimizations at compile-time rather than
+  waiting until run-time to make all its decisions.
+  </P>
+
+  <LI>
+  <P>
+  <TT>use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);</TT><BR>
+  The vars pragma is a way of declaring your global variables.  Any
+  variable listed here is available throughout the entire package
+  scope.
+  </P>
+
+  <LI>
+  <P>
+  <TT>require Exporter;</TT><BR>
+  This loads the Exporter module, which allows you to export variables
+  and subroutines into the calling packages namespace when the module
+  is used with the <TT>use</TT> statement.
+  </P>
+
+  <LI>
+  <P>
+  <TT>@ISA = qw(Exporter AutoLoader);</TT><BR>
+
+  By placing a module name in the @ISA array, we are saying that the
+  current package is a subclass (in the object-oriented sense) of that
+  package.  In practical terms, this means that if we try to use a
+  method <TT>&amp;NewModule->foo</TT> and the <tt>&amp;foo</tt>
+  subroutine is not found in the NewModule package, then Perl will
+  also check for <tt>&amp;Exporter::foo</tt> and
+  <tt>&amp;AutoLoader::foo</tt> as well.  If those aren't found, Perl
+  will check Exporter's parents and AutoLoader's parents, and so on up
+  the tree.
+  </P>
+
+  <P>
+  In general, you can remove the references to AutoLoader as you
+  probably won't use this.  If you are writing an object-oriented
+  module (a class) then you should remove the Exporter-related code as
+  well.
+  </P>
+
+  <LI>
+  <P>
+  <PRE>@EXPORT = qw(
+
+);</PRE>
+  Any variables or subroutines listed here will automatically be
+  placed into the calling package's namespace.  It is important to
+  document these in order to prevent namespace conflicts.
+  </P>
+
+  <LI>
+  <P>
+  <TT>$VERSION = '0.01';</TT><BR>
+  All modules should have a version number.  This helps with version
+  control.  In addition, it allows you to do:
+  <PRE>use My::Module 1.21;</PRE>
+  This will cause the compiler to die if it cannot find at least
+  version 1.21 of the module.  It checks the version by looking at the
+  $VERSION variable.<BR>
+  Since we are using RCS and CVS for version control here at Digital River,
+  we can (and should) use the following for our $VERSION scalar:<br>
+   <code>&nbsp;&nbsp;<nobr><FONT COLOR="#996633">$VERSION = sprintf "%d.%03d",
+   q$Revision: 1.6 $ =~ /: (\d+)\.(\d+)/;</font></nobr></code><br>
+
+  <b>This must be all on one line.</b> The Revision tag will be kept
+  up to date by the rcs programs.  Perl in turn will use the regex to
+  extract the major and minor numbers, which are then formatted by
+  <TT>sprintf</TT>.
+  </P>
+
+  <LI>
+  <P>
+  The references to preloaded and autoloaded methods are only
+  relevant if you are using the AutoLoader module.  Don't use the
+  AutoLoader module unless you know what you're doing, it's generally
+  not worth the trouble.
+  </P>
+
+  <LI>
+  <P>
+  <TT>1;</TT><BR>
+  When a module is loaded (via <TT>use</TT>) the compiler will
+  complain unless the last statement executed when it is loaded is
+  true.  This line ensures that this is the case (as long as you don't
+  place any code after this line).  It's Perl's way of making sure
+  that it successfully parsed all the way to the end of the file.
+  </P>
+
+  <LI>
+  <P>
+  <TT>__END__</TT><BR>
+  Anything after this token is ignored by the compiler.  This is
+  generally where you will place your documentation.
+  </P>
+</UL>
+</P>
+
+<P>
+Let's create some sample code.  Don't worry about what this code does
+or how it works.  We're mostly concerned with having a few methods so
+we can demonstrate how to document a module.  For reference, this code
+is using the Object Oriented Perl syntax and features that became
+available with Perl 5.  This will be the subject of a future
+presentation.
+</P>
+
+<P>
+<TABLE BORDER="1" CELLSPACING="2" CELLPADDING="0">
+<TR>
+<TD BGCOLOR="#ccffcc"><PRE>package NewModule;
+
+use strict;
+use vars qw($VERSION);
+$VERSION = '0.01';
+
+sub new {
+  my $package = shift;
+  return bless({}, $package);
+}
+
+sub verbose {
+  my $self = shift;
+  if (@_) {
+    $self-&gt;{'verbose'} = shift;
+  }
+  return $self-&gt;{'verbose'};
+}
+
+sub hoot {
+  my $self = shift;
+  return &quot;Don't pollute!&quot; if $self-&gt;{'verbose'};
+  return;
+}
+
+1;
+__END__</PRE>
+</TD></TR>
+</TABLE>
+</P>
+
+<H2 ALIGN=CENTER><A NAME="tests"></A>Write some tests for your code</H2>
+
+<P>One of the benefits of developing modules this way is that you can
+maintain a list of tests for your code that make sure it's working
+properly. This is what the <TT>test.pl</TT> file is for. Let's put a
+couple of tests at the end of the file - here is the complete file
+now:</P>
+
+<P><TABLE BORDER="1" CELLSPACING="2" CELLPADDING="0">
+<TR>
+<TD BGCOLOR="#ccffcc"><PRE>
+# Before `make install' is performed this script should be runnable with
+# `make test'. After `make install' it should work as `perl test.pl'
+
+######################### We start with some black magic to print on failure.
+
+# Change 1..1 below to 1..last_test_to_print .
+# (It may become useful if the test is moved to ./t subdirectory.)
+
+BEGIN { $| = 1; print &quot;1..1\n&quot;; }
+END {print &quot;not ok 1\n&quot; unless $loaded;}
+use NewModule;
+$loaded = 1;
+print &quot;ok 1\n&quot;;
+
+######################### End of black magic.
+
+# Insert your test code below (better if it prints &quot;ok 13&quot;
+# (correspondingly &quot;not ok 13&quot;) depending on the success of chunk 13
+# of the test code):
+
+# Test 2:
+my $obj = new NewModule;
+$obj-&gt;verbose(1);
+my $result = $obj-&gt;hoot;
+print ($result eq &quot;Don't pollute!&quot; ? &quot;ok 2\n&quot; : &quot;not ok 2\n&quot;);
+
+# Test 3:
+$obj-&gt;verbose(0);
+my $result = $obj-&gt;hoot;
+print ($result eq &quot;&quot; ? &quot;ok 3\n&quot; : &quot;not ok 3\n&quot;);</PRE>
+</TD></TR>
+</TABLE>
+</P>
+
+<P>The first test has already been created by <TT>h2xs</TT> in step one.
+It just makes sure we can load <TT>NewModule.pm</TT> in the first place.
+The second and third tests check that the hoot method returns the right
+things.  These tests were written by the programmer.</P>
+
+<P>
+These tests should completely exercise every function/method of the
+entire module, as exhaustively as possible.  This script should be the
+regression test for your module.  Every time you make a change to the
+module's implementation, you can test it against this script to make
+sure that nothing is broken.  It also lets you determine whether your
+code will work on different platforms.
+</P>
+
+<P>
+While this is a signficant time commitment for a large module, it also
+has a big payoff.  For example, the <A
+HREF="http://www20.digitalriver.com/rcsdev/modules/DRDB.html">DRDB
+module</A> currently has an approximately 200 line test script with 33
+tests.  Whenever a change is made to this module, we can find out very
+quickly whether or not the existing functionality has been changed.
+And when a bug gets reported, the first thing we do is add a test to
+<TT>test.pl</TT> that exhibits the bug - when we fix the bug, we'll
+never have to worry about it escaping our attention again.
+</P>
+
+<H2 ALIGN=CENTER><A NAME="install"></A>Install the module</H2>
+
+<P>Now we've got everything written, we can try installing the module. The
+general procedure for installing any Perl module is:</P>
+
+<PRE>  perl Makefile.PL
+  make
+  make test
+  make install</PRE>
+
+<P>Let's try it now.</P>
+
+<P><TABLE BORDER="1" CELLSPACING="2" CELLPADDING="0">
+<TR>
+<TD BGCOLOR="#ccffcc"><PRE>[~/modules/NewModule],6:07pm% ls
+Changes        MANIFEST       Makefile.PL    NewModule.pm   README         test.pl
+[~/modules/NewModule],6:07pm% perl Makefile.PL
+Checking if your kit is complete...
+Looks good
+Writing Makefile for NewModule
+[~/modules/NewModule],6:09pm% make
+mkdir ./blib
+mkdir ./blib/lib
+mkdir ./blib/arch
+mkdir ./blib/arch/auto
+mkdir ./blib/arch/auto/NewModule
+mkdir ./blib/lib/auto
+mkdir ./blib/lib/auto/NewModule
+mkdir ./blib/man3
+cp NewModule.pm ./blib/lib/NewModule.pm
+Manifying ./blib/man3/NewModule.3
+[~/modules/NewModule],6:09pm% make test
+PERL_DL_NONLAZY=1 /usr/local/bin/perl -I./blib/arch -I./blib/lib -I/usr/local/li
+b/perl5/alpha-dec_osf/5.00404 -I/usr/local/lib/perl5 test.pl
+1..1
+ok 1
+ok 2
+ok 3
+[~/modules/NewModule],6:10pm% su
+s/key 1111 aa11111
+Password:
+[forum]:/home/ken/modules/NewModule# make install
+Installing /usr/local/lib/perl5/site_perl/./NewModule.pm
+Installing /usr/local/lib/perl5/man/man3/./NewModule.3
+Writing /usr/local/lib/perl5/site_perl/alpha-dec_osf/auto/NewModule/.packlist
+Appending installation info to /usr/local/lib/perl5/alpha-dec_osf/5.00404/perllocal.pod</PRE>
+</TD></TR>
+</TABLE>
+</P>
+
+<P>Notice that I had to become root to install the module
+globally. Installation involves copying files into the Perl library
+directory, which most people don't have permission to copy into. Since
+this isn't a very useful module, I installed it and then immediately
+uninstalled it by deleting the first three files mentioned in the
+&quot;<TT>make install</TT>&quot; step.</P>
+
+<P>
+If you want to install the module in some non-standard location (like
+<tt>/a14/ows30/ows/3.0/v2.0/bin/pm</tt>), you give a <TT>LIB</tt>
+directive in the Makefile.PL step, i.e. <nobr><TT><FONT COLOR="#996633">perl
+Makefile.PL LIB=/put/module/here</font></TT></nobr>.  This can also be put
+inside Makefile.PL - see the TPFA:: modules for an example.
+
+
+<H2 ALIGN=CENTER><A NAME="tips"></A>Tips</H2>
+
+<UL>
+  <LI>Write the documentation for a module first, before writing any
+   code.  Discuss the module with other people first, before writing
+   any code.  Plan the module first, before writing any code.</br>
+
+   It's easy to come up with a solution to a problem.  It takes
+   planning to come up with a good solution.  <font
+   color=red>Remember: the documentation, not the code, defines what a
+   module does.</font>
+
+  <LI>Every module should have a purpose.  There's a proliferation of
+   modules with names like "perlutils.pm", "rcs_utils.pm", and
+   "utilUtils.pm" that have no obvious purpose, and it's difficult to
+   know what each does.  This leads to confusion and duplication of
+   code.
+
+  <LI>A note about naming conventions.  The Perl standard for module
+   names is that all modules start with a capital letter.  Names
+   starting with a lower case letter are reserved for pragmas.  In
+   addition, it is not a bad thing to have your name include two
+   colons, as in the name <TT>Text::Wrap</TT>.  When this module is
+   installed, it will be placed in a directory named <TT>Text</TT>
+   under the root library directory.  The module code itself will be
+   in a file called <TT>Wrap.pm</TT>.  This helps keep the library
+   directory more organized.  In addition, the <TT>::</TT> naming
+   convetion can also indicate class hierarchies, although it does not
+   have to.
+
+  <LI>If you're writing an object-oriented module, don't use the
+   Exporter stuff. Exporter lets someone &quot;use&quot; your module
+   and then use some of your module's functions without fully
+   package-qualifying those functions. See my <TT><A
+   HREF="http://forum.swarthmore.edu/~ken/modules/DataExchange/">
+   DataExchange.pm</A></TT> module for an example, and read the
+   Exporter documentation for the details.
+
+   <LI>The AutoLoader stuff lets your module only compile certain
+   subroutines as they're needed. It can make programs that use your
+   module faster if they only use small parts of your module. It's
+   usually not necessary to use this, but if you're writing a really
+   huge module (like CGI.pm) it might be worth it. Read the AutoLoader
+   docs for the details.  In general, avoid it, it's not worth the
+   headache.
+
+  <LI>You can type &quot;<TT>make realclean</TT>&quot; to get rid of
+   temporary files and directories that are created during the testing
+   and installation process.
+
+  <LI>You can type &quot;<TT>make dist</TT>&quot; to create a file suitable
+   for uploading to CPAN or giving to your friends at the mall.
+</UL>
+
+<ADDRESS>Created in 1997 by Ken Williams.  Expanded and revised in
+1999 for Digital River by Dave Rolsky and Ken Williams.</ADDRESS>
+
+</BODY>
+</HTML>
