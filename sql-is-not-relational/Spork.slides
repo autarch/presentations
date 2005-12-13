@@ -78,11 +78,36 @@ presentation_date: December 14, 2005
 === The Relational Model: Structure Example
 
 * The most boring example ever
-* Your friend, the supplier parts database!
+* Your friend, the parts/supplier database!
 
+.css
+table.inline, table.inline tr, table.inline tr td, table.inline tr th {
+  border: 1px solid #905030;
+  border-collapse: collapse;
+}
+table.inline td, table.inline th { padding: 0.2em 0.5em }
+table.inline th { text-align: left }
+.css
 
-| part_number: part_number | part_name: name | color: color |
-
+.html
+<table class="inline">
+ <tr>
+  <th>part_number: part_number</th>
+  <th>part_name: name</th>
+  <th>color: color</th>
+ </tr>
+ <tr>
+  <td>part_number: 1</td>
+  <td>part_name: Sprocket</td>
+  <td>color: red</td>
+ </tr>
+ <tr>
+  <td>part_number: 1</td>
+  <td>part_name: Flux Capacitor</td>
+  <td>color: blue</td>
+ </tr>
+</table>
+.html
 
 ----
 
@@ -91,7 +116,8 @@ presentation_date: December 14, 2005
 * Each relation represents a predicate about our business domain
 * "The part with a part number of X is named Y and is some color."
 +* Each tuple asserts a particular proposition based on that predicate
-* "Part number 1 is named Sprocket."
+* "Part number 1 is named Sprocket and is red."
+* "Part number 2 is named Flux Capacitor and is blue."
 
 ----
 
@@ -100,10 +126,10 @@ presentation_date: December 14, 2005
 * Integrity is provided through constraints
 * We already saw attribute constraints
 ** Each attribute has a type
-* Types are constraints
-** Part numbers must be positive integers
-** Part names must be names - strings with a length >= 2
-** Colors must be one of: red, green, blue, yellow
++* Types are constraints
+** *part_number*: integer, > 0
+** *part_name*: string, length >= 2
+** *color*: sting, one "red", "green", "blue", "yellow"
 
 ----
 
@@ -116,3 +142,136 @@ presentation_date: December 14, 2005
 * Other relation constraints
 ** There must be at least one red part in the relation
 ** There must be more blue parts than yellow parts
+
+----
+
+=== The Relational Model: Integrity - Database
+
+* Constraints involving more than one relation
+* Foreign keys are one type of database constraint
+** Every part_number in SupplierOfPart must correspond to a part_number Part
+* Simplified double-entry bookkeeping constraint:
+** For every tuple in Deposit there must be a tuple in Withdrawal with the same transaction_id
+** The value of the amount attribute for the two tuples must be the same
+
+----
+
+=== The Relational Model: Manipulation
+
+* Operators to allow modification of data
+** In relational theory, insert, update and delete can all be thought of as assignment
+** Every modification to the data in a relation /variable/ changes the /value/ of that /variable/.
+
+   # Insert
+   Part = { (all current tuples of Part),
+            [ part_number: 5,
+              part_name: "Big Bird's Head",
+              color: "yellow" ],
+          };
+
+   # Update
+   Part = { (all current tuples except part_number == 5),
+            [ part_number: 5,
+              part_name: "Big Bird's Bloody Head",
+              color: "red" ],
+          };
+
+   # Delete
+   Part = { (all current tuples except part_number == 5) };
+
+----
+
+=== The Relational Model: Manipulation
+
+* Queries are done via some query language
+** The relational model does not really define a language
+** But says it should be based on relational algebra
+
+----
+
+=== The Relational Model: Manipulation - Relational Algebra
+
+* Six basic operators
+* Set union
+* Set difference
+* Cartesian product (cross join)
+* Selection
+** like SQL's WHERE (color == "yellow")
+* Projection - subset of attributes from a relation
+** part_number and part_name from Part
+* Rename
+** part_name AS name
+* Everything else is defined in terms of those operators
+
+----
+
+=== Why SQL is not relational: Bags, not Sets
+
+* SQL is based on bags (multisets), not sets
+** A bag can have duplicate tuples (rows)
+** SQL does not require that a table have keys
+** Results frequently contain duplicate tuples (rows)
+** Bag math is much more complicated than set math
+* Probably the biggest failure of SQL
+
+----
+
+=== Why SQL is not relational: Ordering, Namelessness, and Name Duplication
+
+* In SQL, columns are ordered and can be referred to positionally
+** Relational theory is clear that all attributes are referred to by name
+* SQL allows for a query to return two columns with the same name
+** |SELECT Employee.department_id, Department.department_id ...|
+* SQL allows for a query to return columns without names
+** |SELECT SUM(salary) FROM Employee|
+
+----
+
+=== Why SQL is not relational: Poor Data Type Support
+
+* SQL implementations have poor support for custom data types
+** Creating new data types based on "base types" should be trivial
+** Creating new complex data types (map route, fingerprint) should be possible
+
+----
+
+=== Why SQL is not relational: Poor Integrity Support
+
+* Minimal constraint support
+** Making new types is hard to impossible
+** Cannot express database constraints except foreign keys
+** Support for table constraints is not rich enough
+
+----
+
+=== Why SQL is not relational: Physical/Logical Confusion
+
+* SQL does not do a good job of separating physical and logical implementation
+** Indexes are physical but unique indexes are logical (keys) /and/ physical
+** Lack of options for optimizing storage separately from logical implementation
+** Leads to solutions at the logical layer like denormalization
+
+----
+
+=== Summary
+
+* SQL sucks and I hate it, but it's probably the best thing out there /right now/
+* A truly relational DBMS would be really cool
+* Knowing what SQL's problems makes you aware of potential pitfalls
+* When someone says "relational sucks, we should use [insert one of XML, object database, ...]"
+** They are probably talking about SQL
+
+----
+
+=== More resources
+
+* /An Introduction to Database Systems/ - Chris Date
+* /Practical Issues in Database Management/ - Fabian Pascal
+* /The Third Manifesto: Foundation for Future Database Systems/ - Chris Date and Hugh Darwen
+** Describes what a truly relational database should be
+* /Temporal Data and the Relational Model/ - Chris Date, Hugh Darwen, and Nokis Lorentzos
+** Will make your head explode
+* http://www.dbdebunk.com/
+** Fabian Pascal's site, with contributions from Date and Darwen
+** Pascal's tone is consistently bilious and unpalatable, /but/ the technical content is good
+
