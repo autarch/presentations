@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>The Relational Model: Integrity - Database</title>
+<title>The Relational Model: Integrity - Relation</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -123,7 +123,7 @@ function nextSlide() {
 }
 
 function prevSlide() {
-    window.location = 'slide10.html';
+    window.location = 'slide10b.html#end';
 }
 
 function indexSlide() {
@@ -191,19 +191,20 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h3>The Relational Model: Integrity - Database</h3>
+ <h3>The Relational Model: Integrity - Relation</h3>
 <ul>
-<li>Constraints involving more than one relation</li>
-<li>Foreign keys are one type of database constraint</li>
+<li>Also can have relation and database constraints</li>
+<li>Keys are relation constraints</li>
 
 <ul>
-<li>Every part_number in SupplierOfPart must correspond to a part_number Part</li>
+<li>No two parts can have the same part number</li>
+<li>Part number is a candidate key for our Parts relation</li>
 </ul>
-<li>Simplified double-entry bookkeeping constraint:</li>
+<li>Other relation constraints</li>
 
 <ul>
-<li>For every tuple in Deposit there must be a tuple in Withdrawal with the same transaction_id</li>
-<li>The value of the amount attribute for the two tuples must be the same</li>
+<li>There must be at least one red part in the relation</li>
+<li>There must be more blue parts than yellow parts</li>
 </ul></ul>
 
 
@@ -217,7 +218,7 @@ document.onkeypress = handleKey
    <td align="left" valign="middle">
     <div>
 
-     <a accesskey='p' href="slide10.html">&lt; &lt; Previous</a> |
+     <a accesskey='p' href="slide10b.html#end">&lt; &lt; Previous</a> |
      <a accesskey='i' href="index.html">Index</a> |
      <a accesskey='n' href="slide12.html">Next &gt;&gt;</a>
 

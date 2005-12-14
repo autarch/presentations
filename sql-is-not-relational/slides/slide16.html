@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Why SQL is not relational: Ordering, Namelessness, and Name Duplication</title>
+<title>Why SQL is not relational: Bags, not Sets</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -191,23 +191,18 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h3>Why SQL is not relational: Ordering, Namelessness, and Name Duplication</h3>
+ <h3>Why SQL is not relational: Bags, not Sets</h3>
 <ul>
-<li>In SQL, columns are ordered and can be referred to positionally</li>
+<li>SQL is based on bags &#40;multisets&#41;, not sets</li>
 
 <ul>
-<li>Relational theory is clear that all attributes are referred to by name</li>
+<li>A bag can have duplicate tuples &#40;rows&#41;</li>
+<li>SQL does not require that a table have keys</li>
+<li>Results frequently contain duplicate tuples &#40;rows&#41;</li>
+<li>Bag math is much more complicated than set math</li>
 </ul>
-<li>SQL allows for a query to return two columns with the same name</li>
-
-<ul>
-<li><tt>SELECT Employee.department_id, Department.department_id ...</tt></li>
+<li>Probably the biggest failure of SQL</li>
 </ul>
-<li>SQL allows for a query to return columns without names</li>
-
-<ul>
-<li><tt>SELECT SUM&#40;salary&#41; FROM Employee</tt></li>
-</ul></ul>
 
 
 </div>

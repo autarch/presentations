@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>The Relational Model: Manipulation</title>
+<title>The Relational Model: Integrity - Database</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -191,32 +191,21 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h3>The Relational Model: Manipulation</h3>
+ <h3>The Relational Model: Integrity - Database</h3>
 <ul>
-<li>Operators to allow modification of data</li>
+<li>Constraints involving more than one relation</li>
+<li>Foreign keys are one type of database constraint</li>
 
 <ul>
-<li>In relational theory, insert, update and delete can all be thought of as assignment</li>
-<li>Every modification to the data in a relation <em>variable</em> changes the <em>value</em> of that <em>variable</em>.</li>
+<li>Every part_number in SupplierOfPart must correspond to a part_number Part</li>
+</ul>
+<li>Simplified double-entry bookkeeping constraint:</li>
+
+<ul>
+<li>For every tuple in Deposit there must be a tuple in Withdrawal with the same transaction_id</li>
+<li>The value of the amount attribute for the two tuples must be the same</li>
 </ul></ul>
-<pre class="formatter_pre">
-# Insert
-Part = { &#40;all current tuples of Part&#41;,
-         [ part_number: 5,
-           part_name: &#34;Big Bird&#39;s Head&#34;,
-           color: &#34;yellow&#34; ],
-       };
 
-# Update
-Part = { &#40;all current tuples except part_number == 5&#41;,
-         [ part_number: 5,
-           part_name: &#34;Big Bird&#39;s Bloody Head&#34;,
-           color: &#34;red&#34; ],
-       };
-
-# Delete
-Part = { &#40;all current tuples except part_number == 5&#41; };
-</pre>
 
 </div>
 <!-- END slide.html -->

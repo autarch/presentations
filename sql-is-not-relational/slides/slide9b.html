@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>The Relational Model: Integrity - Attribute and Type</title>
+<title>Relations are Predicates</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -119,7 +119,7 @@ small {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide10.html';
+    window.location = 'slide10a.html';
 }
 
 function prevSlide() {
@@ -191,21 +191,14 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h3>The Relational Model: Integrity - Attribute and Type</h3>
+ <h3>Relations are Predicates</h3>
 <ul>
-<li>Integrity is provided through constraints</li>
-<li>We already saw attribute constraints</li>
-
-<ul>
-<li>Each attribute has a type</li>
+<li>Each relation represents a predicate about our business domain</li>
+<li>&#34;The part with a part number of X is named Y and is some color.&#34;</li>
+<li>Each tuple asserts a particular proposition based on that predicate</li>
+<li>&#34;Part number 1 is named Sprocket and is red.&#34;</li>
+<li>&#34;Part number 2 is named Flux Capacitor and is blue.&#34;</li>
 </ul>
-<li>Types are constraints</li>
-
-<ul>
-<li><strong>part_number</strong>: integer, &gt; 0</li>
-<li><strong>part_name</strong>: string, length &gt;= 2</li>
-<li><strong>color</strong>: sting, one &#34;red&#34;, &#34;green&#34;, &#34;blue&#34;, &#34;yellow&#34;</li>
-</ul></ul>
 
 
 </div>
@@ -220,7 +213,7 @@ document.onkeypress = handleKey
 
      <a accesskey='p' href="slide9a.html">&lt; &lt; Previous</a> |
      <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide10.html">Next &gt;&gt;</a>
+     <a accesskey='n' href="slide10a.html">Next &gt;&gt;</a>
 
     </div>
    </td>

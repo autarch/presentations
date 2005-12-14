@@ -193,13 +193,30 @@ document.onkeypress = handleKey
  
  <h3>The Relational Model: Manipulation</h3>
 <ul>
-<li>Queries are done via some query language</li>
+<li>Operators to allow modification of data</li>
 
 <ul>
-<li>The relational model does not really define a language</li>
-<li>But says it should be based on relational algebra</li>
+<li>In relational theory, insert, update and delete can all be thought of as assignment</li>
+<li>Every modification to the data in a relation <em>variable</em> changes the <em>value</em> of that <em>variable</em>.</li>
 </ul></ul>
+<pre class="formatter_pre">
+# Insert
+Part = { &#40;all current tuples of Part&#41;,
+         [ part_number: 5,
+           part_name: &#34;Big Bird&#39;s Head&#34;,
+           color: &#34;yellow&#34; ],
+       };
 
+# Update
+Part = { &#40;all current tuples except part_number == 5&#41;,
+         [ part_number: 5,
+           part_name: &#34;Big Bird&#39;s Bloody Head&#34;,
+           color: &#34;red&#34; ],
+       };
+
+# Delete
+Part = { &#40;all current tuples except part_number == 5&#41; };
+</pre>
 
 </div>
 <!-- END slide.html -->
