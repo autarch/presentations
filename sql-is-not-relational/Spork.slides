@@ -11,7 +11,7 @@ presentation_date: December 14, 2005
 
 === The Janus Term
 
-* Janus is the Roman good of doorways as well as beginnings & endings
+* Janus is the Roman god of doorways as well as beginnings & endings
 * Thus the two faces, looking backwards and forwards
 +* This has little to do with my topic
 ** But I'm trying to appear educated
@@ -61,11 +61,19 @@ presentation_date: December 14, 2005
 
 ----
 
+=== The Relational Model
+
+* Invented by Edgar Codd in 1970.
+* Based on math and logic, specifically set theory and predicate logic
+* Separate logical representation of data from storage of the data
+
+----
+
 === The Relational Model: Structure
 
 * The "relation" in relational comes from mathematics
 ** Not "relationship"
-* A relation is basically a set with N elements
+* A relation is basically an ordered set with N elements
 ** *disclaimer*: I was a music major
 * A relation consists of a heading and body
 * The heading defines the relation's attributes
@@ -102,7 +110,7 @@ table.inline th { text-align: left }
   <td>color: red</td>
  </tr>
  <tr>
-  <td>part_number: 1</td>
+  <td>part_number: 2</td>
   <td>part_name: Flux Capacitor</td>
   <td>color: blue</td>
  </tr>
@@ -184,7 +192,7 @@ table.inline th { text-align: left }
 === The Relational Model: Manipulation
 
 * Queries are done via some query language
-** The relational model does not really define a language
+** The relational model does not define such a language
 ** But says it should be based on relational algebra
 
 ----
@@ -271,7 +279,7 @@ table.inline th { text-align: left }
 ** Describes what a truly relational database should be
 * /Temporal Data and the Relational Model/ - Chris Date, Hugh Darwen, and Nokis Lorentzos
 ** Will make your head explode
+* TRDBMS projects on Sourceforge: Rel and Duro
 * http://www.dbdebunk.com/
 ** Fabian Pascal's site, with contributions from Date and Darwen
 ** Pascal's tone is consistently bilious and unpalatable, /but/ the technical content is good
-
