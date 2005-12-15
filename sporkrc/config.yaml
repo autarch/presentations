@@ -1,0 +1,41 @@
+################################################################################
+# Spork Configuration File.
+# 
+# Please read this file over and set the values to your own.
+#
+# If you want global settings for all your slideshows, copy this file to
+# ~/.sporkrc/config.yaml. Any settings in this local file will override
+# the global value of that setting.
+# 
+# See C<perldoc Spork::Config> for details on settings.
+################################################################################
+author_name: Dave Rolsky
+author_email: autarch@urth.org
+author_webpage: http://www.houseabsolute.com/
+copyright_string: Copyright &copy; 2005 David Rolsky
+
+banner_bgcolor: lightgray
+show_controls: 1
+mouse_controls: 0
+image_width: 250
+auto_scrolldown: 1
+file_base: /
+
+slides_file: Spork.slides
+template_directory: template/mason
+template_path: 
+- ./template/mason
+slides_directory: slides
+download_method: wget
+character_encoding: utf-8
+link_previous: &lt; &lt; Previous
+link_next: Next &gt;&gt;
+link_index: Index
+
+start_command: perl -MCwd -e"system('/home/autarch/bin/run-firefox', 'file://' . Cwd::abs_path('slides/start.html'))"
+
+template_class: Spork::Template::Mason
+formatter_class: Spork::Formatter::Extra
+
+plugin_classes:
+- Spork::Hilite
