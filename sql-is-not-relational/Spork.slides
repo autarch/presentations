@@ -137,7 +137,7 @@ table.inline th { text-align: left }
 +* Types are constraints
 ** *part_number*: integer, > 0
 ** *part_name*: string, length >= 2
-** *color*: sting, one "red", "green", "blue", "yellow"
+** *color*: string, one of "red", "green", "blue", "yellow"
 
 ----
 
@@ -277,7 +277,7 @@ table.inline th { text-align: left }
 * /Practical Issues in Database Management/ - Fabian Pascal
 * /The Third Manifesto: Foundation for Future Database Systems/ - Chris Date and Hugh Darwen
 ** Describes what a truly relational database should be
-* /Temporal Data and the Relational Model/ - Chris Date, Hugh Darwen, and Nokis Lorentzos
+* /Temporal Data and the Relational Model/ - Chris Date, Hugh Darwen, and Nikos Lorentzos
 ** Will make your head explode
 * TRDBMS projects on Sourceforge: Rel and Duro
 * http://www.dbdebunk.com/
