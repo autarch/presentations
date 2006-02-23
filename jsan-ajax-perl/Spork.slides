@@ -1,0 +1,306 @@
+----
+images_directory: /home/autarch/presentations/jsan/images
+banner_bgcolor: #006400
+presentation_topic: JSAN, AJAX, and Perl
+presentation_title: JSAN, AJAX, and Perl
+presentation_place: YAPC::Asia, Tokyo, Japan
+presentation_date: March 29, 2006
+----
+
+{image: http://images.amazon.com/images/P/B00008OE4V.01._PE10_SCLZZZZZZZ_.jpg}
+
+=== JavaScript Is the New Sex
+
+* All the cool kids are using it
+* If your website does not use AJAX you are *DOOMED* to Web 1.0 obscurity
+* Perl is dead!
+
+----
+
+{image: http://i.xanga.com/bjs1023/t/skull.jpg}
+
+=== Grave Robbing
+
+* But Perl did have one or two good ideas
+* And one of its best was CPAN
+
+----
+
+{image: http://www.lancashire.gov.uk/corporate/news/press_releases/2003/04/10/001_800x1000.jpg}
+
+=== Finding Reusable JavaScript is Painful
+
+* Besides just a Google search, options were limited
+* Terrible sites like HotScripts
+** Lots of bad code
+** No documentation standards (and often no docs)
+** A lot of commercially licensed code
++* There is good code out there ...
+** ... but it is hard to find, and mostly linked from someone's blog
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== Enter JSAN (www.openjsan.org)
+
+* The obvious idea is CPAN for JS, JSAN
+* Casey West started this project mid-2005
+* Central repository for JS libraries, with some expected standards:
+** Tests
+** API docs in POD
+** Changes file, README, etc.
++* One big problem ...
+** ... JavaScript has not facility for loading libraries!
+* Nothing like Perl's |use| or |require|
+* Loading of multiple libraries can only be done from an HTML file:
+
+  <script type="text/javascript" src="/js/Lib/Foo.js" />
+  <script type="text/javascript" src="/js/Lib/Bar.js" />
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== The JSAN.js Library Loader
+
+* Actually, there is a way to load libraries from a script file
+** several ways, in fact
+* It is possible to use XMLHttpRequest to load a script from inside a script
+* JSAN.js does this for you
+** and provides Perl-style "exporting" as well
++* In your HTML:
+
+.hilite
+  <script type="text/javascript" src="/js/JSAN.js" />
+  <script type="text/javascript">
+    JSAN.use('Lib.Foo');
+    JSAN.use('Lib.Bar');
+  </script>
++
+  g+ 1
++
+  g+ 3
+  g+ 4
++
+              ggggggg  3
+              ggggggg  4
+.hilite
+
+----
+
+{image: http://www.roman-empire.net/army/pics/late-legionary-02.jpg}
+
+=== Caveat
+
+* There's always a caveat
+* Some browsers (Firefox, IE sometimes) do not respect caching headers when using XHR
+* If you load 50k worth of JS libraries on each page ...
++** ... 10,000 page view per day
++** ... 50MB per day
++** ... approximately 1.5GB per month!
+** = ??? $$
+* Now do the math for 100,000 or 1,000,000 page views per day
+
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Workarounds
+
+* For dynamic sites, use |JSAN::ServerSide| from CPAN
+* Reads a JSAN-using JavaScript library ...
+** ... analyzes dependencies ...
+** ... spits out a bunch of URIs to load libraries in the right order
++* In your code:
+
+  my $js =
+      JSAN::ServerSide->new
+          ( uri_prefix => '/path/to/js/via/web',
+            fs_prefix  => '/usr/local/js' );
+
+  $js->add('HTTP.Request');
+  $js->add('My.Class');
+
++* When generating HTML:
+
+.hilite
+  <script type="text/javascript">
+    var JSAN = {};
+    JSAN.use = function () {};
+  </script>
+  % for my $uri ( $js->uris() ) {
+  <script type="text/javascript" src="<% $uri %>" />
+  % }
+
++
+    ggggggggggggg 2
+    ggggggggggggggggggggggggg 3
+.hilite
+
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Another Workaround
+
+* Just do it by hand
+* Analyze dependencies by looking at file
+* Mock out JSAN.js
+
+  <script type="text/javascript">
+    var JSAN = {};
+    JSAN.use = function () {};
+  </script>
+
+* Load libraries in correct order
+
+  <script type="text/javascript" src="/js/Lib/Foo.js" />
+  <script type="text/javascript" src="/js/Lib/PrereqForBar.js" />
+  <script type="text/javascript" src="/js/Lib/Bar.js" />
+
+* |JSAN.js| and |JSAN::ServerSide| are always optional
+
+----
+
+=== What's on JSAN?
+
+* Test.Simple
+** JS port of Perl's |Test::Simple|, |Test::More|, and |Test::Harness|
+
+----
+
+=== Test.More
+
+.hilite
+  <html>
+  <head>
+   <script type="text/javascript" src="lib/JSAN.js" />
+   <script type="text/javascript">
+    JSAN.addRepository("lib", "../lib");
+    JSAN.use("Test.More");
+   </script>
+  </head>
+  <body>
+
+   <pre style="white-space: pre" id="test">
+    <script type="text/javascript">
+     plan({ tests: 2 });
+
+     JSAN.use("DOM.Ready");
+     DOM.Ready._clearTimer();
+
+     is( typeof DOM.Ready, "object", "namespace exists" );
+     ok( DOM.Ready.VERSION, "found library VERSION" );
+    </script>
+   </pre>
+
+  </body>
+  </html>
++
+   g+ 3
+    g+ 5
+    g+ 6
++
+     g+ 13
++
+     g+ 18
+     g+ 19
+
+----
+
+=== Test.Harness
+
+  <html>
+  <head>
+   <script type="text/javascript" src="lib/JSAN.js" />
+  </head>
+  <body>
+
+   <script type="text/javascript">
+     JSAN.use('Test.Harness.Browser');
+
+     var t = new Test.Harness.Browser();
+
+     t.runTests(
+       "constructor.t.html",
+       "ready.t.html",
+       "run_callbacks.t.html"
+     );
+   </script>
+
+  </body>
+  </html>
+
+----
+
+=== DOM.Events
+
+* Attach events to any DOM element.
+** cross-platform
+** memory-leak free (IE is a memory sieve)
+** stack multiple listener callbacks on the same event
+** a nice way to handle the need for multiple window.onLoad events
++* Example ...
+
+  DOM.Events.addListener
+      ( window, "load", AdServer.RandomAnnoyingPopupDiv );
+
+  var divs = document.getElementsByTagName("div");
+  for ( var i = 0; i < divs.length; i++ ) {
+    DOM.Events.addListener( divs[i], "click", Effects.Bounce );
+  }
+
+----
+
+=== DOM.Ready
+
+* Setup callbacks to be executed when an element is available
+* window.onLoad not called until *all* page elements are loaded
+** including images
+* Images fetched from another server could take a while
++* Example:
+
+  DOM.Ready.onIdReady( "div_id", addDivEvent );
++* Use this at the end of the page to run all remaining callbacks:
+
+   ...
+
+   <script type="text/javascript">
+     DOM.Ready.runReadyCallbacks();
+   </script>
+  </body>
+  </html>
+
+----
+
+=== Lots more
+
+* Some ports of Perl modules: |File.Basename|
+* Widgets: |Widget.Select|, |Widget.PairedMultiSelect|
+* DOM Manipulation & Instrumentation: |DOM.Triggers|, |DOM.Insert|, |Display.Swap|
+* Cross-platform XHR: |HTTP.Request|
+* Class creation: |Class.Setup|, |Class|
+
+----
+
+=== Helping out
+
+* The project needs help in lots of areas
+* Writing more useful JavaScript libraries
+* Working on the openjsan website and mirroring system
+* Working on clients
+** a JSAN shell exists but could use lots of improvement
+
+----
+
+=== JSAN
+
+* http://www.openjsan.org/
+* Questions?
+
+
+-------
+=== NOTES
+
+JSAN.js and JSAN::ServerSide are optional - can use libraries without them
