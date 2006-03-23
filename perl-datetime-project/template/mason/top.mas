@@ -7,7 +7,6 @@
 <meta name="generator" content="<% $spork_version | h %>">
 <link rel='stylesheet' href='slide.css' type='text/css'>
 <link rel='icon' HREF='favicon.png'>
-<style>
 % if ( $hub->can('css') ) {
 %   foreach my $f ( grep { defined && length } @{ $hub->css->files } ) {
 <link rel="stylesheet" type="text/css" href="<% $f | h %>" />
