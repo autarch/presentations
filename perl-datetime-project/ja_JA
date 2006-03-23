@@ -1,0 +1,21 @@
+use strict;
+
+use DateTime;
+
+binmode STDOUT, ':utf8';
+
+print "\n";
+
+my $dt = DateTime->now( locale => 'ja_JA' );
+for my $m ( qw( month_name month_abbr day_name day_abbr
+                era ) )
+{
+    print " $m: ", $dt->$m, "\n";
+}
+
+for my $f ( qw( %p %c %x %X ) )
+{
+    print " $f: ", $dt->strftime($f), "\n";
+}
+
+print "\n";

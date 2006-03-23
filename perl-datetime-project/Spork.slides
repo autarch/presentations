@@ -5,30 +5,8 @@ logo_image: clocks-small.jpg
 banner_bgcolor: #E9E6BB
 presentation_topic: Perl DateTime Project
 presentation_title: Perl DateTime Project
-presentation_place: Toronto, Ontario
-presentation_date: June 28, 2005
-----------------------------------------------
-
-{image: http://www.poc.it/stories/desktop/desk_1024/shark1024.jpg}
-
-== Wear Your Name Tag to the Cruise
-
-* Or else!
-
-----------------------------------------------
-
-== Choose Your Own Adventure
-
-{image: http://www.gamebooks.org/gallery/cyoa001f.jpg}
-
-* The presenter asks you what you want to see for the last part of the talk, you will ...
-+** A) listen to him blather on
-*** turn to slide 76 and go to sleep
-+** B) come up with programming problems you want to see solved
-*** turn to slide 23 and write down the problem you want to see solved
-+** C) go on a rampage of destruction, Johnny Depp style
-*** turn to slide 55, go to your room, and start chucking stuff out the window
-
+presentation_place: Tokyo, Asia
+presentation_date: March 30, 2006
 ----------------------------------------------
 
 == The Problem(s)
@@ -58,7 +36,7 @@ presentation_date: June 28, 2005
 
 * Core
 ** |DateTime.pm|
-+** |DateTime::TimeZone| - the Olson database in Perl
++** |DateTime::TimeZone| - the Olson time zone database in Perl
 +** |DateTime::Locale| - ICU-based localization
 +** |DateTime::{Set,Span,SpanSet}|
 * Parsing and formatting
@@ -78,6 +56,7 @@ presentation_date: June 28, 2005
 ** |DateTime::Event::Lunar|
 ** |DateTime::Event::Easter|
 * Non-Gregorian calendars
+** Japanese
 ** Chinese
 ** Julian
 ** Hebrew
@@ -132,14 +111,14 @@ presentation_date: June 28, 2005
 == Time Zones
 
 * Time zones are *geo-political* entities
-** they are not "real"
+** completely arbitrary, can change at a politician's whim
 +* Canonical data source: the Olson time zone database
 +* Each time zone has several parts
 ** an offset from UTC in minutes and hours
-+** a name - usually contintent or ocean plus city
++** a name - usually continent or ocean plus city
 *** America/Toronto
 *** Europe/London
-*** some three component names - America/Indiana/Knox
+*** some have three component names - America/Indiana/Knox
 +** Also includes Daylight Saving Time rules
 *** when do switches happen
 +** a short name for the zone, like EST
@@ -150,7 +129,7 @@ presentation_date: June 28, 2005
 
 * The canonical names are the long names!
 +* Short names are *not* unique around the world
-+* A global app should only use short names for display
++* An app with users around the world should only use short names for display
 
 ----------------------------------------------
 
@@ -170,9 +149,9 @@ presentation_date: June 28, 2005
 
 * Epochs times are not portable
 +* Epoch times have a limited range
-** just wait for the y2.038 bug
-** Or try calculatiung a 30 year mortgage starting in 2009
-+* The Unix epoch ignores leap seconds in a weird way
+** just wait for the y2.038k bug
+** Or try calculating a 30 year mortgage starting in 2009
++* The POSIX epoch standard ignores leap seconds in a weird way
 
 ----------------------------------------------
 
@@ -192,7 +171,7 @@ presentation_date: June 28, 2005
 == Make it Speak
 
 * |$dt->year| - 2005
-+* |$dt->year_with_secular_era| - 2005AD
++* |$dt->year_with_secular_era| - 2005CE
 ** localized
 +* |$dt->month_name| - June
 ** also localized
@@ -278,7 +257,7 @@ presentation_date: June 28, 2005
 
 * An example:
 
-    my $dt = DateTime->now( locale => 'zh_TW' );
+    my $dt = DateTime->now( locale => 'ja_JA' );
     for my $m ( qw( month_name month_abbr day_name day_abbr
                     era ) )
     {
@@ -290,7 +269,7 @@ presentation_date: June 28, 2005
         print "$f: ", $dt->strftime($f);
     }
 
-* run the script - /zh_TW/
+* run the script - /ja_JA/
 
 ----------------------------------------------
 
