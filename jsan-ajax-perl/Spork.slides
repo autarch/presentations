@@ -93,7 +93,7 @@ presentation_date: March 29, 2006
 
 ----
 
-{image: http://www.roman-empire.net/army/pics/late-legionary-02.jpg}
+{image: http://upload.wikimedia.org/wikipedia/en/4/4c/Biggus.jpg}
 
 === Caveat
 
@@ -382,6 +382,8 @@ presentation_date: March 29, 2006
 
 ----
 
+{image: http://www.lay-lo.com/graff/h-l/json_001.jpg}
+
 === JSON Example
 
 * JSON is just Javascript, in this case an anonymous object.
@@ -426,6 +428,8 @@ receive_update: function (transport) {
 
 ----
 
+{image: http://www.urth.org/~autarch/jsan-ajax.png}
+
 === AJAX and JSAN
 
 * |HTTP.Request|, cross-platform XHR library
@@ -434,6 +438,8 @@ receive_update: function (transport) {
 
 ----
 
+{image: http://www.maztravel.com/perl/images/camel.jpg}
+
 === Perl Modules
 
 * |JSON::Syck| - convert Perl data structures to JSON
@@ -441,6 +447,8 @@ receive_update: function (transport) {
 * |JSAN::ServerSide| - JSAN dependency analyzer
 
 ----
+
+{image: http://www.urth.org/~autarch/camel-ajax.jpg}
 
 === Perl and AJAX
 
