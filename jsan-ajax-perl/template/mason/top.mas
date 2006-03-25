@@ -27,7 +27,7 @@
 % if ( defined $logo_image ) {
     <img src="<% $images_directory %>/<% $logo_image %>" alt="<% $presentation_topic | h %>" />
 % } else {
-    <% $presentation_topic | h %>
+
 % }
    </td>
    <td align="center" width="73%">

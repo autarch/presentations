@@ -45,13 +45,14 @@ presentation_date: March 29, 2006
 === Enter JSAN (www.openjsan.org)
 
 * The obvious idea is CPAN for JS, JSAN
+** http://www.openjsan.org/
 * Casey West started this project mid-2005
 * Central repository for JS libraries, with some expected standards:
 ** Tests
 ** API docs in POD
 ** Changes file, README, etc.
 +* One big problem ...
-** ... JavaScript has not facility for loading libraries!
+** ... JavaScript has no facility for loading libraries!
 * Nothing like Perl's |use| or |require|
 * Loading of multiple libraries can only be done from an HTML file:
 
@@ -74,6 +75,7 @@ presentation_date: March 29, 2006
 .hilite
   <script type="text/javascript" src="/js/JSAN.js" />
   <script type="text/javascript">
+    JSAN.addRepository('/js');
     JSAN.use('Lib.Foo');
     JSAN.use('Lib.Bar');
   </script>
@@ -81,10 +83,12 @@ presentation_date: March 29, 2006
   g+ 1
 +
   g+ 3
-  g+ 4
 +
-              ggggggg  3
+  g+ 4
+  g+ 5
++
               ggggggg  4
+              ggggggg  5
 .hilite
 
 ----
@@ -96,11 +100,11 @@ presentation_date: March 29, 2006
 * There's always a caveat
 * Some browsers (Firefox, IE sometimes) do not respect caching headers when using XHR
 * If you load 50k worth of JS libraries on each page ...
-+** ... 10,000 page view per day
-+** ... 50MB per day
-+** ... approximately 1.5GB per month!
-** = ??? $$
-* Now do the math for 100,000 or 1,000,000 page views per day
++** ... 100,000 page view per day
++** ... 500MB per day
++** ... approximately 15GB per month!
+** = ??? ¥
+* Now do the math for 1,000,000 or 100,000,000 page views per day
 
 ----
 
@@ -112,6 +116,7 @@ presentation_date: March 29, 2006
 * Reads a JSAN-using JavaScript library ...
 ** ... analyzes dependencies ...
 ** ... spits out a bunch of URIs to load libraries in the right order
+** ... but does not support exporting (yet)
 +* In your code:
 
   my $js =
@@ -238,7 +243,7 @@ presentation_date: March 29, 2006
 
 * Attach events to any DOM element.
 ** cross-platform
-** memory-leak free (IE is a memory sieve)
+** memory-leak free - events on IE are notorious for leaking
 ** stack multiple listener callbacks on the same event
 ** a nice way to handle the need for multiple window.onLoad events
 +* Example ...
@@ -248,7 +253,7 @@ presentation_date: March 29, 2006
 
   var divs = document.getElementsByTagName("div");
   for ( var i = 0; i < divs.length; i++ ) {
-    DOM.Events.addListener( divs[i], "click", Effects.Bounce );
+    DOM.Events.addListener( divs[i], "click", Effect.Bounce );
   }
 
 ----
@@ -256,6 +261,7 @@ presentation_date: March 29, 2006
 === DOM.Ready
 
 * Setup callbacks to be executed when an element is available
+** ... instead of using window.onLoad
 * window.onLoad not called until *all* page elements are loaded
 ** including images
 * Images fetched from another server could take a while
@@ -277,30 +283,172 @@ presentation_date: March 29, 2006
 === Lots more
 
 * Some ports of Perl modules: |File.Basename|
-* Widgets: |Widget.Select|, |Widget.PairedMultiSelect|
+* Widgets: |Widget.SortableTable|, |Widget.TableOfContentGenerator|
+* Effects: |Effect.DropShadow|, |Effect.RoundedCorners|
 * DOM Manipulation & Instrumentation: |DOM.Triggers|, |DOM.Insert|, |Display.Swap|
 * Cross-platform XHR: |HTTP.Request|
 * Class creation: |Class.Setup|, |Class|
 
 ----
 
-=== Helping out
+{image: http://blog.labnotes.org/wp-content/uploads/ajax.jpg}
 
-* The project needs help in lots of areas
-* Writing more useful JavaScript libraries
-* Working on the openjsan website and mirroring system
-* Working on clients
-** a JSAN shell exists but could use lots of improvement
+=== AJAX
+
+* *A*{{synchronous}} *J*{{avascript}} *a*{{nd}} *X*{{ML}}
+* Core of AJAX ...
+** Server request without page refresh
 
 ----
 
-=== JSAN
+{image: http://www.transload.net/~marneysplace/misc/lie.gif}
 
-* http://www.openjsan.org/
-* Questions?
+=== AJAX is a Lie
 
+* Can be synchronous
+* No need for XML
+* Doesn't even need Javascript
+** Similar techniques for Flash, for example
 
--------
-=== NOTES
+----
 
-JSAN.js and JSAN::ServerSide are optional - can use libraries without them
+=== XMLHttpRequest
+
+* Modern browsers have XMLHttpRequest (XHR) in Javascript
+* API for making server request in JS
+* Mozilla Firefox, modern IE, Opera, Safari, Konqueror
+
+----
+
+{image: http://www.seismo.unr.edu/ftp/pub/louie/class/100/earth-core.GIF}
+
+== Core of AJAX
+
+* Use XHR to send an HTTP request to the server
+* Server can return anything ...
+** XML
+** HTML
+** Javascript
+** JSON (Javascript Object Notation)
+* Use DHTML techniques to update page based on server response
+
+----
+
+{image: http://www.channel4.com/entertainment/tv/microsites/I/itcrowd/images/moss-profile.jpg}
+
+=== Why it is cool
+
+* No page reloads
+* Use it with timers for automatic updates
+* More desktop-like web applications
+
+----
+
+{image: http://www.meredy.com/lisrobot.jpg}
+
+=== Danger, Will Robinson!
+
+* Breaks the back button
+* Can defy user expectations
+** Users expect a page reload when they hit a button
+* A whole new way of doing web apps
+** Not as well explored, lacking standards for UI design
+
+----
+
+{image: http://static.flickr.com/26/60097639_c00d822480_d.jpg}
+
+=== Socialtext Example
+
+.html
+<ul><li><a href="http://www.socialtext.net/exchange/">http://www.socialtext.net/exchange/</a></li></ul>
+.html
++* Side box content is loaded if box is opened
+* Content is just an HTML blob:
+
+  <div class="box_item">
+      <a title="Attention Management"
+          href="index.cgi?attention_management">Attention Management</a>
+  </div>
+
+  <div class="box_item">
+      <a title="Best Practices"
+          href="index.cgi?best_practices">Best Practices</a>
+  </div>
+
+* Uses normal DHTML to change the page:
+
+  content_div.innerHTML = response;
+
+----
+
+=== JSON Example
+
+* JSON is just Javascript, in this case an anonymous object.
+
+    {
+     html: { 'element-id-1':
+               'blob of <strong>HTML</strong>',
+             'element-id-2':
+               'another blob of <em>HTML</em>'
+           }
+    }
+
+* On the client side:
+
+.hilite
+receive_update: function (transport) {
+  var response;
+
+  try { eval("response = " + transport.responseText) }
+  catch (e) { alert(e + "\n" + transport.responseText) }
+
+  for (elt_id in response.html) {
+    var element = document.getElementById(elt_id);
+    if (element) {
+      element.innerHTML = response.html[elt_id];
+    }
+  }
+}
+
++
+  g+ 4
+  g+ 5
+
++
+  g+ 7
+  g+ 8
+  g+ 9
+  g+ 10
+  g+ 11
+  g+ 12
+.hilite
+
+----
+
+=== AJAX and JSAN
+
+* |HTTP.Request|, cross-platform XHR library
+* With XHR, you specify a function to be called when the response arrives
+* The XHR object is passed to the callback
+
+----
+
+=== Perl Modules
+
+* |JSON::Syck| - convert Perl data structures to JSON
+** Also |Data::JavaScript| and |Data::JavaScript::Anon|
+* |JSAN::ServerSide| - JSAN dependency analyzer
+
+----
+
+=== Perl and AJAX
+
+* The Perl side is simple
+* Get a request for a URI
+* Serve some sort of data in response
+* Standard webapp behavior
+
+----
+
+=== Questions?
