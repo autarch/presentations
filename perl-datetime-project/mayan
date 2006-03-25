@@ -3,7 +3,11 @@ use strict;
 use DateTime;
 use DateTime::Calendar::Mayan;
 
+print "\n";
+
     my $mayan = DateTime::Calendar::Mayan->new( baktun => 13 );
     my $dt = DateTime->from_object( object => $mayan );
 
-    print $dt->date, "\n";
+    print " You have until ", $dt->date, "\n";
+
+print "\n";

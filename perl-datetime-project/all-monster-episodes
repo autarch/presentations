@@ -1,0 +1,15 @@
+use strict;
+
+use DateTime;
+
+print "\n";
+
+    my $NumberOfEpisodes  = 74;
+    my $MinutesPerEpisode = 20;
+
+    my $dt = DateTime->now;
+    $dt->add( minutes => $NumberOfEpisodes * $MinutesPerEpisode );
+
+    print " Start watching now and finish at ", $dt->datetime, "\n";
+
+print "\n";

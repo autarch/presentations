@@ -6,12 +6,12 @@ use DateTime::Event::Recurrence;
     my $recur =
         DateTime::Event::Recurrence->weekly( days => [ 1 .. 5 ] );
 
-    my $end = DateTime->new( year => 2005, month => 8 )->subtract( days => 1 );
+    my $end = DateTime->new( year => 2006, month => 8 )->subtract( days => 1 );
     my @list =
         $recur->as_list( start => DateTime->today, end => $end );
 
     for my $dt (@list)
     {
         print "\n" if $dt->day_of_week == 1;
-        print sprintf( "%-9s - %s\n", $dt->day_name, $dt->date );
+        print sprintf( " %-9s - %s\n", $dt->day_name, $dt->date );
     }

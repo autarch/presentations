@@ -208,11 +208,11 @@ presentation_date: March 30, 2006
 
     my $dt = DateTime->now( time_zone => 'Asia/Taipei' );
 
-    print "Taipei: ", $dt->datetime;
+    print ' Taipei: ', $dt->datetime, "\n";
 
     $dt->set_time_zone( 'Europe/Paris' );
 
-    print "Paris: ", $dt->datetime;
+    print ' Paris:  ', $dt->datetime, "\n";
 
 * run the script - /what-time-is-it-there/
 
@@ -258,15 +258,14 @@ presentation_date: March 30, 2006
 * An example:
 
     my $dt = DateTime->now( locale => 'ja_JA' );
-    for my $m ( qw( month_name month_abbr day_name day_abbr
-                    era ) )
+    for my $m ( qw( month_name month_abbr day_name day_abbr era ) )
     {
-        print "$m: ", $dt->$m;
+        print " $m: ", $dt->$m, "\n";
     }
 
     for my $f ( qw( %p %c %x %X ) )
     {
-        print "$f: ", $dt->strftime($f);
+        print " $f: ", $dt->strftime($f), "\n";
     }
 
 * run the script - /ja_JA/
@@ -279,36 +278,40 @@ presentation_date: March 30, 2006
 
 .hilite
 my $today = DateTime->today( time_zone => 'floating' );
-my $oscon = DateTime->new( year => 2005, month => 8, day => 3 );
+my $yapc  = DateTime->new( year => 2006, month => 6, day => 26 );
 
-my $delta = $oscon->delta_days($today);
+my $delta = $yapc->delta_days($today);
 
-print $delta->delta_days;
-
+print " Days until YAPC::NA: ", $delta->delta_days, "\n";
 +
-                    rrrrrrrrrr 4
-              rrrrrrrrrr 6
+                   rrrrrrrrrr 4
+                                        rrrrrrrrrr 6
 .hilite
 
 +* This part of the API sucks
-+* Sorry
+* Sorry
 ** hindsight
 ** 20/20
 
-+* run the script - /delta-days-oscon/
++* run the script - /delta-days-yapc/
 
 ----------------------------------------------
 
+{image: http://upload.wikimedia.org/wikipedia/en/8/80/Monster.JPG}
+
 == Math (cont)
 
-* What day is it 10 days from now?
+* How long to watch all Monster episodes?
 
-    my $dt = DateTime->today;
-    $dt->add( days => 10 );
+    my $NumberOfEpisodes  = 74;
+    my $MinutesPerEpisode = 20;
 
-    print $dt->date;
+    my $dt = DateTime->now;
+    $dt->add( minutes => $NumberOfEpisodes * $MinutesPerEpisode );
 
-* run the script - /10-days-out/
+    print " Start watching now and finish at ", $dt->datetime, "\n";
+
+* run the script - /all-monster-episodes/
 
 ----------------------------------------------
 
@@ -320,7 +323,7 @@ print $delta->delta_days;
     $today_zh->set( month => 7, day => 7 );
     my $dt = DateTime->from_object( object => $today_zh );
 
-    print $dt->date;
+    print " I should give my wife a gift on ", $dt->date, "\n";
 
 * run the script - /chinese-valentine/
 +* If I were a good husband, I would remember this
@@ -336,7 +339,7 @@ print $delta->delta_days;
     my $mayan = DateTime::Calendar::Mayan->new( baktun => 13 );
     my $dt = DateTime->from_object( object => $mayan );
 
-    print $dt->date;
+    print " You have until ", $dt->date, "\n";
 
 * run the script - /mayan/
 
@@ -365,7 +368,7 @@ my $dt = DateTime->today;
 while ( $dt = $recur->next($dt) )
 {
     last if $dt->month == 8;
-    print $dt->date;
+    print ' ', $dt->date, "\n";
 }
 
                       rrrrrrrr 5
@@ -385,19 +388,21 @@ my $recur =
     DateTime::Event::Recurrence->weekly( days => [ 1 .. 5 ] );
 
 my $end =
-    DateTime->new( year => 2005, month => 8 )->subtract( days => 1 );
+    DateTime->new( year => 2006, month => 8 )->subtract( days => 1 );
 my @list =
     $recur->as_list( start => DateTime->today, end => $end );
 
 for my $dt (@list)
 {
     print "\n" if $dt->day_of_week == 1;
-    print sprintf( "%-9s - %s\n", $dt->day_name, $dt->date );
+    print sprintf( " %-9s - %s\n", $dt->day_name, $dt->date );
 }
 
                                          bbbbbbbbbbbbbbbbbb 2
             rrrrrrrr 7
 .hilite
+
+* run the script - /work-week/
 
 ----------------------------------------------
 
@@ -412,8 +417,8 @@ my $recur =
 my $days_off =
     DateTime::Set->from_datetimes
         ( dates => [ map { DateTime->new(%$_) }
-                     { year => 2005, month => 7, day => 12 },
-                     { year => 2005, month => 7, day => 13 } ] );
+                     { year => 2006, month => 7, day => 12 },
+                     { year => 2006, month => 7, day => 13 } ] );
 
 $recur = $recur->complement($days_off);
 
@@ -435,10 +440,10 @@ rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 10
 
 * HTTP dates:
 
-    print DateTime::Format::HTTP->format_datetime
-              ( DateTime->today );
-    print DateTime::Format::HTTP->parse_datetime
-              ( 'Tue, 28 Jun 2005 13:52:00 GMT' );
+    print ' ', DateTime::Format::HTTP->format_datetime
+                   ( DateTime->today );
+    print ' ', DateTime::Format::HTTP->parse_datetime
+                   ( 'Tue, 28 Jun 2005 13:52:00 GMT' );
 
 * run the script - /http/
 
@@ -450,3 +455,5 @@ rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 10
 * mailing list: datetime@perl.org
 
 ----------------------------------------------
+
+== Questions?

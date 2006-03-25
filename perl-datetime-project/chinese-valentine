@@ -3,8 +3,12 @@ use strict;
 use DateTime;
 use DateTime::Calendar::Chinese;
 
+print "\n";
+
     my $today_zh = DateTime::Calendar::Chinese->now();
     $today_zh->set( month => 7, day => 7 );
     my $dt = DateTime->from_object( object => $today_zh );
 
-    print $dt->date, "\n";
+    print " I should give my wife a gift on ", $dt->date, "\n";
+
+print "\n";

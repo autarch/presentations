@@ -10,5 +10,5 @@ use DateTime::Event::Recurrence;
     while ( $dt = $recur->next($dt) )
     {
         last if $dt->month == 8;
-        print $dt->date, "\n";
+        print ' ', $dt->date, "\n";
     }

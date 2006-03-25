@@ -9,12 +9,12 @@ use DateTime::Event::Recurrence;
     my $days_off =
         DateTime::Set->from_datetimes
             ( dates => [ map { DateTime->new(%$_) }
-                         { year => 2005, month => 7, day => 12 },
-                         { year => 2005, month => 7, day => 13 } ] );
+                         { year => 2006, month => 7, day => 12 },
+                         { year => 2006, month => 7, day => 13 } ] );
 
     $recur = $recur->complement($days_off);
 
-    my $end = DateTime->new( year => 2005, month => 8 )->subtract( days => 1 );
+    my $end = DateTime->new( year => 2006, month => 8 )->subtract( days => 1 );
 
     my @list =
         $recur->as_list( start => DateTime->today, end => $end );
@@ -22,5 +22,5 @@ use DateTime::Event::Recurrence;
     for my $dt (@list)
     {
         print "\n" if $dt->day_of_week == 1;
-        print sprintf( "%-9s - %s\n", $dt->day_name, $dt->date );
+        print sprintf( " %-9s - %s\n", $dt->day_name, $dt->date );
     }
