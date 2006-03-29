@@ -3,21 +3,15 @@ images_directory: /home/autarch/presentations/sql-is-not-relational/images
 banner_bgcolor: #905030
 presentation_topic: Relational & SQL
 presentation_title: What is a Data Model?; The Relational Model; SQL is not Relational
-presentation_place: Minneapolis, MN
-presentation_date: December 14, 2005
+presentation_place: Tokyo, Japan
+presentation_date: March 30, 2006
 ----
 
-{image: http://fbyg.org/janus.jpg}
+=== A Data Model Is?
 
-=== The Janus Term
-
-* Janus is the Roman god of doorways as well as beginnings & endings
-* Thus the two faces, looking backwards and forwards
-+* This has little to do with my topic
-** But I'm trying to appear educated
-+* "Data model" has two meanings
-* First is the representation of a set of business rules for a data management system
-** Tables and constraints for SQL are a "data model" of some business domain
+* "Data model" has two meanings
+* First is the representation of a set of business rules
+** SQL tables and constraints are a "data model" of some business domain
 * The other is general theory of representing and manipulating data
 ** I'm going to talk about this meaning
 
@@ -38,7 +32,6 @@ presentation_date: December 14, 2005
 * How is the data organized
 * In SQL you have tables and rows
 * In relational you have relations and tuples
-* In XML you have documents and tag markup
 * Structure is /logical/, not /physical/
 * How and where data is stored is *not* part of a data model
 
@@ -48,7 +41,6 @@ presentation_date: December 14, 2005
 
 * Rules for restricting data types, values, etc. - constraints
 * Relational (and SQL) has keys (candidate & foreign) and other constraints
-* XML has DTDs and XML Schema
 
 ----
 
@@ -56,160 +48,14 @@ presentation_date: December 14, 2005
 
 * Modifying and querying the data
 * SQL has SQL
-* XML has XPath & XSLT for querying (more or less)
-** How do you modify XML - code?
 
 ----
 
 === The Relational Model
 
-* Invented by Edgar Codd in 1970.
+* Invented by Edgar Codd (RIP) in 1970.
 * Based on math and logic, specifically set theory and predicate logic
 * Separate logical representation of data from storage of the data
-
-----
-
-=== The Relational Model: Structure
-
-* The "relation" in relational comes from mathematics
-** Not "relationship"
-* A relation is basically an ordered set with N elements
-** *disclaimer*: I was a music major
-* A relation consists of a heading and body
-* The heading defines the relation's attributes
-** Attributes have a name and a data type
-* The body contains 0 or more tuples
-** Each tuple has the set of attributes defined by the heading
-
-----
-
-=== The Relational Model: Structure Example
-
-* The most boring example ever
-* Your friend, the parts/supplier database!
-
-.css
-table.inline, table.inline tr, table.inline tr td, table.inline tr th {
-  border: 1px solid #905030;
-  border-collapse: collapse;
-}
-table.inline td, table.inline th { padding: 0.2em 0.5em }
-table.inline th { text-align: left }
-.css
-
-.html
-<table class="inline">
- <tr>
-  <th>part_number: part_number</th>
-  <th>part_name: name</th>
-  <th>color: color</th>
- </tr>
- <tr>
-  <td>part_number: 1</td>
-  <td>part_name: Sprocket</td>
-  <td>color: red</td>
- </tr>
- <tr>
-  <td>part_number: 2</td>
-  <td>part_name: Flux Capacitor</td>
-  <td>color: blue</td>
- </tr>
-</table>
-.html
-
-----
-
-=== Relations are Predicates
-
-* Each relation represents a predicate about our business domain
-* "The part with a part number of X is named Y and is some color."
-+* Each tuple asserts a particular proposition based on that predicate
-* "Part number 1 is named Sprocket and is red."
-* "Part number 2 is named Flux Capacitor and is blue."
-
-----
-
-=== The Relational Model: Integrity - Attribute and Type
-
-* Integrity is provided through constraints
-* We already saw attribute constraints
-** Each attribute has a type
-+* Types are constraints
-** *part_number*: integer, > 0
-** *part_name*: string, length >= 2
-** *color*: string, one of "red", "green", "blue", "yellow"
-
-----
-
-=== The Relational Model: Integrity - Relation
-
-* Also can have relation and database constraints
-* Keys are relation constraints
-** No two parts can have the same part number
-** Part number is a candidate key for our Parts relation
-* Other relation constraints
-** There must be at least one red part in the relation
-** There must be more blue parts than yellow parts
-
-----
-
-=== The Relational Model: Integrity - Database
-
-* Constraints involving more than one relation
-* Foreign keys are one type of database constraint
-** Every part_number in SupplierOfPart must correspond to a part_number Part
-* Simplified double-entry bookkeeping constraint:
-** For every tuple in Deposit there must be a tuple in Withdrawal with the same transaction_id
-** The value of the amount attribute for the two tuples must be the same
-
-----
-
-=== The Relational Model: Manipulation
-
-* Operators to allow modification of data
-** In relational theory, insert, update and delete can all be thought of as assignment
-** Every modification to the data in a relation /variable/ changes the /value/ of that /variable/.
-
-   # Insert
-   Part = { (all current tuples of Part),
-            [ part_number: 5,
-              part_name: "Big Bird's Head",
-              color: "yellow" ],
-          };
-
-   # Update
-   Part = { (all current tuples except part_number == 5),
-            [ part_number: 5,
-              part_name: "Big Bird's Bloody Head",
-              color: "red" ],
-          };
-
-   # Delete
-   Part = { (all current tuples except part_number == 5) };
-
-----
-
-=== The Relational Model: Manipulation
-
-* Queries are done via some query language
-** The relational model does not define such a language
-** But says it should be based on relational algebra
-
-----
-
-=== The Relational Model: Manipulation - Relational Algebra
-
-* Six basic operators
-* Set union
-* Set difference
-* Cartesian product (cross join)
-* Selection
-** like SQL's WHERE (color == "yellow")
-* Projection - subset of attributes from a relation
-** part_number and part_name from Part
-* Rename
-** part_name AS name
-* Everything else is defined in terms of those operators
 
 ----
 
@@ -265,6 +111,7 @@ table.inline th { text-align: left }
 
 * SQL sucks and I hate it, but it's probably the best thing out there /right now/
 * A truly relational DBMS would be really cool
+* SQL is more complex than relational, but no more powerful
 * Knowing what SQL's problems makes you aware of potential pitfalls
 * When someone says "relational sucks, we should use [insert one of XML, object database, ...]"
 ** They are probably talking about SQL
