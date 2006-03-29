@@ -9,53 +9,34 @@ presentation_date: March 29, 2006
 
 {image: http://images.amazon.com/images/P/B00008OE4V.01._PE10_SCLZZZZZZZ_.jpg}
 
-=== JavaScript Is the New Sex 
+=== JavaScript Is the New Sex
 
 * All the cool kids are using it
-* 最先端の人たちはみんな使ってる
 * If your website does not use AJAX you are *DOOMED* to Web 1.0 obscurity
-* AJAXを使わないサイトはWeb 1.0とともに暗闇にのまれるだろう
 * Perl is dead!
-* Perlは死んだ！
 
 ----
 
 {image: http://i.xanga.com/bjs1023/t/skull.jpg}
 
-=== Grave Robbing | 墓荒らし・・・
+=== Grave Robbing
 
 * But Perl did have one or two good ideas
-* ただPerlにも少し残すべきアイデアがあった
 * And one of its best was CPAN
-* そのうちのひとつがCPAN
 
 ----
 
 {image: http://www.lancashire.gov.uk/corporate/news/press_releases/2003/04/10/001_800x1000.jpg}
 
-=== Finding Reusable JavaScript is Painful | 汎用性のあるJavascriptの入手は困難
+=== Finding Reusable JavaScript is Painful
 
 * Besides just a Google search, options were limited
-* Googleで探す以外の手段は少なかった
 * Terrible sites like HotScripts
-* HotScriptsのような粗悪なサイト
 ** Lots of bad code
-** 粗悪なコード
 ** No documentation standards (and often no docs)
-** ドキュメント規格もなし
 ** A lot of commercially licensed code
-** 商用ライセンスのみのコード
-
-----
-
-{image: http://www.lancashire.gov.uk/corporate/news/press_releases/2003/04/10/001_800x1000.jpg}
-
-=== Finding Reusable JavaScript is Painful | 汎用性のあるJavascriptの入手は困難
-
-* There is good code out there ...
-* しかし他の場所には良いコードもある
++* There is good code out there ...
 ** ... but it is hard to find, and mostly linked from someone's blog
-** ただ入手が困難で、誰かのブログからしかたどれなかったりする
 
 ----
 
@@ -64,47 +45,16 @@ presentation_date: March 29, 2006
 === Enter JSAN (www.openjsan.org)
 
 * The obvious idea is CPAN for JS, JSAN
-* 明白なのはJS用のCPANを作る事：それがJSAN
 ** http://www.openjsan.org/
 * Casey West started this project mid-2005
-* Casey Westが２００５年半ばにプロジェクトを開始
-
-----
-
-{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
-
-=== Enter JSAN (www.openjsan.org)
-
 * Central repository for JS libraries, with some expected standards:
-* 一定の規格でJSライブラリを保管する:
 ** Tests
-** テスト
 ** API docs in POD
-** POD書式のAPIドキュメンテーション
 ** Changes file, README, etc.
-** Changesファイル、README、その他
-
-----
-
-{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
-
-=== Enter JSAN (www.openjsan.org)
-
-* One big problem ...
-* ただひとつ問題が・・・
++* One big problem ...
 ** ... JavaScript has no facility for loading libraries!
-** ... Javascriptにはライブラリを読み込む仕組みが存在しない！
 * Nothing like Perl's |use| or |require|
-* Perlの |use| や |require| のようなものは存在しない
-
-----
-
-{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
-
-=== Enter JSAN (www.openjsan.org)
-
 * Loading of multiple libraries can only be done from an HTML file:
-* 複数のライブラリを読み込むにはHTMLに埋め込むしかない：
 
   <script type="text/javascript" src="/js/Lib/Foo.js" />
   <script type="text/javascript" src="/js/Lib/Bar.js" />
@@ -113,32 +63,13 @@ presentation_date: March 29, 2006
 
 {image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
 
-=== The JSAN.js Library Loader | JSAN.jsライブラリローダー
+=== The JSAN.js Library Loader
 
 * Actually, there is a way to load libraries from a script file
-* スクリプトからライブラリを読み込む方法もある
 ** several ways, in fact
-** 実は何個かある
-
-----
-
-{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
-
-=== The JSAN.js Library Loader | JSAN.jsライブラリローダー
-
 * It is possible to use XMLHttpRequest to load a script from inside a script
-* XMLHttpRequestを使って、スクリプト内から他のスクリプトを読み込む
-
-----
-
-{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
-
-=== The JSAN.js Library Loader | JSAN.jsライブラリローダー
-
 * JSAN.js does this for you
-* JSAN.jsはこの方法で読み込む
 ** and provides Perl-style "exporting" as well
-** また、Perl方式のエクスポートも可能
 +* In your HTML:
 
 .hilite
@@ -164,54 +95,29 @@ presentation_date: March 29, 2006
 
 {image: http://upload.wikimedia.org/wikipedia/en/4/4c/Biggus.jpg}
 
-=== Caveat | 留意点
+=== Caveat
 
 * There's always a caveat
-* 注意しなくてはいけない点はもちろん存在する
 * Some browsers (Firefox, IE sometimes) do not respect caching headers when using XHR
-* ブラウザによってはキャッシュ用ヘッダーを無視する場合がある
-
-----
-
-{image: http://upload.wikimedia.org/wikipedia/en/4/4c/Biggus.jpg}
-
-=== Caveat | 留意点
-
 * If you load 50k worth of JS libraries on each page ...
-* もし50k分のJSライブラリをそれぞれのページで読み込んだ場合・・・
 +** ... 100,000 page view per day
-** ... 100,000 PV/日
 +** ... 500MB per day
-** ... 500MB/日
 +** ... approximately 15GB per month!
-** ... 一月で約15GB!!
+** = ??? ¥
 * Now do the math for 1,000,000 or 100,000,000 page views per day
-* もしこれが１００万、１億PVあったらどうなるか？
 
 ----
 
 {image: http://www.star-e.com/company/factory-work.jpg}
 
-=== Workarounds | 回避方法
+=== Workarounds
 
 * For dynamic sites, use |JSAN::ServerSide| from CPAN
-* 動的なサイトでは、 |JSAN::ServerSide| が使える
 * Reads a JSAN-using JavaScript library ...
-* JSANを使用したJavascriptライブラリを読み込んで・・・
 ** ... analyzes dependencies ...
-** ... 依存関係を解析 ...
 ** ... spits out a bunch of URIs to load libraries in the right order
-** ... 正しい順番で読み込むライブラリのURIを作成
 ** ... but does not support exporting (yet)
-** ... ただし、まだエクスポートは実装されていない
-
-----
-
-{image: http://www.star-e.com/company/factory-work.jpg}
-
-=== Workarounds | 回避方法
-
-* In your code:
++* In your code:
 
   my $js =
       JSAN::ServerSide->new
@@ -221,13 +127,7 @@ presentation_date: March 29, 2006
   $js->add('HTTP.Request');
   $js->add('My.Class');
 
-----
-
-{image: http://www.star-e.com/company/factory-work.jpg}
-
-=== Workarounds | 回避方法
-
-* When generating HTML:
++* When generating HTML:
 
 .hilite
   <script type="text/javascript">
@@ -247,50 +147,31 @@ presentation_date: March 29, 2006
 
 {image: http://www.star-e.com/company/factory-work.jpg}
 
-=== Another Workaround | その他の回避方法
+=== Another Workaround
 
 * Just do it by hand
-* 手動でやってしまう
 * Analyze dependencies by looking at file
-* ファイルを見て依存関係を解析する
-
-----
-
-{image: http://www.star-e.com/company/factory-work.jpg}
-
-=== Another Workaround | その他の回避方法
-
 * Mock out JSAN.js
-* ハリボテのJSAN.jsを宣言しておく
 
   <script type="text/javascript">
     var JSAN = {};
     JSAN.use = function () {};
   </script>
 
-----
-
-{image: http://www.star-e.com/company/factory-work.jpg}
-
-=== Another Workaround | その他の回避方法
-
 * Load libraries in correct order
-* ライブラリを正しい順番で読み込む
 
   <script type="text/javascript" src="/js/Lib/Foo.js" />
   <script type="text/javascript" src="/js/Lib/PrereqForBar.js" />
   <script type="text/javascript" src="/js/Lib/Bar.js" />
 
 * |JSAN.js| and |JSAN::ServerSide| are always optional
-* |JSAN.js| と |JSAN::ServerSide| は常に任意
 
 ----
 
-=== What's on JSAN? | JSANには何があるの？
+=== What's on JSAN?
 
 * Test.Simple
 ** JS port of Perl's |Test::Simple|, |Test::More|, and |Test::Harness|
-** JSで実装されたPerlの|Test::Simple|, |Test::More|,それに|Test::Harness|
 
 ----
 
@@ -361,21 +242,11 @@ presentation_date: March 29, 2006
 === DOM.Events
 
 * Attach events to any DOM element.
-* 全てのDOM要素にイベントを関連づける
 ** cross-platform
-** クロスプラットフォーム
 ** memory-leak free - events on IE are notorious for leaking
-** メモリーリークがない - IEでのイベントはメモリーリークが起こる事で有名
 ** stack multiple listener callbacks on the same event
-** 複数のリスナーを同一イベントに関連づける
 ** a nice way to handle the need for multiple window.onLoad events
-** 複数の処理をwindow.onLoadイベントに関連づける良い方法
-
-----
-
-=== DOM.Events
-
-* Example ...
++* Example ...
 
   DOM.Events.addListener
       ( window, "load", AdServer.RandomAnnoyingPopupDiv );
@@ -390,25 +261,15 @@ presentation_date: March 29, 2006
 === DOM.Ready
 
 * Setup callbacks to be executed when an element is available
-* DOM要素の準備が整ったらコールバックを実行させる
 ** ... instead of using window.onLoad
-** ... window.onLoadを使わずに
 * window.onLoad not called until *all* page elements are loaded
-* window.onLoadはページ内の全ての要素が読み込まれてからでないと実行されない
 ** including images
-** 画像を含む全ての要素
 * Images fetched from another server could take a while
-* 外部サーバーから読み込まれている画像は読み込みに時間がかかる可能性がある
-
-----
-
-=== DOM.Ready
-
-* Example:
++* Example:
 
   DOM.Ready.onIdReady( "div_id", addDivEvent );
 +* Use this at the end of the page to run all remaining callbacks:
-* ページの最後に残りのコールバックを全て使うにはこちらを使用する：
+
    ...
 
    <script type="text/javascript">
@@ -419,20 +280,14 @@ presentation_date: March 29, 2006
 
 ----
 
-=== Lots more | その他
+=== Lots more
 
 * Some ports of Perl modules: |File.Basename|
-* Perlモジュールからのポート： |File.Basename|
 * Widgets: |Widget.SortableTable|, |Widget.TableOfContentGenerator|
-* ウィジェット：|Widget.SortableTable|, |Widget.TableOfContentGenerator|
 * Effects: |Effect.DropShadow|, |Effect.RoundedCorners|
-* 効果：|Effect.DropShadow|, |Effect.RoundedCorners|
 * DOM Manipulation & Instrumentation: |DOM.Triggers|, |DOM.Insert|, |Display.Swap|
-* DOM操作：|DOM.Triggers|, |DOM.Insert|, |Display.Sawp|
 * Cross-platform XHR: |HTTP.Request|
-* クロスプラットフォームXHR: |HTTP.Request|
 * Class creation: |Class.Setup|, |Class|
-* クラス作成： |Class.Setup|, |Class|
 
 ----
 
@@ -442,119 +297,84 @@ presentation_date: March 29, 2006
 
 * *A*{{synchronous}} *J*{{avascript}} *a*{{nd}} *X*{{ML}}
 * Core of AJAX ...
-* AJAXのミソ ...
 ** Server request without page refresh
-** ページを読み込まずにサーバーにリクエストを送る
 
 ----
 
 {image: http://www.transload.net/~marneysplace/misc/lie.gif}
 
-=== AJAX is a Lie | AJAXという名は嘘
+=== AJAX is a Lie
 
 * Can be synchronous
-* 非同期でアル必要はない
 * No need for XML
-* XMLである必要もない
 * Doesn't even need Javascript
-* Javascriptである必要でもない。
 ** Similar techniques for Flash, for example
-** 似たような技術がFlashにも存在する
 
 ----
 
 === XMLHttpRequest
 
 * Modern browsers have XMLHttpRequest (XHR) in Javascript
-* 新しいブラウザはXMLHttRequest(XHR)をJavascriptで実装している
 * API for making server request in JS
-* JSからサーバーにアクセスするためのAPI
 * Mozilla Firefox, modern IE, Opera, Safari, Konqueror
 
 ----
 
 {image: http://www.seismo.unr.edu/ftp/pub/louie/class/100/earth-core.GIF}
 
-== Core of AJAX | AJAXの基本
+== Core of AJAX
 
 * Use XHR to send an HTTP request to the server
-* XHRを使用してサーバーにHTTPリクエストを送信
 * Server can return anything ...
-* サーバーはなにを返してもいい
 ** XML
 ** HTML
 ** Javascript
 ** JSON (Javascript Object Notation)
 * Use DHTML techniques to update page based on server response
-* サーバーからの返答をDHTMLで処理してページをアップデート
 
 ----
 
 {image: http://www.channel4.com/entertainment/tv/microsites/I/itcrowd/images/moss-profile.jpg}
 
-=== Why it is cool | なぜカッコ良いのか
+=== Why it is cool
 
 * No page reloads
-* 再読み込み不要
 * Use it with timers for automatic updates
-* タイマーと使用して自動アップデート
 * More desktop-like web applications
-* デスクトップのようなウェブアプリケーション
 
 ----
 
 {image: http://www.meredy.com/lisrobot.jpg}
 
-=== Danger, Will Robinson! | 警告！
+=== Danger, Will Robinson!
 
 * Breaks the back button
-* 「戻る」ボタンが使えなくなる
 * Can defy user expectations
-* ユーザーの期待する動作を裏切るかもしれない
 ** Users expect a page reload when they hit a button
-** ボタンをクリックすると、ページが読み込まれるのを期待しているかもしれない
 * A whole new way of doing web apps
-* 全く新しいウェブアプリケーションの構築法
 ** Not as well explored, lacking standards for UI design
-** まだ枯れていない。UIデザインの規格が存在しない
 
 ----
 
 {image: http://static.flickr.com/26/60097639_c00d822480_d.jpg}
 
-=== Socialtext Example | Socialtextでの用例
+=== Socialtext Example
 
 .html
-<ul>
- <li><a href="http://www.socialtext.net/exchange/">http://www.socialtext.net/exchange/</a></li>
-</ul>
+<ul><li><a href="http://www.socialtext.net/exchange/">http://www.socialtext.net/exchange/</a></li></ul>
 .html
-
-----
-
-{image: http://static.flickr.com/26/60097639_c00d822480_d.jpg}
-
-=== Socialtext Example | Socialtextでの用例
-
-* Side box content is loaded if box is opened
++* Side box content is loaded if box is opened
 * Content is just an HTML blob:
 
   <div class="box_item">
-      <a title="Attention"
-         href="index.cgi?attention">Attention</a>
+      <a title="Attention Management"
+          href="index.cgi?attention_management">Attention Management</a>
   </div>
 
   <div class="box_item">
       <a title="Best Practices"
-         href="index.cgi?best_practices">Best Practices</a>
+          href="index.cgi?best_practices">Best Practices</a>
   </div>
-
-
-----
-
-{image: http://static.flickr.com/26/60097639_c00d822480_d.jpg}
-
-=== Socialtext Example | Socialtextでの用例
 
 * Uses normal DHTML to change the page:
 
@@ -564,10 +384,9 @@ presentation_date: March 29, 2006
 
 {image: http://www.lay-lo.com/graff/h-l/json_001.jpg}
 
-=== JSON Example | JSON 例
+=== JSON Example
 
 * JSON is just Javascript, in this case an anonymous object.
-* JSONはただのJavascriptの無名オブジェクト
 
     {
      html: { 'element-id-1':
@@ -577,14 +396,7 @@ presentation_date: March 29, 2006
            }
     }
 
-----
-
-{image: http://www.lay-lo.com/graff/h-l/json_001.jpg}
-
-=== JSON Example | JSON 例
-
 * On the client side:
-* クライアントサイドで：
 
 .hilite
 receive_update: function (transport) {
@@ -621,23 +433,18 @@ receive_update: function (transport) {
 === AJAX and JSAN
 
 * |HTTP.Request|, cross-platform XHR library
-* |HTTP.Request|, クロスプラットフォーム XmlHttpRequestライブラリ
 * With XHR, you specify a function to be called when the response arrives
-* サーバーからの返答が返ってきた時に実行する関数を指定できる
 * The XHR object is passed to the callback
-* 関数にXHRオブジェクトが渡される
 
 ----
 
 {image: http://www.maztravel.com/perl/images/camel.jpg}
 
-=== Perl Modules | Perlモジュール
+=== Perl Modules
 
 * |JSON::Syck| - convert Perl data structures to JSON
-* |JSON::Syck| - Perl構造体をJSONに変換
 ** Also |Data::JavaScript| and |Data::JavaScript::Anon|
 * |JSAN::ServerSide| - JSAN dependency analyzer
-* |JSAN::ServerSide| - JSAN依存関係を解析
 
 ----
 
@@ -646,18 +453,10 @@ receive_update: function (transport) {
 === Perl and AJAX
 
 * The Perl side is simple
-* Perl側はシンプル
 * Get a request for a URI
-* あるURIにへのリクエストを送ってもらい
 * Serve some sort of data in response
-* データを返信する。
 * Standard webapp behavior
-* 普通のウェブアプリケーションの動作
 
 ----
 
-=== Thank You
-
-* Thanks to Daisuke Maki for translating
-* Questions?
-
+=== Questions?
