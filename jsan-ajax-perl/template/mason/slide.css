@@ -50,6 +50,7 @@ small {
 }
 
 #bottombar {
+    display: none;
     background: <% $banner_bgcolor %>;
     color: white;
     position: fixed;
