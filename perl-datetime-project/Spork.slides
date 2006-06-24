@@ -161,7 +161,8 @@ presentation_date: March 30, 2006
 ** rather, they're in the "floating" time zone
 
     my $dt =
-        DateTime->new( year => 2005, month => 6, day => 28 );
+        DateTime->new
+            ( year => 2005, month => 6, day => 28 );
 
 +* Can specify up to your desired precision.
 ** unspecified components are "zeroed" out (or "oned" out).
@@ -186,7 +187,7 @@ presentation_date: March 30, 2006
 * |$dt->quarter| - 2
 +* |$dt->nanosecond| - 0
 +* |$dt->mjd| - 53549
-** not the guy in the second row, "Modified Julian Date"
+** "Modified Julian Date"
 +* Many, many more read-only accessors
 
 ----------------------------------------------
@@ -204,7 +205,15 @@ presentation_date: March 30, 2006
 * You're an obsessive, alienated young man in Taipei
 +** you sold your dead father's watch to a Taiwanese woman who's gone to Paris
 +** you *need* to know ...
-+** _What Time is it There?_
+
+----------------------------------------------
+
+
+{image: http://upload.wikimedia.org/wikipedia/en/thumb/c/ce/Whattimeisitthere.jpg/200px-Whattimeisitthere.jpg}
+
+== Time Zones
+
+* _What Time is it There?_ - 你那邊幾點 by 蔡明亮
 
     my $dt = DateTime->now( time_zone => 'Asia/Taipei' );
 
@@ -258,7 +267,8 @@ presentation_date: March 30, 2006
 * An example:
 
     my $dt = DateTime->now( locale => 'ja_JA' );
-    for my $m ( qw( month_name month_abbr day_name day_abbr era ) )
+    for my $m ( qw( month_name month_abbr
+                    day_name day_abbr era ) )
     {
         print " $m: ", $dt->$m, "\n";
     }
@@ -278,14 +288,17 @@ presentation_date: March 30, 2006
 
 .hilite
 my $today = DateTime->today( time_zone => 'floating' );
-my $yapc  = DateTime->new( year => 2006, month => 6, day => 26 );
+my $yapc  =
+    DateTime->new
+        ( year => 2006, month => 6, day => 26 );
 
 my $delta = $yapc->delta_days($today);
 
-print " Days until YAPC::NA: ", $delta->delta_days, "\n";
+print " Days until YAPC::NA: ",
+      $delta->delta_days, "\n";
 +
-                   rrrrrrrrrr 4
-                                        rrrrrrrrrr 6
+                   rrrrrrrrrr 6
+              rrrrrrrrrr 9
 .hilite
 
 +* This part of the API sucks
@@ -307,9 +320,11 @@ print " Days until YAPC::NA: ", $delta->delta_days, "\n";
     my $MinutesPerEpisode = 20;
 
     my $dt = DateTime->now;
-    $dt->add( minutes => $NumberOfEpisodes * $MinutesPerEpisode );
+    $dt->add( minutes =>
+              $NumberOfEpisodes * $MinutesPerEpisode );
 
-    print " Start watching now and finish at ", $dt->datetime, "\n";
+    print " Start watching now and finish at ",
+          $dt->datetime, "\n";
 
 * run the script - /all-monster-episodes/
 
@@ -323,7 +338,8 @@ print " Days until YAPC::NA: ", $delta->delta_days, "\n";
     $today_zh->set( month => 7, day => 7 );
     my $dt = DateTime->from_object( object => $today_zh );
 
-    print " I should give my wife a gift on ", $dt->date, "\n";
+    print " I should give my wife a gift on ",
+          $dt->date, "\n";
 
 * run the script - /chinese-valentine/
 +* If I were a good husband, I would remember this
@@ -336,7 +352,8 @@ print " Days until YAPC::NA: ", $delta->delta_days, "\n";
 ** /baktun/ == 144,000 days
 +* Baktuns occur in a 13-baktun cycle
 
-    my $mayan = DateTime::Calendar::Mayan->new( baktun => 13 );
+    my $mayan =
+        DateTime::Calendar::Mayan->new( baktun => 13 );
     my $dt = DateTime->from_object( object => $mayan );
 
     print " You have until ", $dt->date, "\n";
@@ -385,21 +402,27 @@ while ( $dt = $recur->next($dt) )
 
 .hilite
 my $recur =
-    DateTime::Event::Recurrence->weekly( days => [ 1 .. 5 ] );
+    DateTime::Event::Recurrence->weekly
+        ( days => [ 1 .. 5 ] );
 
 my $end =
-    DateTime->new( year => 2006, month => 8 )->subtract( days => 1 );
+    DateTime->new( year => 2006, month => 8 )
+            ->subtract( days => 1 );
 my @list =
-    $recur->as_list( start => DateTime->today, end => $end );
+    $recur->as_list( start => DateTime->today, 
+                     end => $end );
 
 for my $dt (@list)
 {
     print "\n" if $dt->day_of_week == 1;
-    print sprintf( " %-9s - %s\n", $dt->day_name, $dt->date );
+    print sprintf( " %-9s - %s\n",
+                   $dt->day_name, $dt->date );
 }
 
-                                         bbbbbbbbbbbbbbbbbb 2
-            rrrrrrrr 7
+    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 2
+        bbbbbbbbbbbbbbbbbbbbbbb 3
+    rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 9
+                     rrrrrrrrrrrrrr 10
 .hilite
 
 * run the script - /work-week/
@@ -412,27 +435,71 @@ for my $dt (@list)
 
 .hilite
 my $recur =
-    DateTime::Event::Recurrence->weekly( days => [ 1 .. 5 ] );
+    DateTime::Event::Recurrence->weekly
+        ( days => [ 1 .. 5 ] );
 
 my $days_off =
     DateTime::Set->from_datetimes
         ( dates => [ map { DateTime->new(%$_) }
-                     { year => 2006, month => 7, day => 12 },
-                     { year => 2006, month => 7, day => 13 } ] );
+              { year => 2006, month => 7, day => 12 },
+              { year => 2006, month => 7, day => 13 }
+                   ] );
 
 $recur = $recur->complement($days_off);
 
 
    bbbbbb  1
-   bbbbbbbbb 4
+   bbbbbbbbb 5
 +
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 10
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 12
 .hilite
 
 * run the script - /days-off/
 
 +* Flavio Glock is my hero
 ** Flavio wrote all the hard set math parts
+
+----------------------------------------------
+
+== Scheduling
+
+* Does this appointment overlap another?
+
+.hilite
+my $monday_at_1pm =
+    DateTime::Event::Recurrence->daily
+        ( hours => [ 13 ] );
+my $appointments =
+    DateTime::SpanSet->from_set_and_duration
+    ( set => $monday_at_1pm, hours => 1 );
+
+for my $dt ( map { DateTime->new(%$_) }
+    { year => 2006, month => 4, day => 3,
+      hour => 12 },
+    { year => 2006, month => 4, day => 3,
+      hour => 13, minute => 30 },
+           ) {
+    my $verb =
+        $appointments->intersects($dt)
+        ? 'conflicts'
+        : q|doesn't conflict|;
+
+    print ' ', $dt->datetime,
+          " $verb with your weekly 1pm meeting\n";
+}
++
+rrrrrrrrrrrrrrrrrrr 1
+    rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 2
+        r+ 3
++
+rrrrrrrrrrrrrrrrr 4
+    rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 5
+    rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 6
++
+        rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 15
+.hilite
+
+* run the script - /appointment-check/
 
 ----------------------------------------------
 

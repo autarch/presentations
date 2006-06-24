@@ -50,6 +50,7 @@ small {
 }
 
 #bottombar {
+    display: none;
     background: <% $banner_bgcolor %>;
     color: black;
     position: fixed;
@@ -93,12 +94,15 @@ small {
     background-repeat: no-repeat;
 }
 
+tt {
+    font-size: 110%;
+}
+
 .formatter_pre, pre {
-    background: lightgray;
-    border: 1px black solid;
     padding: 5px;
     font-size: 120%;
-    width: 700px;
+    max-width: 700px;
+    border: 1px solid black;
 }
 /* END index.css */
 <%args>

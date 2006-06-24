@@ -14,13 +14,15 @@ use DateTime::Event::Recurrence;
 
     $recur = $recur->complement($days_off);
 
-    my $end = DateTime->new( year => 2006, month => 8 )->subtract( days => 1 );
+    my $end = DateTime->new( year => 2006, month => 8 )->subtract( days => 10 );
 
     my @list =
-        $recur->as_list( start => DateTime->today, end => $end );
+        $recur->as_list( start => DateTime->new(year=>2006,month=>7,day=>3), end => $end );
 
     for my $dt (@list)
     {
         print "\n" if $dt->day_of_week == 1;
         print sprintf( " %-9s - %s\n", $dt->day_name, $dt->date );
     }
+
+print "\n";

@@ -1,0 +1,29 @@
+use strict;
+
+use DateTime;
+use DateTime::Event::Recurrence;
+use DateTime::Span;
+use DateTime::SpanSet;
+
+print "\n";
+
+my $monday_at_1pm =
+    DateTime::Event::Recurrence->daily( hours => [ 13 ] );
+my $appointments =
+    DateTime::SpanSet->from_set_and_duration
+    ( set => $monday_at_1pm, hours => 1 );
+
+for my $dt ( map { DateTime->new(%$_) }
+             { year => 2006, month => 4, day => 3, hour => 12 },
+             { year => 2006, month => 4, day => 3, hour => 13, minute => 30 },
+             { year => 2006, month => 4, day => 3, hour => 14, minute => 30 },
+           ) {
+    my $verb =
+        $appointments->intersects($dt)
+        ? 'conflicts'
+        : q|doesn't conflict|;
+
+    print ' ', $dt->datetime, " $verb with your weekly 1pm meeting\n";
+}
+
+print "\n";
