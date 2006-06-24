@@ -35,7 +35,14 @@ presentation_date: March 29, 2006
 ** Lots of bad code
 ** No documentation standards (and often no docs)
 ** A lot of commercially licensed code
-+* There is good code out there ...
+
+----
+
+{image: http://www.lancashire.gov.uk/corporate/news/press_releases/2003/04/10/001_800x1000.jpg}
+
+=== Finding Reusable JavaScript is Painful
+
+* There is good code out there ...
 ** ... but it is hard to find, and mostly linked from someone's blog
 
 ----
@@ -47,13 +54,34 @@ presentation_date: March 29, 2006
 * The obvious idea is CPAN for JS, JSAN
 ** http://www.openjsan.org/
 * Casey West started this project mid-2005
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== Enter JSAN (www.openjsan.org)
+
 * Central repository for JS libraries, with some expected standards:
 ** Tests
 ** API docs in POD
 ** Changes file, README, etc.
-+* One big problem ...
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== Enter JSAN (www.openjsan.org)
+
+* One big problem ...
 ** ... JavaScript has no facility for loading libraries!
 * Nothing like Perl's |use| or |require|
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== Enter JSAN (www.openjsan.org)
+
 * Loading of multiple libraries can only be done from an HTML file:
 
   <script type="text/javascript" src="/js/Lib/Foo.js" />
@@ -67,7 +95,21 @@ presentation_date: March 29, 2006
 
 * Actually, there is a way to load libraries from a script file
 ** several ways, in fact
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== The JSAN.js Library Loader
+
 * It is possible to use XMLHttpRequest to load a script from inside a script
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== The JSAN.js Library Loader
+
 * JSAN.js does this for you
 ** and provides Perl-style "exporting" as well
 +* In your HTML:
@@ -99,11 +141,17 @@ presentation_date: March 29, 2006
 
 * There's always a caveat
 * Some browsers (Firefox, IE sometimes) do not respect caching headers when using XHR
+
+----
+
+{image: http://upload.wikimedia.org/wikipedia/en/4/4c/Biggus.jpg}
+
+=== Caveat
+
 * If you load 50k worth of JS libraries on each page ...
 +** ... 100,000 page view per day
 +** ... 500MB per day
 +** ... approximately 15GB per month!
-** = ??? ¥
 * Now do the math for 1,000,000 or 100,000,000 page views per day
 
 ----
@@ -117,7 +165,14 @@ presentation_date: March 29, 2006
 ** ... analyzes dependencies ...
 ** ... spits out a bunch of URIs to load libraries in the right order
 ** ... but does not support exporting (yet)
-+* In your code:
+
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Workarounds
+
+* In your code:
 
   my $js =
       JSAN::ServerSide->new
@@ -127,7 +182,13 @@ presentation_date: March 29, 2006
   $js->add('HTTP.Request');
   $js->add('My.Class');
 
-+* When generating HTML:
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Workarounds
+
+* When generating HTML:
 
 .hilite
   <script type="text/javascript">
@@ -151,12 +212,25 @@ presentation_date: March 29, 2006
 
 * Just do it by hand
 * Analyze dependencies by looking at file
+
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Another Workaround
+
 * Mock out JSAN.js
 
   <script type="text/javascript">
     var JSAN = {};
     JSAN.use = function () {};
   </script>
+
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Another Workaround
 
 * Load libraries in correct order
 
@@ -246,7 +320,12 @@ presentation_date: March 29, 2006
 ** memory-leak free - events on IE are notorious for leaking
 ** stack multiple listener callbacks on the same event
 ** a nice way to handle the need for multiple window.onLoad events
-+* Example ...
+
+----
+
+=== DOM.Events
+
+* Example ...
 
   DOM.Events.addListener
       ( window, "load", AdServer.RandomAnnoyingPopupDiv );
@@ -265,9 +344,15 @@ presentation_date: March 29, 2006
 * window.onLoad not called until *all* page elements are loaded
 ** including images
 * Images fetched from another server could take a while
-+* Example:
+
+----
+
+=== DOM.Ready
+
+* Example:
 
   DOM.Ready.onIdReady( "div_id", addDivEvent );
+
 +* Use this at the end of the page to run all remaining callbacks:
 
    ...
@@ -361,20 +446,36 @@ presentation_date: March 29, 2006
 === Socialtext Example
 
 .html
-<ul><li><a href="http://www.socialtext.net/exchange/">http://www.socialtext.net/exchange/</a></li></ul>
+<ul>
+ <li><a href="http://www.socialtext.net/exchange/">http://www.socialtext.net/exchange/</a></li>
+</ul>
 .html
-+* Side box content is loaded if box is opened
+
+----
+
+{image: http://static.flickr.com/26/60097639_c00d822480_d.jpg}
+
+=== Socialtext Example
+
+* Side box content is loaded if box is opened
 * Content is just an HTML blob:
 
   <div class="box_item">
-      <a title="Attention Management"
-          href="index.cgi?attention_management">Attention Management</a>
+      <a title="Attention"
+         href="index.cgi?attention">Attention</a>
   </div>
 
   <div class="box_item">
       <a title="Best Practices"
-          href="index.cgi?best_practices">Best Practices</a>
+         href="index.cgi?best_practices">Best Practices</a>
   </div>
+
+
+----
+
+{image: http://static.flickr.com/26/60097639_c00d822480_d.jpg}
+
+=== Socialtext Example
 
 * Uses normal DHTML to change the page:
 
@@ -395,6 +496,12 @@ presentation_date: March 29, 2006
                'another blob of <em>HTML</em>'
            }
     }
+
+----
+
+{image: http://www.lay-lo.com/graff/h-l/json_001.jpg}
+
+=== JSON Example
 
 * On the client side:
 
@@ -459,4 +566,7 @@ receive_update: function (transport) {
 
 ----
 
-=== Questions?
+=== Thank You
+
+* Questions?
+
