@@ -198,11 +198,14 @@ document.onkeypress = handleKey
 </ul>
 <pre class="formatter_pre">
 DOM.Events.addListener
-    &#40; window, &#34;load&#34;, AdServer.RandomAnnoyingPopupDiv &#41;;
+    &#40; window, &#34;load&#34;,
+      AdServer.AnnoyingPopupDiv &#41;;
 
-var divs = document.getElementsByTagName&#40;&#34;div&#34;&#41;;
+var divs =
+    document.getElementsByTagName&#40;&#34;div&#34;&#41;;
 for &#40; var i = 0; i &lt; divs.length; i++ &#41; {
-  DOM.Events.addListener&#40; divs[i], &#34;click&#34;, Effect.Bounce &#41;;
+  DOM.Events.addListener
+      &#40; divs[i], &#34;click&#34;, Effect.Bounce &#41;;
 }
 </pre>
 

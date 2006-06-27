@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Another Workaround | &atilde;&#129;&#157;&atilde;&#129;&reg;&auml;&raquo;&#150;&atilde;&#129;&reg;&aring;&#155;&#158;&eacute;&#129;&iquest;&aelig;&#150;&sup1;&aelig;&sup3;&#149;</title>
+<title>Another Workaround</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -196,19 +196,20 @@ document.onkeypress = handleKey
 
 
 </p>
-<h3>Another Workaround | その他の回避方法</h3>
+<h3>Another Workaround</h3>
 <ul>
 <li>Load libraries in correct order</li>
-<li>ライブラリを正しい順番で読み込む</li>
 </ul>
 <pre class="formatter_pre">
-&lt;script type=&#34;text/javascript&#34; src=&#34;/js/Lib/Foo.js&#34; /&gt;
-&lt;script type=&#34;text/javascript&#34; src=&#34;/js/Lib/PrereqForBar.js&#34; /&gt;
-&lt;script type=&#34;text/javascript&#34; src=&#34;/js/Lib/Bar.js&#34; /&gt;
+&lt;script type=&#34;text/javascript&#34;
+        src=&#34;/js/Lib/Foo.js&#34; /&gt;
+&lt;script type=&#34;text/javascript&#34;
+        src=&#34;/js/Lib/Prereq.js&#34; /&gt;
+&lt;script type=&#34;text/javascript&#34;
+        src=&#34;/js/Lib/Bar.js&#34; /&gt;
 </pre>
 <ul>
 <li><tt>JSAN.js</tt> and <tt>JSAN::ServerSide</tt> are always optional</li>
-<li><tt>JSAN.js</tt> と <tt>JSAN::ServerSide</tt> は常に任意</li>
 </ul>
 
 

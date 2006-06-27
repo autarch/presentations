@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Workarounds | &aring;&#155;&#158;&eacute;&#129;&iquest;&aelig;&#150;&sup1;&aelig;&sup3;&#149;</title>
+<title>Workarounds</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -196,15 +196,17 @@ document.onkeypress = handleKey
 
 
 </p>
-<h3>Workarounds | 回避方法</h3>
+<h3>Workarounds</h3>
 <ul>
 <li>In your code:</li>
 </ul>
 <pre class="formatter_pre">
 my $js =
     JSAN::ServerSide-&gt;new
-        &#40; uri_prefix =&gt; &#39;/path/to/js/via/web&#39;,
-          fs_prefix  =&gt; &#39;/usr/local/js&#39; &#41;;
+        &#40; uri_prefix =&gt;
+             &#39;/uri/to/js&#39;,
+          fs_prefix =&gt;
+             &#39;/usr/local/js&#39; &#41;;
 
 $js-&gt;add&#40;&#39;HTTP.Request&#39;&#41;;
 $js-&gt;add&#40;&#39;My.Class&#39;&#41;;
