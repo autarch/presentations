@@ -1,0 +1,50 @@
+<!-- BEGIN bottom.html -->
+<div id="bottombar">
+ <table width="100%">
+  <tr>
+   <td align="left" valign="middle">
+    <div<% $show_controls ? '' : ' style="display:none"' %>>
+<&| .no_empty_links &>
+     <a accesskey='p' href="<% $prev_slide | h %>"><% $link_previous %></a> |
+     <a accesskey='i' href="<% $index_slide | h %>"><% $link_index %></a> |
+     <a accesskey='n' href="<% $next_slide %>"><% $link_next %></a>
+</&>
+    </div>
+   </td>
+   <td align="right" valign="middle">
+    <% $copyright_string %>
+   </td>
+  </tr>
+ </table>
+</div>
+<div id="logo"></div>
+
+<div id="spacer">
+ <a name="end"></a>
+</div>
+</body>
+</html>
+<!-- END bottom.html -->
+<%args>
+$prev_slide => ''
+$index_slide => ''
+$next_slide => ''
+$copyright_string
+$show_controls => 0
+$link_previous => ''
+$link_index => ''
+$link_next => ''
+</%args>
+
+<%init>
+$prev_slide ||= 'start.html'
+    unless $m->request_comp->source_file =~ /start\.html/;
+</%init>
+
+<%def .no_empty_links>\
+<% $c %>\
+<%init>
+my $c = $m->content;
+$c =~ s{<a href="">([^<]+)</a>}{$1}g;
+</%init>
+</%def>
