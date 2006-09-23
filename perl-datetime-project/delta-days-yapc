@@ -4,11 +4,14 @@ use DateTime;
 
 print "\n";
 
-    my $today = DateTime->today( time_zone => 'floating' );
-    my $yapc  = DateTime->new( year => 2006, month => 6, day => 26 );
+my $today = DateTime->today( time_zone => 'floating' );
+my $yapc  =
+    DateTime->new
+        ( year => 2007, month => 6, day => 20 );
 
-    my $delta = $yapc->delta_days($today);
+my $delta = $yapc->delta_days($today);
 
-    print " Days until YAPC::NA: ", $delta->delta_days, "\n";
+print " Days until YAPC::NA 2007: ",
+      $delta->delta_days, "\n";
 
 print "\n";

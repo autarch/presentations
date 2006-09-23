@@ -162,7 +162,9 @@ presentation_date: September 23, 2006
 
     my $dt =
         DateTime->new
-            ( year => 2005, month => 6, day => 28 );
+            ( year  => 2005,
+              month => 6,
+              day   => 28 );
 
 +* Can specify up to your desired precision.
 ** unspecified components are "zeroed" out (or "oned" out).
@@ -215,7 +217,8 @@ presentation_date: September 23, 2006
 
 * _What Time is it There?_ - 你那邊幾點 by 蔡明亮
 
-    my $dt = DateTime->now( time_zone => 'Asia/Taipei' );
+    my $dt = DateTime->now
+                 ( time_zone => 'Asia/Taipei' );
 
     print ' Taipei: ', $dt->datetime, "\n";
 
@@ -268,13 +271,11 @@ presentation_date: September 23, 2006
 
     my $dt = DateTime->now( locale => 'ja_JA' );
     for my $m ( qw( month_name month_abbr
-                    day_name day_abbr era ) )
-    {
+                    day_name day_abbr era ) ) {
         print " $m: ", $dt->$m, "\n";
     }
 
-    for my $f ( qw( %p %c %x %X ) )
-    {
+    for my $f ( qw( %p %c %x %X ) ) {
         print " $f: ", $dt->strftime($f), "\n";
     }
 
@@ -287,25 +288,25 @@ presentation_date: September 23, 2006
 * How many days from now until X?
 
 .hilite
-my $today = DateTime->today( time_zone => 'floating' );
+my $today = DateTime->today
+                ( time_zone => 'floating' );
 my $yapc  =
     DateTime->new
-        ( year => 2006, month => 6, day => 26 );
+        ( year => 2007,
+          month => 6, 
+          day => 20 );
 
 my $delta = $yapc->delta_days($today);
 
-print " Days until YAPC::NA: ",
+print " Days until YAPC::NA 2007: ",
       $delta->delta_days, "\n";
 +
-                   rrrrrrrrrr 6
-              rrrrrrrrrr 9
+                   rrrrrrrrrr 9
+              rrrrrrrrrr 12
 .hilite
 
-+* This part of the API sucks
+* This part of the API sucks
 * Sorry
-** hindsight
-** 20/20
-
 +* run the script - /delta-days-yapc/
 
 ----------------------------------------------
@@ -321,10 +322,12 @@ print " Days until YAPC::NA: ",
 
     my $dt = DateTime->now;
     $dt->add( minutes =>
-              $NumberOfEpisodes * $MinutesPerEpisode );
+              $NumberOfEpisodes
+              * $MinutesPerEpisode );
 
     print " Start watching now and finish at ",
-          $dt->datetime, "\n";
+          $dt->strftime( '%B %d, %Y %H:%M' ),
+          "\n";
 
 * run the script - /all-monster-episodes/
 
@@ -334,12 +337,15 @@ print " Days until YAPC::NA: ",
 
 * Seventh day of the seventh lunar month
 
-    my $today_zh = DateTime::Calendar::Chinese->now();
+    my $today_zh =
+        DateTime::Calendar::Chinese->now();
     $today_zh->set( month => 7, day => 7 );
-    my $dt = DateTime->from_object( object => $today_zh );
+    my $dt = DateTime->from_object
+                 ( object => $today_zh );
 
-    print " I should give my wife a gift on ",
-          $dt->date, "\n";
+    print
+        " I should have given my wife a gift on ",
+        $dt->date, "\n";
 
 * run the script - /chinese-valentine/
 +* If I were a good husband, I would remember this
@@ -353,8 +359,11 @@ print " Days until YAPC::NA: ",
 +* Baktuns occur in a 13-baktun cycle
 
     my $mayan =
-        DateTime::Calendar::Mayan->new( baktun => 13 );
-    my $dt = DateTime->from_object( object => $mayan );
+        DateTime::Calendar::Mayan->new
+            ( baktun => 13 );
+
+    my $dt = DateTime->from_object
+                 ( object => $mayan );
 
     print " You have until ", $dt->date, "\n";
 
@@ -369,7 +378,7 @@ print " Days until YAPC::NA: ",
 ** every day
 ** second Wednesday of each month
 ** every other Friday
-** Monday through Friday, ever week - the work week
+** Monday through Friday, every week - the work week
 
 ----------------------------------------------
 
@@ -384,12 +393,12 @@ my $recur =
 my $dt = DateTime->today;
 while ( $dt = $recur->next($dt) )
 {
-    last if $dt->month == 8;
+    last if $dt->month == 11;
     print ' ', $dt->date, "\n";
 }
 
-                      rrrrrrrr 5
-    rrrrrrrrrrrrrrrrrrrrrrrr 7
+                      rrrrrrrrr 5
+    rrrrrrrrrrrrrrrrrrrrrrrrr 7
 .hilite
 
 * run the script - /every-day/
@@ -404,16 +413,13 @@ while ( $dt = $recur->next($dt) )
 my $recur =
     DateTime::Event::Recurrence->weekly
         ( days => [ 1 .. 5 ] );
-
 my $end =
-    DateTime->new( year => 2006, month => 8 )
+    DateTime->new( year => 2006, month => 11 )
             ->subtract( days => 1 );
 my @list =
     $recur->as_list( start => DateTime->today, 
                      end => $end );
-
-for my $dt (@list)
-{
+for my $dt (@list) {
     print "\n" if $dt->day_of_week == 1;
     print sprintf( " %-9s - %s\n",
                    $dt->day_name, $dt->date );
@@ -421,8 +427,8 @@ for my $dt (@list)
 
     bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 2
         bbbbbbbbbbbbbbbbbbbbbbb 3
-    rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 9
-                     rrrrrrrrrrrrrr 10
+    rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 8
+                     rrrrrrrrrrrrrr 9
 .hilite
 
 * run the script - /work-week/
@@ -437,27 +443,27 @@ for my $dt (@list)
 my $recur =
     DateTime::Event::Recurrence->weekly
         ( days => [ 1 .. 5 ] );
-
+my @dates = 
+    map { DateTime->new(%$_) }
+    { year => 2006, month => 7, day => 12 },
+    { year => 2006, month => 7, day => 13 }
 my $days_off =
     DateTime::Set->from_datetimes
-        ( dates => [ map { DateTime->new(%$_) }
-              { year => 2006, month => 7, day => 12 },
-              { year => 2006, month => 7, day => 13 }
-                   ] );
-
+        ( dates => \@dates );
 $recur = $recur->complement($days_off);
 
-
-   bbbbbb  1
-   bbbbbbbbb 5
+b+ 1
+b+ 2
+b+ 3
+r+ 8
+r+ 9
+r+ 10
 +
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 12
+g+ 11
 .hilite
 
 * run the script - /days-off/
-
-+* Flavio Glock is my hero
-** Flavio wrote all the hard set math parts
++* Flavio Glock is my hero - he wrote all the hard set math parts
 
 ----------------------------------------------
 
@@ -485,7 +491,7 @@ for my $dt ( map { DateTime->new(%$_) }
         : q|doesn't conflict|;
 
     print ' ', $dt->datetime,
-          " $verb with your weekly 1pm meeting\n";
+      " $verb with your weekly 1pm meeting\n";
 }
 +
 rrrrrrrrrrrrrrrrrrr 1
@@ -507,10 +513,12 @@ rrrrrrrrrrrrrrrrr 4
 
 * HTTP dates:
 
-    print ' ', DateTime::Format::HTTP->format_datetime
-                   ( DateTime->today );
-    print ' ', DateTime::Format::HTTP->parse_datetime
-                   ( 'Tue, 28 Jun 2005 13:52:00 GMT' );
+    print ' ',
+       DateTime::Format::HTTP->format_datetime
+          ( DateTime->today );
+    print ' ',
+        DateTime::Format::HTTP->parse_datetime
+            ( 'Tue, 28 Jun 2005 13:52:00 GMT' );
 
 * run the script - /http/
 

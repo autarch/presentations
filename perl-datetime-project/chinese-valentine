@@ -9,6 +9,6 @@ print "\n";
     $today_zh->set( month => 7, day => 7 );
     my $dt = DateTime->from_object( object => $today_zh );
 
-    print " I should give my wife a gift on ", $dt->date, "\n";
+    print " I should have given my wife a gift on ", $dt->date, "\n";
 
 print "\n";

@@ -9,6 +9,6 @@ use DateTime::Event::Recurrence;
     my $dt = DateTime->today;
     while ( $dt = $recur->next($dt) )
     {
-        last if $dt->month == 8;
+        last if $dt->month == 11;
         print ' ', $dt->date, "\n";
     }

@@ -6,7 +6,7 @@ use DateTime::Event::Recurrence;
     my $recur =
         DateTime::Event::Recurrence->weekly( days => [ 1 .. 5 ] );
 
-    my $end = DateTime->new( year => 2006, month => 8 )->subtract( days => 1 );
+    my $end = DateTime->new( year => 2006, month => 11 )->subtract( days => 1 );
     my @list =
         $recur->as_list( start => DateTime->today, end => $end );
 

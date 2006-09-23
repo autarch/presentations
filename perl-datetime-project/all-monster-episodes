@@ -10,6 +10,7 @@ print "\n";
     my $dt = DateTime->now;
     $dt->add( minutes => $NumberOfEpisodes * $MinutesPerEpisode );
 
-    print " Start watching now and finish at ", $dt->datetime, "\n";
+    print " Start watching now and finish at ",
+          $dt->strftime( '%B %d, %Y %H:%M' ), "\n";
 
 print "\n";
