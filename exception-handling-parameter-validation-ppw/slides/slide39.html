@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Other Parameter Validation modules</title>
+<title>Params::Util</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     39
@@ -183,46 +183,26 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Other Parameter Validation modules</h2>
+ <h2>Params::Util</h2>
 <ul>
-<li><tt>Params::Check</tt> - API is very similar to <tt>Params::Validate</tt></li>
-<li><tt>Data::Validator::Item</tt></li>
-<li><tt>Getargs::Long</tt></li>
-<li><tt>Class::Contract</tt> - design-by-contract</li>
-<li>Probably more I didn&#39;t find</li>
+<li>Minimal parameter checking - just a set of useful functions</li>
+<li>Example:</li>
+</ul>
+
+<pre>
+sub foo {
+    my $name = <span class="hilite_blue">_STRING(shift)</span> or ...;
+    my $size = <span class="hilite_blue">_POSINT(shift)</span> or ...;
+}
+</pre>
+
+<ul>
+<li>Does not throw errors, simply returns the value or undef</li>
+<li>Could support named or positional params easily</li>
 </ul>
 
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide38.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide40.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

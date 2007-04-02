@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     23
@@ -185,44 +185,23 @@ document.onkeypress = handleKey
  
  <h2>Exception::Class::TryCatch</h2>
 <ul>
-<li>No nested closures, no source filters</li>
-<li>However, requires that all uses of <tt>try</tt> are followed by a <tt>catch</tt></li>
+<li>Try/catch syntax for <tt>Exception::Class</tt>:</li>
+</ul>
+<pre class="formatter_pre">
 
-<ul>
-<li>else havoc ensues</li>
-</ul></ul>
+eval { may_die&#40;&#41; };
+catch my $err and warn $err-&gt;message;
 
+eval { may_die&#40;&#41; };
+catch my $err, [&#39;BigException&#39;, &#39;SmallException&#39;]
+   and warn $err-&gt;message;
+
+try eval { may_die &#40;&#41; }
+and do { cleanup&#40;&#41; };
+catch my $err;
+</pre>
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide22.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide24.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

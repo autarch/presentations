@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     19
@@ -185,47 +185,21 @@ document.onkeypress = handleKey
  
  <h2>Exception::Class</h2>
 <ul>
-<li>The base class provides a number of handy methods</li>
+<li>It can create a &#34;shorthand&#34; sub for each class:</li>
+</ul>
 
-<ul>
-<li><tt>pid&#40;&#41;</tt></li>
-<li><tt>package&#40;&#41;</tt></li>
-<li><tt>file&#40;&#41;</tt></li>
-<li><tt>line&#40;&#41;</tt></li>
-<li><tt>trace&#40;&#41;</tt></li>
-</ul></ul>
+<pre>
+use Exception::Class
+    ( &#39;SQLException&#39; =&gt;
+      { fields =&gt; [ &#39;sql&#39;, &#39;bound_values&#39; ],
+        <span class="hilite_blue">alias  =&gt; &#39;sql_error&#39;</span> }
+    );
+
+<span class="hilite_blue">sql_error</span> error =&gt; &#39;bad sql&#39;, sql =&gt; $sql;
+</pre>
 
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide18.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide20.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

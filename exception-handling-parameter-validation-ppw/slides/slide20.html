@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     20
@@ -185,54 +185,18 @@ document.onkeypress = handleKey
  
  <h2>Exception::Class</h2>
 <ul>
-<li>Also provides some syntactic sugar for exception checking:</li>
-</ul>
-<pre class="formatter_pre">
-if &#40; my $e = Exception::Class-&gt;caught&#40;&#39;MyException&#39;&#41; &#41;
-{
-     do_something&#40;$e&#41;;
-}
-</pre>
+<li>The base class provides a number of handy methods</li>
+
 <ul>
-<li>or</li>
-</ul>
-<pre class="formatter_pre">
-if &#40; my $e = Some::Exception-&gt;caught&#40;&#41; &#41;
-{
-     do_something&#40;$e&#41;;
-}
-</pre>
+<li><tt>pid&#40;&#41;</tt></li>
+<li><tt>package&#40;&#41;</tt></li>
+<li><tt>file&#40;&#41;</tt></li>
+<li><tt>line&#40;&#41;</tt></li>
+<li><tt>trace&#40;&#41;</tt></li>
+</ul></ul>
+
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide19.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide21.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

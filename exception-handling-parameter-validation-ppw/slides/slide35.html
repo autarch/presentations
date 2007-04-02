@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Data::FormValidator</title>
+<title>Params::Validate</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     35
@@ -183,59 +183,22 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Data::FormValidator</h2>
+ <h2>Params::Validate</h2>
 <ul>
-<li>Only loosely related to HTML forms</li>
-<li>Can have required or optional parameters</li>
+<li>Fairly mature, over three years old</li>
+<li>Is written entirely in XS, so it&#39;s fast</li>
+
+<ul>
+<li>As fast as it can be, it still is a noticeable performance hit in profiling</li>
 </ul>
-
-<pre>
-my $results =
-    Data::FormValidator-&gt;check
-        ( %params,
-          { <span class="hilite_blue">required  =&gt; [ &#39;foo&#39;, &#39;bar&#39; ],</span>
-            <span class="hilite_green">optional  =&gt; [ &#39;baz&#39; ]</span> },
-        );
-</pre>
+<li>Validation can be turned off with an env var</li>
 
 <ul>
-<li>HTML-ism ...</li>
-
-<ul>
-<li>a value with only whitespace is considered to be missing</li>
+<li>But I never do this</li>
 </ul></ul>
 
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide34.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide36.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

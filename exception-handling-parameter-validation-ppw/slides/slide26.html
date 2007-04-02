@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     26
@@ -184,55 +184,14 @@ document.onkeypress = handleKey
  <div class="top_spacer"></div>
  
  <h2>Error.pm</h2>
-<p>
-use Error qw&#40;:try&#41;;
-
-</p>
-<pre>
-<span class="hilite_blue">try</span> {
-    cause_an_error();
-} <span class="hilite_green">catch</span> Error::Bar with {
-    my $error = shift;
-    do_some_cleanup();
-    throw $error; #rethrow
-} <span class="hilite_red">otherwise</span> {
-    panic();
-} <span class="hilite_magenta">finally</span> {
-    close_some_handle();
-}; # trailing semi-colon is needed
-</pre>
+<ul>
+<li>Provides more advanced try/catch feature than <tt>eval</tt> and <tt>die&#40;&#41;</tt> allow</li>
+<li>Also includes its own exception base class</li>
+<li>It does not allow declaration of exceptions</li>
+</ul>
 
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide25.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide27.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

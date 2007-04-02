@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Another Workaround</title>
+<title>The Workaround</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     13
@@ -183,50 +183,32 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Another Workaround</h2>
+ <h2>The Workaround</h2>
 <ul>
-<li>Can also use <tt>$SIG{__DIE__}</tt> but this has effects <em>every module loaded</em></li>
-</ul>
+<li>Check if <tt>$@</tt> is an object with <tt>Scalar::Util::blessed&#40;&#41;</tt></li>
+
+<ul>
+<li>Ugly but it works</li>
+</ul></ul>
 <pre class="formatter_pre">
-$SIG{__DIE__} =
-   sub { Exception::Generic-&gt;throw&#40; error =&gt; $_[0] &#41;
-             unless ref $_[0] };
+if &#40;$@&#41; {
+    if &#40; Scalar::Util::blessed&#40;$@&#41;
+         &#38;&#38; $@-&gt;isa&#40; &#39;Exception&#39; &#41; &#41; {
+        warn &#34;Error: &#34;, $@-&gt;error, &#34;\n&#34;;
+        warn &#34;SQL: &#34;, $@-&gt;sql, &#34;\n&#34;
+            if $@-&gt;can&#40;&#39;sql&#39;&#41;;
+    }
+    else {
+        warn &#34;Error: $@\n&#34;;
+    }
+}
 </pre>
 <ul>
-<li>This is a bad idea, don&#39;t do it.</li>
+<li>Put it in a sub to get it out of the way</li>
 </ul>
 
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide12.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide14.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

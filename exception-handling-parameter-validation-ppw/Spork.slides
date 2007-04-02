@@ -2,7 +2,7 @@
 images_directory: /home/autarch/presentations/exception-handling-logging-parameter-validation/images
 banner_bgcolor: #99cc99;
 presentation_topic:
-presentation_title: Exception Handling and Parameter Validation
+presentation_title: Exception Handling, Logging, and Parameter Validation
 presentation_place: Pittsburgh Perl Workshop
 presentation_date: September 23, 2006
 ----------------------------------------------
@@ -39,6 +39,16 @@ presentation_date: September 23, 2006
 * The worst code simply forges blindly ahead
 * That code *will* fail, eventually
 * But it might break something important first
+
+----------------------------------------------
+
+{image: http://www.a-cd.de/images/articles/2004-09-20_160313_billy_joel_innocent_man.jpg}
+
+== "Tell Her About It"
+
+* It's not enough to fail predictably
+** you need to record the failure
+* Debugging a failure in a production system without good logs is very difficult
 
 ----------------------------------------------
 
@@ -600,10 +610,6 @@ sub foo {
 
 ----------------------------------------------
 
-== Questions?
-
-----------------------------------------------
-
 == Logging
 
 * Not many /general-purpose/ logging modules on CPAN
@@ -716,5 +722,9 @@ sub foo {
 * |Log::Agent| - no OO, just functions
 +* |Log::Channel| - can use |Log::Dispatch| for output
 ** Can take over carp/croak from other modules
+
+----------------------------------------------
+
+== Questions?
 
 ----------------------------------------------

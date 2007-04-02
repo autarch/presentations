@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>An Important Caveat</title>
+<title>&quot;Realer&quot; Exceptions</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     11
@@ -183,48 +183,24 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>An Important Caveat</h2>
+ <h2>"Realer" Exceptions</h2>
 <ul>
-<li>The previous example blindly called methods on <tt>$@</tt></li>
-<li>This is a bad idea</li>
-
-<ul>
-<li>Perl&#39;s built-in exceptions are still thrown as strings</li>
+<li>But wouldn&#39;t you prefer an object?</li>
 </ul>
-<li>Divide by zero in an <tt>eval</tt> block, and <tt>$@</tt> will contain a string</li>
-</ul>
-
+<pre class="formatter_pre">
+eval { die SQLException-&gt;new
+               &#40; error =&gt; &#39;Bad SQL&#39;,
+                 sql =&gt; $sql,
+                 bound_vars =&gt; \@bound_vars &#41; };
+if &#40;$@&#41;
+{
+    warn &#34;Error: &#34;, $@-&gt;error, &#34;\n&#34;;
+    warn &#34;SQL: &#34;, $@-&gt;sql, &#34;\n&#34;
+        if $@-&gt;can&#40;&#39;sql&#39;&#41;;
+}
+</pre>
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide10.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide12.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

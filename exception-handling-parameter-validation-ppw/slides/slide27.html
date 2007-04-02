@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>The Caveat</title>
+<title>Error.pm</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     27
@@ -183,52 +183,27 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>The Caveat</h2>
-<ul>
-<li>try/catch is implemented with closures</li>
-<li>A try block that contains another try block will lead to nested closures</li>
-<li>Perl has historically had memory leakage problems with nested closures</li>
+ <h2>Error.pm</h2>
+<p>
+use Error qw&#40;:try&#41;;
 
-<ul>
-<li>But this seems to have been fixed in 5.8.x</li>
-</ul>
-<li><tt>Error::TryCatch</tt> provides the same syntax, but as a source filter</li>
-
-<ul>
-<li>which has its own problems</li>
-</ul></ul>
+</p>
+<pre>
+<span class="hilite_blue">try</span> {
+    cause_an_error();
+} <span class="hilite_green">catch</span> Error::Bar with {
+    my $error = shift;
+    do_some_cleanup();
+    throw $error; #rethrow
+} <span class="hilite_red">otherwise</span> {
+    panic();
+} <span class="hilite_magenta">finally</span> {
+    close_some_handle();
+}; # trailing semi-colon is needed
+</pre>
 
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide26.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide28.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

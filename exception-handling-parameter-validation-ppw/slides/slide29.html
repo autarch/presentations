@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Params::Validate</title>
+<title>Parameter Validation</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     29
@@ -183,51 +183,18 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Params::Validate</h2>
+ <h2>Parameter Validation</h2>
 <ul>
-<li>My contribution to the mess</li>
-<li>Can validate named or position parameters</li>
-<li>Simplest form - list the required parameters</li>
-</ul>
-<pre class="formatter_pre">
-my %p = validate&#40; @_, { foo =&gt; 1, # required
-                        bar =&gt; 0, # optional
-                      } &#41;;
+<li>The usual state of CPAN</li>
 
-# first 2 are required, last is optional
-my @p = validate_pos&#40; @_, 1, 1, 0 &#41;;
-</pre>
+<ul>
+<li>many redundant parameter validation modules on CPAN.</li>
+</ul>
+<li>Also more narrowly focused modules - data type validation &#40;email, credit card&#41;</li>
+</ul>
+
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide28.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide30.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

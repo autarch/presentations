@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     37
@@ -185,49 +185,28 @@ document.onkeypress = handleKey
  
  <h2>Data::FormValidator</h2>
 <ul>
-<li>Parameters can have defaults</li>
-<li>Parameter values can be transformed via filters</li>
+<li>A parameter can have one or more constraints</li>
+</ul>
+
+<pre>
+my $results =
+    Data::FormValidator-&gt;check
+        ( %params,
+          { required  =&gt; [ &#39;foo&#39;, &#39;bar&#39;, &#39;email&#39; ],
+            <span class="hilite_blue">constraints =&gt; { email =&gt; &#39;email&#39; }</span> },
+        );
+</pre>
 
 <ul>
-<li>comes with pre-defined filters</li>
-<li>can build your own</li>
-<li>some on CPAN</li>
-</ul>
-<li>Parameters can specify dependencies on other params</li>
-<li>Validation results are returned as an object</li>
-</ul>
+<li>Comes with pre-defined constraints</li>
+
+<ul>
+<li>Easy to build custom constraints</li>
+<li>Some on CPAN</li>
+</ul></ul>
 
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide36.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide38.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

@@ -111,7 +111,7 @@ pre {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide33.html';
+    window.location = 'slide32c.html#end';
 }
 
 function prevSlide() {
@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     32
@@ -184,58 +184,22 @@ document.onkeypress = handleKey
  <div class="top_spacer"></div>
  
  <h2>Params::Validate</h2>
-<ul>
-<li>Can use callbacks for complex validations:</li>
-</ul>
-
 <pre>
-validate
-    ( @_,
-      { email =&gt;
-        { callbacks =&gt;
-          { &#39;email is valid&#39; =&gt;
-            sub { Email::Valid-&gt;address( $_[0] ) } },
-        },
-        credit_card =&gt;
-        { callbacks =&gt;
-          <span class="hilite_blue">{ &#39;credit card is valid&#39; =&gt;</span>
-          <span class="hilite_blue">  sub { Business::CreditCard::validate( $_[0] ) } },</span>
-        },
-      },
-    );
+use Params::Validate qw( validate SCALAR UNDEF );
+
+my %p = 
+    validate
+        ( @_,
+          { foo =&gt; { type =&gt; SCALAR | UNDEF },
+<span class="hilite_blue">            bar =&gt; { isa =&gt; &#39;Bar&#39; },</span>
+            baz =&gt; { can =&gt; &#39;print&#39; },
+            color =&gt;
+            { regex =&gt; qr/^(?:red|blue)$/ },
+        );
 </pre>
 
-
+ <small>continued...</small>
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide32a.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide33.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

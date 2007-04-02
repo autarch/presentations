@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     17
@@ -185,57 +185,21 @@ document.onkeypress = handleKey
  
  <h2>Exception::Class</h2>
 <ul>
-<li>Declared classes are subclasses of <tt>Exception::Class::Base</tt> by default</li>
-
-<ul>
-<li>but you can use your own base class</li>
+<li>Lets you declare a hierarchy of exceptions at compile time:</li>
 </ul>
-<li>Classes can have arbitrary &#34;fields&#34;, for storing information about an exception:</li>
-</ul>
-
-<pre>
+<pre class="formatter_pre">
 use Exception::Class
-    ( &#39;SQLException&#39; =&gt;
-      { <span class="hilite_blue">fields =&gt; [ &#39;sql&#39; ]</span> }
-    );
+    &#40; &#39;MyException&#39;,
 
-eval { SQLException-&gt;throw
-           ( error =&gt; &#39;bad sql&#39;, <span class="hilite_blue">sql =&gt; $sql</span> ) };
+      &#39;AnotherException&#39; =&gt;
+      { isa =&gt; &#39;MyException&#39; },
 
-print $@-&gt;<span class="hilite_blue">sql()</span>;
+      &#39;YetAnotherException&#39; =&gt;
+      { isa =&gt; &#39;AnotherException&#39; },
+    &#41;;
 </pre>
-
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide16.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide18.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

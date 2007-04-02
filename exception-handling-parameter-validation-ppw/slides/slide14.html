@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Another Caveat</title>
+<title>Another Workaround</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     14
@@ -183,56 +183,21 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Another Caveat</h2>
+ <h2>Another Workaround</h2>
 <ul>
-<li>Remember - <tt>$@</tt> is cleared every time <tt>eval</tt> is used</li>
-<li>Copy it before doing stuff:</li>
+<li>Can also use <tt>$SIG{__DIE__}</tt> but this has effects <em>every module loaded</em></li>
 </ul>
 <pre class="formatter_pre">
-if &#40;my $exc = $@&#41;
-{
-    do_something&#40;&#41;;
-    handle_exception&#40;$exc&#41;;
-}
+$SIG{__DIE__} =
+   sub { Exception::Generic-&gt;throw&#40; error =&gt; $_[0] &#41;
+             unless ref $_[0] };
 </pre>
 <ul>
-<li>Because <tt>do_something&#40;&#41;</tt> might use <tt>eval</tt> or call code which uses <tt>eval</tt></li>
-
-<ul>
-<li>This is doubly important if <tt>do_something&#40;&#41;</tt> might invoke some other module&#39;s code</li>
-</ul></ul>
+<li>This is a bad idea, don&#39;t do it.</li>
+</ul>
 
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide13.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide15.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

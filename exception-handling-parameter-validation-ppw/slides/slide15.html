@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Exception Modules on CPAN</title>
+<title>Another Caveat</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     15
@@ -183,48 +183,27 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Exception Modules on CPAN</h2>
+ <h2>Another Caveat</h2>
 <ul>
-<li>Amazingly, there are <strong>not</strong> a ridiculous number of redundant modules in this area</li>
-<li>My favorite is <tt>Exception::Class</tt></li>
-<li>But I&#39;m biased cause it&#39;s mine</li>
-<li>Also <tt>Error.pm</tt></li>
+<li>Remember - <tt>$@</tt> is cleared every time <tt>eval</tt> is used</li>
+<li>Copy it before doing stuff:</li>
+</ul>
+<pre class="formatter_pre">
+if &#40;my $exc = $@&#41;
+{
+    do_something&#40;&#41;;
+    handle_exception&#40;$exc&#41;;
+}
+</pre>
+<ul>
+<li>Because <tt>do_something&#40;&#41;</tt> might use <tt>eval</tt> or call code which uses <tt>eval</tt></li>
 
 <ul>
-<li>and <tt>Error::TryCatch</tt>, which reimplements <tt>Error.pm</tt> as a source filter</li>
+<li>This is doubly important if <tt>do_something&#40;&#41;</tt> might invoke some other module&#39;s code</li>
 </ul></ul>
 
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide14.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide16.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

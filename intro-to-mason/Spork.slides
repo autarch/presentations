@@ -1,11 +1,11 @@
-----------------------------------------------
+--------------------------------------------
 images_directory: /home/autarch/presentations/mason-intro-spork/images
 logo_image: mason-trowel.png
 banner_bgcolor: #C7C7BC
 presentation_topic: Mason
 presentation_title: Introduction to Mason
-presentation_place: Toronto, Ontario
-presentation_date: June 29, 2005
+presentation_place: Chicago, IL
+presentation_date: June 27, 2006
 ----------------------------------------------
 
 {image: http://www.af.mil/news/airman/0597/retire2.jpg}
@@ -24,7 +24,13 @@ b+ 1
        b+    2
 .hilite
 
-+* Mason components consist of three basic pieces:
+----------------------------------------------
+
+{image: http://www.af.mil/news/airman/0597/retire2.jpg}
+
+== Basics
+
+* Mason components consist of three basic pieces:
 ** text (HTML, XML, etc.)
 ** code which generates output
 ** inline code
@@ -93,11 +99,11 @@ b+ 7
 
 == autohandler example
 
-* http://www.vegguide.org/contact.mhtml
+* http://www.masonhq.com/
 
 ----------------------------------------------
 
-{image: http://www.wedmart.com/gifts/images/sliders/D.jpg}
+{image: http://www.ralphmag.org/1/letter-D-183x181.gif}
 
 == dhandlers
 
@@ -144,9 +150,11 @@ b+ 2
     <% $who %>
 ** Substitutions can be escaped:
 .hilite
-<% $html_escape_me | h %> - <% $uri_escape_me | u %>
+<% $html_escape_me | h %>
+<% $uri_escape_me | u %>
 
-                     r                          r 1
+                     r 1
+                    r 2
 .hilite
 
 ----------------------------------------------
@@ -207,7 +215,23 @@ b+ 2
     r          bb 7
 .hilite
 
+----------------------------------------------
+
+{image: http://halife.com/living/argument.jpg}
+
+== <%args>
+
 * This looks like real Perl, but it's not.
+
+    <%args>
+    # Default to 5
+    $size => 5
+    # Required
+    @items
+    # Defaults to an empty hash
+    %labels => ()
+    </%args>
+
 ** a declaration (name + default) cannot be >1 line.
 +* Args become lexically-scoped variables inside the component.
 
@@ -234,10 +258,19 @@ b+ 2
 * It's the Mason Request object.
 * Has a bunch of handy methods, particularly for calling other components.
 * It's a global available in all components, all the time.
-+* Methods include:
+
+----------------------------------------------
+
+{image: http://www.cnn.com/interactive/career/0102/aleeza/01.eminem.jpg}
+
+== $m
+
+* Methods include:
 ** [=scomp()] - returns component output in a scalar
 
-    my $link = $m->scomp( '/lib/link_to_person.mas', person => $person );
+    my $link =
+        $m->scomp( '/lib/link_to_person.mas',
+                   person => $person );
 
 ** [=abort()] - stops processing, in its tracks!
 
@@ -247,7 +280,7 @@ b+ 2
 
 ----------------------------------------------
 
-{image: http://www.camosun.bc.ca/~jbritton/globe.gif}
+{image: http://library.utoledo.edu/maps/carlson/globebig.gif}
 
 == Other globals
 
@@ -262,7 +295,7 @@ b+ 2
 
 ----------------------------------------------
 
-{image: http://aggie-horticulture.tamu.edu/syllabi/319/Figfruitfoliage.jpg}
+{image: http://home.vigay.com/photos/03-05-03/l/342F0007.jpg}
 
 == Configuration under mod_perl
 
@@ -286,13 +319,13 @@ r+ 4
 
 ----------------------------------------------
 
-{image: http://aggie-horticulture.tamu.edu/syllabi/319/Figfruitfoliage.jpg}
+{image: http://home.vigay.com/photos/03-05-03/l/342F0007.jpg}
 
 == Configuration under mod_perl (cont)
 
 * Some more configuration:
 
-    PerlSetVar  MasonCompRoot      /home/dave/htdocs
+    PerlSetVar  MasonCompRoot      /home/dave/www
     PerlSetVar  MasonDataDir       /home/dave/mason
     PerlSetVar  MasonAllowGlobal   $User
 
@@ -315,7 +348,7 @@ r+ 4
 
 ----------------------------------------------
 
-{image: http://tooteefrootee.com/images/pics/picture21.jpg}
+{image: http://www.hairsandiego.com/images/highlights_jenn.jpg}
 
 == MasonX::WebApp Highlights
 
@@ -344,7 +377,8 @@ r+ 4
 
 .hilite
 <%init>
-my $left = $m->request_comp->attr('left_column');
+my $left =
+    $m->request_comp->attr('left_column');
 </%init>
 
 <div id="left-column">
@@ -353,10 +387,10 @@ my $left = $m->request_comp->attr('left_column');
 % }
 </div>
 
-b+ 2
-g+ 6
+b+ 3
 g+ 7
 g+ 8
+g+ 9
 .hilite
 
 +* Attributes are "inherited" from autohandlers
@@ -387,7 +421,8 @@ g+ 8
 * Can pass content to a component call:
 
 .hilite
-<&| /lib/fill_in_form.mas, data => $saved_args &>
+<&| /lib/fill_in_form.mas,
+    data => $saved_args &>
  <form action="/login" method="post">
   <input name="username" type="text" />
   <input name="password" type="password" />
@@ -395,7 +430,8 @@ g+ 8
 </&>
 
 b+ 1
-b+ 6
+b+ 2
+b+ 7
 .hilite
 
 ----------------------------------------------
@@ -415,7 +451,8 @@ my $form = $m->content;
 my $fif = HTML::FillInForm->new;
 </%init>
 
-<% $fif->fill( scalarref => \$form, fdat => \%data ) %>
+<% $fif->fill( scalarref => \$form,
+               fdat => \%data ) %>
 
 b+ 6
 .hilite

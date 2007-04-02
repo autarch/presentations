@@ -111,11 +111,11 @@ pre {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide32.html';
+    window.location = 'slide32a.html';
 }
 
 function prevSlide() {
-    window.location = 'slide30e.html#end';
+    window.location = 'slide30.html';
 }
 
 function indexSlide() {
@@ -169,7 +169,7 @@ document.onkeypress = handleKey
     
    </td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Exception Handling and Parameter Validation</a>
+    <a accesskey="s" href="index.html">Exception Handling, Logging, and Parameter Validation</a>
    </td>
    <td align="right" width="13%">
     31
@@ -185,55 +185,20 @@ document.onkeypress = handleKey
  
  <h2>Params::Validate</h2>
 <ul>
-<li>Can use callbacks for complex validations:</li>
+<li>Can also validate by ...</li>
+
+<ul>
+<li>type &#40;scalar, arrayref, glob&#41;</li>
+<li>class</li>
+<li>methods &#40;<tt>-&gt;can</tt>&#41;</li>
+<li>regex match</li>
+<li>callbacks</li>
 </ul>
-<pre class="formatter_pre">
-validate
-   &#40; @_,
-     { email =&gt;
-       { callbacks =&gt;
-         { &#39;email is valid&#39; =&gt;
-           sub { Email::Valid-&gt;address&#40; $_[0] &#41; } },
-       },
-       credit_card =&gt;
-       { callbacks =&gt;
-         { &#39;credit card is valid&#39; =&gt;
-           sub { Business::CreditCard::validate&#40; $_[0] &#41; } },
-         },
-       },
-     &#41;;
-</pre>
+<li>Or any combination of the above</li>
+</ul>
+
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide30e.html#end">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide32.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 
