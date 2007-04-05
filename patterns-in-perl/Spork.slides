@@ -1,0 +1,314 @@
+----
+images_directory: /home/autarch/presentations/patterns-in-perl/images
+banner_bgcolor: red
+presentation_topic: Patterns in Perl
+presentation_title: Patterns in Perl
+presentation_place: Tokyo, Japan
+presentation_date: April 5th, 2007
+----
+
+=== Perl has Patterns
+
+* All languages have patterns
+* Reusable solutions to common problems
+* Shared vocabulary
+* Provides a name for something you already know
+
+----
+
+=== Patterns Become Language Features
+
+* OO was once just a pattern
+* Now part of many languages
+* Subroutines were once a pattern too
+* MJD has a great article about this
+** http://blog.plover.com/prog/design-patterns.html
+
+----
+
+=== What Patterns are Not
+
+* Required
+** You never *need* to use a pattern
+* Patterns are not "good" or "bad"
+** Just solutions
+* Patterns are not magic
+** Using patterns doesn't make you a better programmer
+
+----
+
+{image: http://static.flickr.com/40/113890696_abd998ff9b_d.jpg}
+
+=== *The* Patterns Book
+
+* Sometimes called "Gang of Four" book
+** Four authors
+* Examples use C++ and Smalltalk
+* This book is not a bible
+
+----
+
+=== Singleton
+
+* Globals made pretty
+* Want to instantiate an object of type X in many spots
+* Always want the same object
+
+----
+
+=== Why Use a Singleton?
+
+* Avoid having to synchronize access to a resource
+** For example, log files
+* Avoid repeating expensive object construction
+** DBI connection or socket
+* Centralize configuration
+** Application config object
+
+----
+
+=== Singleton Examples
+
+* Can look just like a constructor ...
+
+  my $logger = App::Logger->new();
+
+* Or use |Class::Singleton| off CPAN ...
+
+  package App::Logger;
+
+  use base 'Class::Singleton';
+
+  package main;
+
+  my $logger = App::Logger->instance();
+
+----
+
+=== Singleton Warnings
+
+* It *is* a global
+* Best used for stateless objects
+** Avoid action at a distance!
+
+----
+
+=== Sort of a Singleton
+
+* May want to offer multiple "singletons"
+** For example, named DBI connections ...
+
+  my $main    = App::DBI->new('main');
+  my $archive = App::DBI->new('archive');
+
+* Singleton or memoization?
+** Blurs the line between the two
+
+----
+
+=== Factory
+
+* Want a subclass but don't know which in advance
+* Let the factory decide which subclass you get
+* All subclasses share a common API
+* |DBI| is a factory
+
+----
+
+=== Factory Examples
+
+* "Give me a lock implementation"
+
+  my $locker = File::Locker->new($file)
+  $locker->lock_for_write();
+
+* Looks at OS?
+** |File::Locker::Unix|, |File::Locker::Win32|
+* Looks at file type?
+** |File::Locker::Standard|, |File::Locker::BerkeleyDB|
+* Don't care how |lock_for_write()| is implemented
+
+----
+
+=== Why Use Factory?
+
+* Want to allow for many implementations
+* "Things just work" for API user
+
+----
+
+=== Strategy
+
+* Same API, different algorithms
+* Let the caller pick one
+* For example, GUI layout algorithms
+** |Tk::grid|, |Tk::pack|, |Tk::Tiler|, etc.
+* Like factory, same API for all subclasses
+** But caller picks, not the factory
+
+----
+
+=== Why Use Strategy?
+
+* Allow many implementations
+* Provide explicit choices to API user
+
+----
+
+=== Observer
+
+* One object "listens" to another
+* Parsers are a great example
+* When parser encounters item of interest, calls method on observer
+
+----
+
+=== Observer Example
+
+  package XML::SAX::Echo;
+
+  sub start_element {
+      my $self = shift;
+      my $elt  = shift;
+
+      print $elt->{Name}, "\n";
+  }
+
+  package main;
+
+  my $observer = XML::SAX::Echo->new();
+  my $parser = XML::SAX::ParserFactory->new();
+  $parser->parse_file('file.xml');
+
+----
+
+=== Observer Example Explained
+
+* The observer is |XML::SAX::Printer|
+* Knows nothing about the parser API
+* Parser just requires that observer implements a defined API
+* Can combine different parsers and observers
+** |XML::LibXML::SAX| is a parser
+** |XML::SAX::Writer| is an observer
+
+----
+
+=== Why use Observer?
+
+* De-couple parts of a system
+** Producer/consumer
+** Publish/subscribe
+* Allows pluggable components
+
+----
+
+=== Facade
+
+* A high-level API on top of a low-level API
+* Simplify common usage of a set of classes
+
+----
+
+=== Facade example
+
+* Compiler and bytecode executor
+* Without a facade ...
+
+  my $compiler = Compiler->new();
+  my $bytecode = $compiler->compile('file');
+
+  my $interpeter = Interpreter->new();
+  $interpreter->execute($bytecode)
+
+* With a facade ...
+
+  my $runner = ProgramRunner->new();
+  $runner->run('file')
+
+----
+
+=== Is Facade a Pattern?
+
+* Seems so obvious it's hard to call it a pattern
+* I'd call it "good design"
+** DRY - Don't Repeat Yourself
+
+----
+
+=== Perl Built-In "Patterns"
+
+* In Perl, some "patterns" are built-in
+** Or on CPAN, which is close enough
+* Is this still a pattern?
+* Or just a language feature?
+
+----
+
+=== Memento
+
+* Memento is a pattern for freezing and thawing objects
+* |Storable| makes this trivial
+* Use |Storable| hooks for extra control
+** Grep the |Storable| docs for "STORABLE_freeze" and "STORABLE_thaw"
+
+----
+
+=== Iterator
+
+* A pattern for returning a list
+* Perl builds lists into the language.
+
+  for my $color ( $picture->colors() ) {
+      ...
+  }
+
+* Iterators are still useful
+
+  my $sth = $dbh->execute($sql);
+  while ( my $row = $sth->fetchrow_hashref() ) {
+      ...
+  }
+
+----
+
+=== Decorator
+
+* Add behavior or attributes to an object
+* Use |Class::Trait|
+* Can apply a trait to a single object
+
+  my $dog = Dog->new();
+  Class::Trait->apply( $dog, 'Talker' );
+  $dog->talk();
+
+  my $other_dog = Dog->new();
+  $other_dog->talk(); # kaboom
+
+----
+
+=== Thoughts on Patterns
+
+* Perl is not C++ or Java
+* Some patterns are just workarounds for language restrictions
+* Perl lets you get away with more nasty hacks
+* Reading the patterns book makes me glad I mostly write Perl
+** I am amazed by how many classes are used in many of the patterns
+** It's class-tastic
+
+----
+
+=== More Thoughts on Patterns
+
+* Patterns are too un-DRY
+* Patterns should be invisible
+** Use CPAN
+** Write a CPAN module
+** Build it into the language
+* Perl 6 builds in even more "patterns"
+** For example, decorators
+* See MJD's cool article again
+** http://blog.plover.com/prog/design-patterns.html
+
+----
+
+=== Questions?
