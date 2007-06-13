@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>The Relational Model: Integrity - Relation</title>
+<title>Why SQL is not relational: Physical/Logical Confusion</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -119,11 +119,11 @@ small {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide12.html';
+    window.location = 'slide21.html';
 }
 
 function prevSlide() {
-    window.location = 'slide10b.html#end';
+    window.location = 'slide19.html';
 }
 
 function indexSlide() {
@@ -180,7 +180,7 @@ document.onkeypress = handleKey
     <a accesskey="s" href="index.html">What is a Data Model?; The Relational Model; SQL is not Relational</a>
    </td>
    <td align="right" width="13%">
-    11
+    20
    </td>
   </tr>
  </table>
@@ -191,20 +191,14 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h3>The Relational Model: Integrity - Relation</h3>
+ <h3>Why SQL is not relational: Physical/Logical Confusion</h3>
 <ul>
-<li>Also can have relation and database constraints</li>
-<li>Keys are relation constraints</li>
+<li>SQL does not do a good job of separating physical and logical implementation</li>
 
 <ul>
-<li>No two parts can have the same part number</li>
-<li>Part number is a candidate key for our Parts relation</li>
-</ul>
-<li>Other relation constraints</li>
-
-<ul>
-<li>There must be at least one red part in the relation</li>
-<li>There must be more blue parts than yellow parts</li>
+<li>Indexes are physical but unique indexes are logical &#40;keys&#41; <em>and</em> physical</li>
+<li>Lack of options for optimizing storage separately from logical implementation</li>
+<li>Leads to solutions at the logical layer like denormalization</li>
 </ul></ul>
 
 
@@ -218,9 +212,9 @@ document.onkeypress = handleKey
    <td align="left" valign="middle">
     <div>
 
-     <a accesskey='p' href="slide10b.html#end">&lt; &lt; Previous</a> |
+     <a accesskey='p' href="slide19.html">&lt; &lt; Previous</a> |
      <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide12.html">Next &gt;&gt;</a>
+     <a accesskey='n' href="slide21.html">Next &gt;&gt;</a>
 
     </div>
    </td>

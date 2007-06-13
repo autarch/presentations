@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Summary</title>
+<title>The Relational Model: Integrity - Database</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -191,16 +191,19 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h3>Summary</h3>
+ <h3>The Relational Model: Integrity - Database</h3>
 <ul>
-<li>SQL sucks and I hate it, but it&#39;s probably the best thing out there <em>right now</em></li>
-<li>A truly relational DBMS would be really cool</li>
-<li>SQL is more complex than relational, but no more powerful</li>
-<li>Knowing what SQL&#39;s problems makes you aware of potential pitfalls</li>
-<li>When someone says &#34;relational sucks, we should use [insert one of XML, object database, ...]&#34;</li>
+<li>Constraints involving more than one relation</li>
+<li>Foreign keys are one type of database constraint</li>
 
 <ul>
-<li>They are probably talking about SQL</li>
+<li>Every part_number in SupplierOfPart must correspond to a part_number Part</li>
+</ul>
+<li>Simplified double-entry bookkeeping constraint:</li>
+
+<ul>
+<li>For every tuple in Deposit there must be a tuple in Withdrawal with the same transaction_id</li>
+<li>The value of the amount attribute for the two tuples must be the same</li>
 </ul></ul>
 
 

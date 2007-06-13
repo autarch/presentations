@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Why SQL is not relational: Bags, not Sets</title>
+<title>The Relational Model: Structure</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -191,18 +191,29 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h3>Why SQL is not relational: Bags, not Sets</h3>
+ <h3>The Relational Model: Structure</h3>
 <ul>
-<li>SQL is based on bags &#40;multisets&#41;, not sets</li>
+<li>The &#34;relation&#34; in relational comes from mathematics</li>
 
 <ul>
-<li>A bag can have duplicate tuples &#40;rows&#41;</li>
-<li>SQL does not require that a table have keys</li>
-<li>Results frequently contain duplicate tuples &#40;rows&#41;</li>
-<li>Bag math is much more complicated than set math</li>
+<li>Not &#34;relationship&#34;</li>
 </ul>
-<li>Probably the biggest failure of SQL</li>
+<li>A relation is basically an ordered set with N elements</li>
+
+<ul>
+<li><strong>disclaimer</strong>: I was a music major</li>
 </ul>
+<li>A relation consists of a heading and body</li>
+<li>The heading defines the relation&#39;s attributes</li>
+
+<ul>
+<li>Attributes have a name and a data type</li>
+</ul>
+<li>The body contains 0 or more tuples</li>
+
+<ul>
+<li>Each tuple has the set of attributes defined by the heading</li>
+</ul></ul>
 
 
 </div>

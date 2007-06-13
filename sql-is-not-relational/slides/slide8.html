@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Why SQL is not relational: Ordering, Namelessness, and Name Duplication</title>
+<title>The Relational Model: Structure Example</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -119,7 +119,7 @@ small {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide9.html';
+    window.location = 'slide9a.html';
 }
 
 function prevSlide() {
@@ -191,23 +191,38 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h3>Why SQL is not relational: Ordering, Namelessness, and Name Duplication</h3>
+ <h3>The Relational Model: Structure Example</h3>
 <ul>
-<li>In SQL, columns are ordered and can be referred to positionally</li>
-
-<ul>
-<li>Relational theory is clear that all attributes are referred to by name</li>
+<li>The most boring example ever</li>
+<li>Your friend, the parts/supplier database!</li>
 </ul>
-<li>SQL allows for a query to return two columns with the same name</li>
 
-<ul>
-<li><tt>SELECT Employee.department_id, Department.department_id ...</tt></li>
-</ul>
-<li>SQL allows for a query to return columns without names</li>
+<div class="css"><style type="text/css">table.inline, table.inline tr, table.inline tr td, table.inline tr th {
+  border: 1px solid #905030;
+  border-collapse: collapse;
+}
+table.inline td, table.inline th { padding: 0.2em 0.5em }
+table.inline th { text-align: left }
+</style></div>
 
-<ul>
-<li><tt>SELECT SUM&#40;salary&#41; FROM Employee</tt></li>
-</ul></ul>
+<div class="html"><table class="inline">
+ <tr>
+  <th>part_number: part_number</th>
+  <th>part_name: name</th>
+  <th>color: color</th>
+ </tr>
+ <tr>
+  <td>part_number: 1</td>
+  <td>part_name: Sprocket</td>
+  <td>color: red</td>
+ </tr>
+ <tr>
+  <td>part_number: 2</td>
+  <td>part_name: Flux Capacitor</td>
+  <td>color: blue</td>
+ </tr>
+</table>
+</div>
 
 
 </div>
@@ -222,7 +237,7 @@ document.onkeypress = handleKey
 
      <a accesskey='p' href="slide7.html">&lt; &lt; Previous</a> |
      <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide9.html">Next &gt;&gt;</a>
+     <a accesskey='n' href="slide9a.html">Next &gt;&gt;</a>
 
     </div>
    </td>
