@@ -7,8 +7,7 @@
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
 <link rel='icon' HREF='favicon.png'>
-<style>
-<link rel="stylesheet" type="text/css" href="ARRAY(0x8a411f0)" />
+<link rel="stylesheet" type="text/css" href="css/hilite.css" />
 <style type="text/css"><!--
 /* BEGIN slide.css */
 hr {
@@ -90,6 +89,11 @@ small {
     margin-top: 80px;
 }
 
+pre {
+    background-color: #EEE;
+    padding: 0.5em;
+    width: 80%;
+}
 
 #logo {
     position: fixed;
@@ -111,7 +115,7 @@ function nextSlide() {
 }
 
 function prevSlide() {
-    window.location = 'slide18b.html#end';
+    window.location = 'slide18.html';
 }
 
 function indexSlide() {
@@ -179,48 +183,28 @@ document.onkeypress = handleKey
  
  <h2>Exception::Class</h2>
 <ul>
-<li>It can create a &#34;shorthand&#34; sub for each class:</li>
-</ul>
-<pre class="formatter_pre">
-use Exception::Class
-    &#40; &#39;SQLException&#39; =&gt;
-      { fields =&gt; [ &#39;sql&#39;, &#39;bound_values&#39; ],
-        alias  =&gt; &#39;sql_error&#39; }
-    &#41;;
+<li>Declared classes are subclasses of <tt>Exception::Class::Base</tt> by default</li>
 
-sql_error error =&gt; &#39;bad sql&#39;, sql =&gt; $sql;
+<ul>
+<li>but you can use your own base class</li>
+</ul>
+<li>Classes can have arbitrary &#34;fields&#34;, for storing information about an exception:</li>
+</ul>
+
+<pre>
+use Exception::Class
+    ( &#39;SQLException&#39; =&gt;
+      { <span class="hilite_blue">fields =&gt; [ &#39;sql&#39; ]</span> }
+    );
+
+eval { SQLException-&gt;throw
+           ( error =&gt; &#39;bad sql&#39;, <span class="hilite_blue">sql =&gt; $sql</span> ) };
+
+print $@-&gt;<span class="hilite_blue">sql()</span>;
 </pre>
+
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide18b.html#end">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide20.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

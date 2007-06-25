@@ -3,17 +3,17 @@ images_directory: /home/autarch/presentations/exception-handling-logging-paramet
 banner_bgcolor: #FFBB33
 presentation_topic: Exception Handling, Logging, and Parameter Validation
 presentation_title: Exception Handling, Logging, and Parameter Validation
-presentation_place: Toronto, Ontario
-presentation_date: June 28, 2005
+presentation_place: Houston, Texas
+presentation_date: June 25, 2007
 ----------------------------------------------
 
 == Failsafe
 
-* Dictionary.com - "capable of compensating automatically and safely for a failure ...".
+* Dictionary.com - "capable of compensating automatically and safely for a failure ..."
 +* That would be really cool ...
 ** .. but too much work
-+* Automatic compensation is very difficult ...
-** ... but you can at least fail cleanly.
+* Automatic compensation is very difficult ...
+** ... but you can at least fail cleanly
 
 ----------------------------------------------
 
@@ -24,7 +24,7 @@ presentation_date: June 28, 2005
 * All code breaks
 ** even mine
 +* But it should break as cleanly as possible
-+* Most importantly, *fail predictably*!
+* Most importantly, *fail predictably*!
 
 ----------------------------------------------
 
@@ -35,11 +35,10 @@ presentation_date: June 28, 2005
 * Failures should happen because you coded for them
 * Surprises are bad
 +* If your code does something important, you should have a code path for failures
-+* Fail early, fail often
-+* The worst code simply forges blindly ahead
-+* That code *will* fail ...
-+** ... eventually
-+* But it might break something important first
+* Fail early, fail often
+* The worst code simply forges blindly ahead
+* That code *will* fail, eventually
+* But it might break something important first
 
 ----------------------------------------------
 
@@ -49,17 +48,19 @@ presentation_date: June 28, 2005
 
 * It's not enough to fail predictably
 ** you need to record the failure
-+* Debugging a failure in a production system without good logs is very difficult
+* Debugging a failure in a production system without good logs is very difficult
 
 ----------------------------------------------
+
+{image: http://www.littlefriendsranch.com/Daisy3new.jpg}
 
 == Assumptions
 
 * Never assume you have good inputs
-+* Never assume your fellow developers are interacting with your code correctly
-+* Never assume your users will use your system correctly
-+* Never assume you will use your code correctly!
-+* But *do* assume that your code will receive bad input
+* Never assume your fellow developers are interacting with your code correctly
+* Never assume your users will use your system correctly
+* Never assume you will use your code correctly!
+* But *do* assume that your code will receive bad input
 
 ----------------------------------------------
 
@@ -68,25 +69,10 @@ presentation_date: June 28, 2005
 == Be a Failure
 
 * Failing intentionally is better than accidentally
-+* An exception guarantees that your failure will be heard
-+* Don't forget, your fellow developers are idiots
+* An exception guarantees that your failure will be heard
+* Don't forget, your fellow developers are idiots
 ** they will forget to check return values
-+* Ignoring exceptions requires more work
-
-----------------------------------------------
-
-{image: http://mark.lsds.com/images/records-3_20_2003.jpg}
-
-== Records
-
-* Logging is good
-+* Generally, more verbosity is better
-** My personal favorite ...
-
-    open my $fh, '<', $file or die;
-
-+* Multiple logging outputs are more reliable
-** you cannot send email to say that sending an email failed
+* Ignoring exceptions requires more work
 
 ----------------------------------------------
 
@@ -95,9 +81,6 @@ presentation_date: June 28, 2005
 == Now How
 
 * That was why, now how
-+* Exceptions
-* Parameter validation
-* Logging
 
 ----------------------------------------------
 
@@ -106,11 +89,11 @@ presentation_date: June 28, 2005
 == Die, Die, Die!
 
 * Perl has no explicit exception mechanism
-+* But it does have the |die()| function and |eval| blocks
-+* If a |die()| happens in an eval *block* it is trapped
+* But it does have the |die()| function and |eval| blocks
+* If a |die()| happens in an eval *block* it is trapped
 ** But not seg faults, bus errors, etc.
-+* The first argument to |die()| will be available after the block in |$@|
-+* Block |eval| is entirely different from |eval $string|
+* The first argument to |die()| will be available after the block in |$@|
+* Block |eval| is entirely different from |eval $string|
 
 ----------------------------------------------
 
@@ -122,15 +105,19 @@ presentation_date: June 28, 2005
     warn $@ if length $@;
     # emits a warning
 
-+* |$@| is cleared every time |eval| (string or block) is used.
+----------------------------------------------
+
+== Very Simple Exceptions
+
+* |$@| is cleared every time |eval| (string or block) is used
 
     eval { die "I am dead" };
     eval { $x = 1 };
     warn $@ if length $@;
     # no warning
 
-* |$@| is be an empty string in this example
-+* Note that |$@| is *always* defined!
+* |$@| will be an empty string in this example
+* Note that |$@| is *always* defined!
 
 ----------------------------------------------
 
@@ -138,8 +125,8 @@ presentation_date: June 28, 2005
 
 * Before Perl 5.005, $@ could only be a string
 * If you passed a ref to |die()|, it was stringified
-+* Since 5.005, if you pass a ref, it is stored as is
-+* So now we can do this:
+* Since 5.005, if you pass a ref, it is stored as is
+* So now we can do this:
 
     eval { die { error => 'Bad SQL',
                  sql => $sql,
@@ -172,19 +159,20 @@ presentation_date: June 28, 2005
 == An Important Caveat
 
 * The previous example blindly called methods on |$@|
-+* This is a bad idea
+* This is a bad idea
 ** Perl's built-in exceptions are still thrown as strings
-+* Divide by zero in an |eval| block, and |$@| will contain a string
+* Divide by zero in an |eval| block, and |$@| will contain a string
 
 ----------------------------------------------
 
 == The Workaround
 
-* Pass |$@| to |UNIVERSAL::isa()|
-** Ugly but effective
+* Check if |$@| is an object with |Scalar::Util::blessed()|
+** Ugly but it works
 
     if ($@) {
-        if ( UNIVERSAL::isa( $@, 'Exception' ) ) {
+        if ( Scalar::Util::blessed($@)
+             && $@->isa( 'Exception' ) ) {
             warn "Error: ", $@->error, "\n";
             warn "SQL: ", $@->sql, "\n"
                 if $@->can('sql');
@@ -198,10 +186,22 @@ presentation_date: June 28, 2005
 
 ----------------------------------------------
 
+== Another Workaround
+
+* Can also use |$SIG{__DIE__}| but this has effects /every module loaded/
+
+    $SIG{__DIE__} =
+       sub { Exception::Generic->throw( error => $_[0] )
+                 unless ref $_[0] };
+
+* This is a bad idea, don't do it.
+
+----------------------------------------------
+
 == Another Caveat
 
 * Remember - |$@| is cleared every time |eval| is used
-+* Copy it before doing stuff:
+* Copy it before doing stuff:
 
    if (my $exc = $@)
    {
@@ -209,7 +209,7 @@ presentation_date: June 28, 2005
        handle_exception($exc);
    }
 
-+* Because |do_something()| might use |eval| or call code which uses |eval|
+* Because |do_something()| might use |eval| or call code which uses |eval|
 ** This is doubly important if |do_something()| might invoke some other module's code
 
 ----------------------------------------------
@@ -217,12 +217,10 @@ presentation_date: June 28, 2005
 == Exception Modules on CPAN
 
 * Amazingly, there are *not* a ridiculous number of redundant modules in this area
-+* My favorite is |Exception::Class|
-+* But I'm biased cause it's mine
-+* Also |Error.pm|
+* My favorite is |Exception::Class|
+* But I'm biased cause it's mine
+* Also |Error.pm|
 ** and |Error::TryCatch|, which reimplements |Error.pm| as a source filter
-+* There are some others with really bad docs
-+* So too bad for them
 
 ----------------------------------------------
 
@@ -246,17 +244,23 @@ presentation_date: June 28, 2005
 
 * Declared classes are subclasses of |Exception::Class::Base| by default
 ** but you can use your own base class
-+* Classes can have arbitrary "fields", for storing information about an exception:
+* Classes can have arbitrary "fields", for storing information about an exception:
 
-    use Exception::Class
-        ( 'SQLException' =>
-          { fields => [ 'sql', 'bound_values' ] }
-        );
+.hilite
+use Exception::Class
+    ( 'SQLException' =>
+      { fields => [ 'sql' ] }
+    );
 
-    eval { SQLException->throw
-               ( error => 'bad sql', sql => $sql ) };
+eval { SQLException->throw
+           ( error => 'bad sql', sql => $sql ) };
 
-    print $@->sql;
+print $@->sql();
+
+        bbbbbbbbbbbbbbbbbbb 3
+                                 bbbbbbbbbbb 7
+          bbbbb 9
+.hilite
 
 ----------------------------------------------
 
@@ -264,13 +268,18 @@ presentation_date: June 28, 2005
 
 * It can create a "shorthand" sub for each class:
 
-    use Exception::Class
-        ( 'SQLException' =>
-          { fields => [ 'sql', 'bound_values' ],
-            alias  => 'sql_error' }
-        );
+.hilite
+use Exception::Class
+    ( 'SQLException' =>
+      { fields => [ 'sql', 'bound_values' ],
+        alias  => 'sql_error' }
+    );
 
-    sql_error error => 'bad sql', sql => $sql;
+sql_error error => 'bad sql', sql => $sql;
+
+        bbbbbbbbbbbbbbbbbbbbb 4
+bbbbbbbbb 7
+.hilite
 
 ----------------------------------------------
 
@@ -294,11 +303,26 @@ presentation_date: June 28, 2005
          do_something($e);
     }
 
+* or
+
+    if ( my $e = Some::Exception->caught() )
+    {
+         do_something($e);
+    }
+
+----------------------------------------------
+
+== Exception::Class
+
+* Recommended by Damian Conway in Perl Best Practices
+* Thus not using must be a worst practice!
+
 ----------------------------------------------
 
 == Exception::Class::TryCatch
 
 * Try/catch syntax for |Exception::Class|:
+
 
     eval { may_die() };
     catch my $err and warn $err->message;
@@ -316,216 +340,89 @@ presentation_date: June 28, 2005
 == Exception::Class::TryCatch
 
 * No nested closures, no source filters
-+* However, requires that all uses of |try| are followed by a |catch|
+* However, requires that all uses of |try| are followed by a |catch|
 ** else havoc ensues
+
+----------------------------------------------
+
+== Exception::Class::TCF
+
+* Another try/cacht syntax implementation for |Exception::Class|:
+
+.hilite
+try   { do_something() }
+catch 'My::Exception'   => sub { ... },
+      'Your::Exception' => sub { ... },
+      # always called
+      'Finally'         => sub { ... },
+
+bbb 1
+ggggg 2
+      rrrrrrrrr 5
+.hilite
+
+* The lack of punctuation after |try| is intentional
+* Has the same nested closure problem with older Perls as |Error.pm|
 
 ----------------------------------------------
 
 == Error.pm
 
 * Provides more advanced try/catch feature than |eval| and |die()| allow
-+* Also includes its own exception base class
-+* It does not allow declaration of exceptions
+* Also includes its own exception base class
+* It does not allow declaration of exceptions
 
 ----------------------------------------------
 
 == Error.pm
 
-    use Error qw(:try);
+use Error qw(:try);
 
-    try {
-        cause_an_error();
-    } catch Error::Bar with {
-        my $error = shift;
-        do_some_cleanup();
-        throw $error; #rethrow
-    } otherwise {
-        panic();
-    } finally {
-        close_some_handle();
-    }; # trailing semi-colon is needed
+.hilite
+try {
+    cause_an_error();
+} catch Error::Bar with {
+    my $error = shift;
+    do_some_cleanup();
+    throw $error; #rethrow
+} otherwise {
+    panic();
+} finally {
+    close_some_handle();
+}; # trailing semi-colon is needed
+
+bbb 1
+  ggggg 3
+  rrrrrrrrr 7
+  mmmmmmm 9
+.hilite
 
 ----------------------------------------------
 
 == The Caveat
 
 * try/catch is implemented with closures
-+* A try block that contains another try block will lead to nested closures
-+* Perl has historically had memory leakage problems with nested closures
-+* Error::TryCatch provides the same syntax, but as a source filter
+* A try block that contains another try block will lead to nested closures
+* Perl has historically had memory leakage problems with nested closures
+** But this seems to have been fixed in 5.8.x
+* |Error::TryCatch| provides the same syntax, but as a source filter
 ** which has its own problems
-
-----------------------------------------------
-
-== Parameter Validation
-
-* The usual state of CPAN
-** many redundant parameter validation modules on CPAN.
-+* Also more narrowly focused modules - data type validation (email, credit card)
-
-----------------------------------------------
-
-== Params::Validate
-
-* My contribution to the mess
-+* Can validate named or position parameters
-+* Simplest form - list the required parameters
-
-    my %p = validate( @_, { foo => 1, # required
-                            bar => 0, # optional
-                          } );
-
-    # first 2 are required, last is optional
-    my @p = validate_pos( @_, 1, 1, 0 );
-
-----------------------------------------------
-
-== Params::Validate
-
-* Can also validate by ...
-** type (scalar, arrayref, glob)
-** class
-** methods (|->can|)
-** regex match
-** callbacks
-
-----------------------------------------------
-
-== Params::Validate
-
-    use Params::Validate qw( validate SCALAR UNDEF );
-
-    my %p =
-       validate
-           ( @_,
-             { foo => { type => SCALAR | UNDEF },
-               bar => { isa => 'Bar' },
-               baz => { can => 'print' },
-               color =>
-               { regex => qr/^(?:red|blue)$/ },
-               number =>
-               { callbacks =>
-                 { 'between 1 and 30' =>
-                   sub { $_[0] >= 1 && $_[0] <= 30 },
-               },
-             } );
-
-----------------------------------------------
-
-== Params::Validate
-
-* Can use callbacks for complex validations:
-
-    validate
-       ( @_,
-         { email =>
-           { callbacks =>
-             { 'email is valid' =>
-               sub { Email::Valid->address( $_[0] ) } },
-           },
-           credit_card =>
-           { callbacks =>
-             { 'credit card is valid' =>
-               sub { Business::CreditCard::validate( $_[0] ) } },
-             },
-           },
-         );
-
-----------------------------------------------
-
-== Params::Validate
-
-* Can also set defaults:
-
-    my %p =
-        validate
-            ( @_,
-              { size => { type => SCALAR,
-                          default => 10 } }
-            );
-
-    # $p{size} is 10 if it wasn't provided
-    # by the caller
-
-----------------------------------------------
-
-== Params::Validate
-
-* Fairly mature, over three years old
-+* Is written entirely in XS, so it's fast
-+* Validation can be turned off with an env var
-* But I never do this
-
-----------------------------------------------
-
-== Data::FormValidator
-
-* Only loosely related to HTML forms
-+* Can have required or optional parameters
-
-    my $results =
-       Date::FormValidator->check
-           ( %params,
-             { required  => [ 'foo', 'bar' ],
-               optional  => [ 'baz' ] } ); 
-
-+* HTML-ism ...
-** a value with only whitespace is considered to be missing
-
-----------------------------------------------
-
-== Data::FormValidator
-
-* A parameter can have one or more constraints
-
-    my $results =
-       Date::FormValidator->check
-           ( %params,
-             { required  => [ 'foo', 'bar', 'email' ],
-               constraints => { email => 'email' }
-             } );
-
-* Comes with pre-defined constraints
-** Easy to build custom constraints
-** Some on CPAN
-
-----------------------------------------------
-
-== Data::FormValidator
-
-* Parameters can have defaults
-+* Parameter values can be transformed via filters
-** comes with pre-defined filters
-** can build your own
-** some on CPAN
-+* Parameters can specify dependencies on other params
-+* Validation results are returned as an object
-
-----------------------------------------------
-
-== Other Parameter Validation modules
-
-* |Params::Check| - API is very similar to |Params::Validate|
-+* |Data::Validator::Item|
-+* |Getargs::Long|
-+* |Class::Contract| - design-by-contract
-+* Probably more I didn't find
 
 ----------------------------------------------
 
 == Logging
 
 * Not many /general-purpose/ logging modules on CPAN
-+* General-purpose = one API, many outputs
+* General-purpose = one API, many outputs
 
 ----------------------------------------------
 
 == Log::Dispatch
 
 * Once more, me first
-+* Create a single dispatcher, which holds one or more outputs
-+* Comes with screen, file, email, syslog and other outputs
-+* Can specify min/max log level per output
+* Create a single dispatcher, which holds one or more outputs
+* Comes with screen, file, email, syslog and other outputs
+* Can specify min/max log level per output
 
 ----------------------------------------------
 
@@ -571,8 +468,8 @@ presentation_date: June 28, 2005
 == Log::Dispatch
 
 * Writing new outputs is very simple
-+* there are several on CPAN
-+* |Log::Dispatch::Config| - configure logging via a text file
+** There are several on CPAN
+* |Log::Dispatch::Config| - configure logging via a text file
 ** similar to log4j
 
 ----------------------------------------------
@@ -580,10 +477,10 @@ presentation_date: June 28, 2005
 == Log::Log4Perl
 
 * Complete log4j style API
-+* Configured either from config file or code
-+* One message -> many outputs
-+* |sprintf|-like pattern language for message formatting
-+* Comes with some outputs modules, and can use |Log::Dispatch| outputs
+* Configured either from config file or code
+* One message -> many outputs
+* |sprintf|-like pattern language for message formatting
+* Comes with some outputs modules, and can use |Log::Dispatch| outputs
 
 ----------------------------------------------
 
@@ -608,14 +505,14 @@ presentation_date: June 28, 2005
 * In your code:
 
     my $log = Log::Log4Perl->get_logger(__PACKAGE__);
-    $log->error("She canna take no, cap'n");
+    $log->error('The centre cannot hold');
 
 ----------------------------------------------
 
 == Log::Log4Perl
 
 * Most full-featured logging module on CPAN
-+* Also the most complex
+* Also the most complex
 ** fortunately it is well-documented
 
 ----------------------------------------------
@@ -623,11 +520,237 @@ presentation_date: June 28, 2005
 == Other Logging modules
 
 * |Log::Agent| - no OO, just functions
-+* |Log::Channel| - can use |Log::Dispatch| for output
+* |Log::Channel| - can use |Log::Dispatch| for output
 ** Can take over carp/croak from other modules
+
+----------------------------------------------
+
+== Parameter Validation
+
+* The usual state of CPAN
+** many redundant parameter validation modules on CPAN.
+* Also more narrowly focused modules - data type validation (email, credit card)
+
+----------------------------------------------
+
+== Params::Validate
+
+* My contribution to the mess
+* Can validate named or position parameters
+* Simplest form - list the required parameters
+
+    my %p = validate( @_, { foo => 1, # required
+                            bar => 0, # optional
+                          } );
+
+    # first 2 are required, last is optional
+    my @p = validate_pos( @_, 1, 1, 0 );
+
+----------------------------------------------
+
+== Params::Validate
+
+* Can also validate by ...
+** type (scalar, arrayref, glob)
+** class
+** methods (|->can|)
+** regex match
+** callbacks
+* Or any combination of the above
+
+----------------------------------------------
+
+== Params::Validate
+
+.hilite
+use Params::Validate qw( validate SCALAR UNDEF );
+
+my %p = 
+    validate
+        ( @_,
+          { foo => { type => SCALAR | UNDEF },
+            bar => { isa => 'Bar' },
+            baz => { can => 'print' },
+            color =>
+            { regex => qr/^(?:red|blue)$/ },
+        );
+
+            b+ 6
++
+b+ 7
++
+b+ 8
++
+b+ 9
+b+ 10
+.hilite
+
+----------------------------------------------
+
+== Params::Validate
+
+* Can use callbacks for complex validations:
+
+  validate( @_, {
+      email => {
+          callbacks => {
+              'email is valid' => \&validate_email,
+          },
+      credit_card => {
+          callbacks => {
+              'credit card is valid' => \&validate_cc,
+          },
+        },
+      );
+
+----------------------------------------------
+
+== Params::Validate
+
+* Can also set defaults:
+
+.hilite
+my %p =
+    validate
+        ( @_,
+          { size => { type => SCALAR,
+                      default => 10 } }
+        );
+
+                      bbbbbbbbbbbbb 5
+.hilite
+
+* |$p{size}| is 10 if it not provided by the caller
+
+----------------------------------------------
+
+== Params::Validate
+
+* Fairly mature - first release in February, 2001
+* Is written entirely in XS, so it's fast
+** As fast as it can be, it still is a noticeable performance hit in profiling
+* Validation can be turned off with an env var
+** But I never do this
+
+----------------------------------------------
+
+== Data::FormValidator
+
+* Only loosely related to HTML forms
+* Can have required or optional parameters
+
+.hilite
+my $results =
+    Data::FormValidator->check
+        ( %params,
+          { required  => [ 'foo', 'bar' ],
+            optional  => [ 'baz' ] },
+        );
+            b+ 4
+            gggggggggggggggggggggg 5
+.hilite
+
+* HTML-ism ...
+** a value with only whitespace is considered to be missing
+
+----------------------------------------------
+
+== Data::FormValidator
+
+* A parameter can have one or more constraints
+
+.hilite
+my $results =
+    Data::FormValidator->check
+        ( %params,
+          { required  => [ 'foo', 'bar', 'email' ],
+            constraints => { email => 'email' } },
+        );
+
+            bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 5
+.hilite
+
+* Comes with pre-defined constraints
+** Easy to build custom constraints
+** Some on CPAN
+
+----------------------------------------------
+
+== Data::FormValidator
+
+* Parameters can have defaults
+* Parameter values can be transformed via filters
+** comes with pre-defined filters
+** can build your own
+** some on CPAN
+* Parameters can specify dependencies on other params
+* Validation results are returned as an object
+
+----------------------------------------------
+
+== Params::Util
+
+* Minimal parameter checking - just a set of useful functions
+* Example:
+
+.hilite
+sub foo {
+    my $name = _STRING(shift) or ...;
+    my $size = _POSINT(shift) or ...;
+}
+
+               bbbbbbbbbbbbbb 2
+               bbbbbbbbbbbbbb 3
+.hilite
+
+* Does not throw errors, simply returns the value or undef
+* Could support named or positional params easily
+
+----------------------------------------------
+
+== Moose
+
+* Much more than parameter validation
+* Full-featured class/method generation
+* Basically Perl 6 style classes in Perl 5
+* Allows validation of object attributes
+
+----------------------------------------------
+
+== MooseX::Method
+
+  method send_email => named
+      ( email_address =>
+            { isa => 'Str', required => 1 },
+      ) => 
+      sub { ... }
+
+----------------------------------------------
+
+== MooseX::Params::Validate
+
+* Some of the power of Params::Validate
+* Some of the types of Moose (Str, Int, ArrayRef, ...)
+* Not as "slick" as MooseX::Method
+
+  sub method {
+      my $self = shift;
+      my %p    = validate( @_, { size => { isa => 'Int' } } );
+
+      ...
+  }    
+
+----------------------------------------------
+
+== Other Parameter Validation modules
+
+* |Params::Check| - API is very similar to |Params::Validate|
+* |Data::Validator::Item|
+* |Getargs::Long|
+* |Class::Contract| - design-by-contract
+* Probably more I didn't find
 
 ----------------------------------------------
 
 == Questions?
 
-----------------------------------------------

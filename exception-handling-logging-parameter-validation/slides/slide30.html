@@ -2,13 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Params::Validate</title>
+<title>Logging</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
 <link rel='icon' HREF='favicon.png'>
-<style>
-<link rel="stylesheet" type="text/css" href="ARRAY(0x8a411f0)" />
+<link rel="stylesheet" type="text/css" href="css/hilite.css" />
 <style type="text/css"><!--
 /* BEGIN slide.css */
 hr {
@@ -90,6 +89,11 @@ small {
     margin-top: 80px;
 }
 
+pre {
+    background-color: #EEE;
+    padding: 0.5em;
+    width: 80%;
+}
 
 #logo {
     position: fixed;
@@ -177,55 +181,14 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Params::Validate</h2>
-<pre class="formatter_pre">use Params::Validate qw&#40; validate SCALAR UNDEF &#41;;
+ <h2>Logging</h2>
+<ul>
+<li>Not many <em>general-purpose</em> logging modules on CPAN</li>
+<li>General-purpose = one API, many outputs</li>
+</ul>
 
-my %p =
-   validate
-       &#40; @_,
-         { foo =&gt; { type =&gt; SCALAR | UNDEF },
-           bar =&gt; { isa =&gt; &#39;Bar&#39; },
-           baz =&gt; { can =&gt; &#39;print&#39; },
-           color =&gt;
-           { regex =&gt; qr/^&#40;?:red|blue&#41;$/ },
-           number =&gt;
-           { callbacks =&gt;
-             { &#39;between 1 and 30&#39; =&gt;
-               sub { $_[0] &gt;= 1 &#38;&#38; $_[0] &lt;= 30 },
-           },
-         } &#41;;
-</pre>
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide29.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide31.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

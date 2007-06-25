@@ -2,13 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Log::Log4Perl</title>
+<title>Params::Validate</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
 <link rel='icon' HREF='favicon.png'>
-<style>
-<link rel="stylesheet" type="text/css" href="ARRAY(0x8a411f0)" />
+<link rel="stylesheet" type="text/css" href="css/hilite.css" />
 <style type="text/css"><!--
 /* BEGIN slide.css */
 hr {
@@ -90,6 +89,11 @@ small {
     margin-top: 80px;
 }
 
+pre {
+    background-color: #EEE;
+    padding: 0.5em;
+    width: 80%;
+}
 
 #logo {
     position: fixed;
@@ -177,44 +181,23 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Log::Log4Perl</h2>
-<ul>
-<li>Complete log4j style API</li>
-<li>Configured either from config file or code</li>
-<li>One message -&gt; many outputs</li>
-</ul>
+ <h2>Params::Validate</h2>
+<pre>
+use Params::Validate qw( validate SCALAR UNDEF );
+
+my %p = 
+    validate
+        ( @_,
+          { foo =&gt; { type =&gt; SCALAR | UNDEF },
+            bar =&gt; { isa =&gt; &#39;Bar&#39; },
+<span class="hilite_blue">            baz =&gt; { can =&gt; &#39;print&#39; },</span>
+            color =&gt;
+            { regex =&gt; qr/^(?:red|blue)$/ },
+        );
+</pre>
 
  <small>continued...</small>
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide43b.html#end">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide43d.html#end">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

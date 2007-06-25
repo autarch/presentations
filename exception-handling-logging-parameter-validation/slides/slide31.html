@@ -2,13 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Params::Validate</title>
+<title>Log::Dispatch</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
 <link rel='icon' HREF='favicon.png'>
-<style>
-<link rel="stylesheet" type="text/css" href="ARRAY(0x8a411f0)" />
+<link rel="stylesheet" type="text/css" href="css/hilite.css" />
 <style type="text/css"><!--
 /* BEGIN slide.css */
 hr {
@@ -90,6 +89,11 @@ small {
     margin-top: 80px;
 }
 
+pre {
+    background-color: #EEE;
+    padding: 0.5em;
+    width: 80%;
+}
 
 #logo {
     position: fixed;
@@ -177,57 +181,16 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Params::Validate</h2>
+ <h2>Log::Dispatch</h2>
 <ul>
-<li>Can use callbacks for complex validations:</li>
+<li>Once more, me first</li>
+<li>Create a single dispatcher, which holds one or more outputs</li>
+<li>Comes with screen, file, email, syslog and other outputs</li>
+<li>Can specify min/max log level per output</li>
 </ul>
-<pre class="formatter_pre">
-validate
-   &#40; @_,
-     { email =&gt;
-       { callbacks =&gt;
-         { &#39;email is valid&#39; =&gt;
-           sub { Email::Valid-&gt;address&#40; $_[0] &#41; } },
-       },
-       credit_card =&gt;
-       { callbacks =&gt;
-         { &#39;credit card is valid&#39; =&gt;
-           sub { Business::CreditCard::validate&#40; $_[0] &#41; } },
-         },
-       },
-     &#41;;
-</pre>
+
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide30.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide32.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

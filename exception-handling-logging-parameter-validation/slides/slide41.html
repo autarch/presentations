@@ -2,13 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Log::Dispatch</title>
+<title>Params::Validate</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
 <link rel='icon' HREF='favicon.png'>
-<style>
-<link rel="stylesheet" type="text/css" href="ARRAY(0x8a411f0)" />
+<link rel="stylesheet" type="text/css" href="css/hilite.css" />
 <style type="text/css"><!--
 /* BEGIN slide.css */
 hr {
@@ -90,6 +89,11 @@ small {
     margin-top: 80px;
 }
 
+pre {
+    background-color: #EEE;
+    padding: 0.5em;
+    width: 80%;
+}
 
 #logo {
     position: fixed;
@@ -107,7 +111,7 @@ small {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide42a.html';
+    window.location = 'slide42.html';
 }
 
 function prevSlide() {
@@ -177,54 +181,22 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Log::Dispatch</h2>
+ <h2>Params::Validate</h2>
 <ul>
-<li>Can specify per-output filters:</li>
+<li>My contribution to the mess</li>
+<li>Can validate named or position parameters</li>
+<li>Simplest form - list the required parameters</li>
 </ul>
 <pre class="formatter_pre">
-my $dispatch = Log::Dispatch-&gt;new;
-$dispatch-&gt;add
-    &#40; Log::Dispatch::File-&gt;new
-          &#40; name =&gt; &#39;debug&#39;,
-            file =&gt; &#39;debug.log&#39;,
-            min_level =&gt; &#39;debug&#39;,
-            callbacks =&gt;
-            sub { my %p = @_;
-                  $p{message} =
-                      &#34;[$p{level}] $p{message}&#34; }
-          &#41; &#41;; 
+my %p = validate&#40; @_, { foo =&gt; 1, # required
+                        bar =&gt; 0, # optional
+                      } &#41;;
+
+# first 2 are required, last is optional
+my @p = validate_pos&#40; @_, 1, 1, 0 &#41;;
 </pre>
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide40.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide42a.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

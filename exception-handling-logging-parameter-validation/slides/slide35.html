@@ -2,13 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Data::FormValidator</title>
+<title>Log::Log4Perl</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
 <link rel='icon' HREF='favicon.png'>
-<style>
-<link rel="stylesheet" type="text/css" href="ARRAY(0x8a411f0)" />
+<link rel="stylesheet" type="text/css" href="css/hilite.css" />
 <style type="text/css"><!--
 /* BEGIN slide.css */
 hr {
@@ -90,6 +89,11 @@ small {
     margin-top: 80px;
 }
 
+pre {
+    background-color: #EEE;
+    padding: 0.5em;
+    width: 80%;
+}
 
 #logo {
     position: fixed;
@@ -107,11 +111,11 @@ small {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide36a.html';
+    window.location = 'slide36.html';
 }
 
 function prevSlide() {
-    window.location = 'slide34c.html#end';
+    window.location = 'slide34.html';
 }
 
 function indexSlide() {
@@ -177,57 +181,17 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Data::FormValidator</h2>
+ <h2>Log::Log4Perl</h2>
 <ul>
-<li>A parameter can have one or more constraints</li>
+<li>Complete log4j style API</li>
+<li>Configured either from config file or code</li>
+<li>One message -&gt; many outputs</li>
+<li><tt>sprintf</tt>-like pattern language for message formatting</li>
+<li>Comes with some outputs modules, and can use <tt>Log::Dispatch</tt> outputs</li>
 </ul>
-<pre class="formatter_pre">
-my $results =
-   Date::FormValidator-&gt;check
-       &#40; %params,
-         { required  =&gt; [ &#39;foo&#39;, &#39;bar&#39;, &#39;email&#39; ],
-           constraints =&gt; { email =&gt; &#39;email&#39; }
-         } &#41;;
-</pre>
-<ul>
-<li>Comes with pre-defined constraints</li>
-
-<ul>
-<li>Easy to build custom constraints</li>
-<li>Some on CPAN</li>
-</ul></ul>
 
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide34c.html#end">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide36a.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

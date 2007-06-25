@@ -2,13 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Params::Validate</title>
+<title>The Caveat</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
 <link rel='icon' HREF='favicon.png'>
-<style>
-<link rel="stylesheet" type="text/css" href="ARRAY(0x8a411f0)" />
+<link rel="stylesheet" type="text/css" href="css/hilite.css" />
 <style type="text/css"><!--
 /* BEGIN slide.css */
 hr {
@@ -90,6 +89,11 @@ small {
     margin-top: 80px;
 }
 
+pre {
+    background-color: #EEE;
+    padding: 0.5em;
+    width: 80%;
+}
 
 #logo {
     position: fixed;
@@ -111,7 +115,7 @@ function nextSlide() {
 }
 
 function prevSlide() {
-    window.location = 'slide28c.html#end';
+    window.location = 'slide28.html';
 }
 
 function indexSlide() {
@@ -177,49 +181,23 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Params::Validate</h2>
+ <h2>The Caveat</h2>
 <ul>
-<li>Can also validate by ...</li>
+<li>try/catch is implemented with closures</li>
+<li>A try block that contains another try block will lead to nested closures</li>
+<li>Perl has historically had memory leakage problems with nested closures</li>
 
 <ul>
-<li>type &#40;scalar, arrayref, glob&#41;</li>
-<li>class</li>
-<li>methods &#40;<tt>-&gt;can</tt>&#41;</li>
-<li>regex match</li>
-<li>callbacks</li>
+<li>But this seems to have been fixed in 5.8.x</li>
+</ul>
+<li><tt>Error::TryCatch</tt> provides the same syntax, but as a source filter</li>
+
+<ul>
+<li>which has its own problems</li>
 </ul></ul>
 
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide28c.html#end">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide30.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 

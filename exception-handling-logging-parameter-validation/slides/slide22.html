@@ -2,13 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Exception::Class::TryCatch</title>
+<title>Exception::Class</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
 <link rel='icon' HREF='favicon.png'>
-<style>
-<link rel="stylesheet" type="text/css" href="ARRAY(0x8a411f0)" />
+<link rel="stylesheet" type="text/css" href="css/hilite.css" />
 <style type="text/css"><!--
 /* BEGIN slide.css */
 hr {
@@ -90,6 +89,11 @@ small {
     margin-top: 80px;
 }
 
+pre {
+    background-color: #EEE;
+    padding: 0.5em;
+    width: 80%;
+}
 
 #logo {
     position: fixed;
@@ -107,7 +111,7 @@ small {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide23a.html';
+    window.location = 'slide23.html';
 }
 
 function prevSlide() {
@@ -177,53 +181,27 @@ document.onkeypress = handleKey
 <div id="content"><p />
  <div class="top_spacer"></div>
  
- <h2>Exception::Class::TryCatch</h2>
+ <h2>Exception::Class</h2>
 <ul>
-<li>Try/catch syntax for <tt>Exception::Class</tt>:</li>
+<li>Also provides some syntactic sugar for exception checking:</li>
 </ul>
 <pre class="formatter_pre">
-eval { may_die&#40;&#41; };
-catch my $err and warn $err-&gt;message;
-
-eval { may_die&#40;&#41; };
-catch my $err, [&#39;BigException&#39;, &#39;SmallException&#39;]
-   and warn $err-&gt;message;
-
-try eval { may_die &#40;&#41; }
-and do { cleanup&#40;&#41; };
-catch my $err;
+if &#40; my $e = Exception::Class-&gt;caught&#40;&#39;MyException&#39;&#41; &#41;
+{
+     do_something&#40;$e&#41;;
+}
+</pre>
+<ul>
+<li>or</li>
+</ul>
+<pre class="formatter_pre">
+if &#40; my $e = Some::Exception-&gt;caught&#40;&#41; &#41;
+{
+     do_something&#40;$e&#41;;
+}
 </pre>
 
 </div>
 <!-- END slide.html -->
 <!-- END slide -->
-<!-- BEGIN bottom.html -->
-<div id="bottombar">
- <table width="100%">
-  <tr>
-   <td align="left" valign="middle">
-    <div>
-
-     <a accesskey='p' href="slide21.html">&lt; &lt; Previous</a> |
-     <a accesskey='i' href="index.html">Index</a> |
-     <a accesskey='n' href="slide23a.html">Next &gt;&gt;</a>
-
-    </div>
-   </td>
-   <td align="right" valign="middle">
-    Copyright &copy; 2005-2006 David Rolsky
-   </td>
-  </tr>
- </table>
-</div>
-<div id="logo"></div>
-
-<div id="spacer">
- <a name="end"></a>
-</div>
-</body>
-</html>
-<!-- END bottom.html -->
-
-
 
