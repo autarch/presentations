@@ -50,7 +50,6 @@ small {
 }
 
 #bottombar {
-    display: none;
     background: <% $banner_bgcolor %>;
     color: blue;
     position: fixed;
@@ -79,6 +78,11 @@ small {
     margin-top: 80px;
 }
 
+pre {
+    background-color: #EEE;
+    padding: 0.5em;
+    width: 80%;
+}
 
 #logo {
     position: fixed;
@@ -91,14 +95,6 @@ small {
     background-image: url(<% $images_directory %>/<% $logo_image %>);
 % }
     background-repeat: no-repeat;
-}
-
-.formatter_pre, pre {
-    background: lightgray;
-    border: 1px black solid;
-    padding: 5px;
-    font-size: 120%;
-    width: 700px;
 }
 /* END index.css */
 <%args>

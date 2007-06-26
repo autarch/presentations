@@ -1,11 +1,11 @@
 --------------------------------------------
 images_directory: /home/autarch/presentations/mason-intro-spork/images
 logo_image: mason-trowel.png
-banner_bgcolor: #C7C7BC
+banner_bgcolor: #E6E6DA
 presentation_topic: Mason
 presentation_title: Introduction to Mason
-presentation_place: Chicago, IL
-presentation_date: June 27, 2006
+presentation_place: Houston, TX
+presentation_date: June 26, 2007
 ----------------------------------------------
 
 {image: http://www.af.mil/news/airman/0597/retire2.jpg}
@@ -13,8 +13,11 @@ presentation_date: June 27, 2006
 == Basics
 
 * Text Templating++
-+* Fundamental building block - "component", contains text and/or code.
-+* A very simple component:
+* Fundamental building block - "component", contains text and/or code.
+
+----------------------------------------------
+
+== A very simple component
 
 .hilite
 % my $who = 'world';
@@ -35,6 +38,16 @@ b+ 1
 ** code which generates output
 ** inline code
 * Plain text is *always* plain text.
+
+----------------------------------------------
+
+== How is it different from TT?
+
+* Mason tries to be like Perl
+* TT is its own language
+** Different scoping
+** Different "sub call" semantics
+** Many other differences
 
 ----------------------------------------------
 
@@ -108,7 +121,7 @@ b+ 7
 == dhandlers
 
 * dhandlers create virtual URLs.
-+* Make a request for _/view/files/id-1.html_.
+* Make a request for _/view/files/id-1.html_.
 ** but there is no such component.
 +* Mason looks for _/view/files/dhandler_ ...
 ** ... then _/view/dhandler_ ...
@@ -125,7 +138,12 @@ b+ 7
 
     $m->cache->set( $key => $value, $expiration );
 
-+* But the coolest part is caching a component's output:
+
+----------------------------------------------
+
+== Caching self
+
+* But the coolest part is caching a component's output:
 
 .hilite
 <%init>
@@ -287,10 +305,19 @@ b+ 2
 * Mason provide two other globals besides [=$m].
 ** [=%ARGS]
 ** [=$r]
-+* [=%ARGS] contains all of the arguments /passed/ to the component
+
+----------------------------------------------
+
+== %ARGS
+
+* [=%ARGS] contains all of the arguments /passed/ to the component
 ** ... but not defaults set by the [=<%args>] block.
 
-+* [=$r] is available when Mason runs under mod_perl.
+----------------------------------------------
+
+== $r
+
+* [=$r] is available when Mason runs under mod_perl.
 ** this is the Apache request object.
 
 ----------------------------------------------
@@ -319,43 +346,19 @@ r+ 4
 
 ----------------------------------------------
 
-{image: http://home.vigay.com/photos/03-05-03/l/342F0007.jpg}
+== MVC Apps with Catalyst
 
-== Configuration under mod_perl (cont)
+* With Catalyst, controller code is all Perl
 
-* Some more configuration:
+  package MyApp::Controller::Use;
 
-    PerlSetVar  MasonCompRoot      /home/dave/www
-    PerlSetVar  MasonDataDir       /home/dave/mason
-    PerlSetVar  MasonAllowGlobal   $User
+  use base 'Catalyst::Controller';
 
-    <LocationMatch "\.mason$">
-      SetHandler  perl-script
-      PerlHandler HTML::Mason::ApacheHandler
-    </LocationMatch>
+  sub view : Path { ... }
+  sub create : Path { ... }
 
-----------------------------------------------
-
-{image: http://www.mulix.org/pics/ols-2003/MVC-0022S.JPG}
-
-== MVC(-ish) with MasonX::WebApp
-
-* Model - your code
-* View - Mason components
-* Controller - MasonX::WebApp as a base class
-+* The picture came up on Google images searching for "MVC"
-** Why?
-
-----------------------------------------------
-
-{image: http://www.hairsandiego.com/images/highlights_jenn.jpg}
-
-== MasonX::WebApp Highlights
-
-* Can dispatch direct to object methods
-** Handle form submissions without Mason
-* Can modify parameter before passing control to Mason
-* Integrates session handling
+* Go to _/user/view_, _/user/create_
+* Catalyst can use Mason for views
 
 ----------------------------------------------
 
@@ -456,6 +459,24 @@ my $fif = HTML::FillInForm->new;
 
 b+ 6
 .hilite
+
+----------------------------------------------
+
+== Mason outside the web
+
+* Nothing inherently web-only about Mason
+
+  my $interp =
+      HTML::Mason::Interp->new
+          ( comp_root => '/path/to/comps' );
+
+  my $buffer;
+  $interp->out_method(\$buffer);
+
+  $interp->exec( '/some/component',
+                 size => 10, color => 'blue' );
+
+  print $buffer;
 
 ----------------------------------------------
 
