@@ -13,10 +13,10 @@ presentation_date: September 23, 2006
 
 * Datetime manipulation appears simple
 ** but has lots of tricky corner cases
-+* CPAN was full of datetime-related modules
+* CPAN was full of datetime-related modules
 ** none of them were complete
 ** all of them had incompatible APIs
-+* Some problems hadn't been solved at all
+* Some problems hadn't been solved at all
 ** notably handling time zones
 
 ----------------------------------------------
@@ -24,11 +24,11 @@ presentation_date: September 23, 2006
 == The Solution
 
 * *WRITE MORE CODE!*
-+* Better yet, get lots of people to write more code
-+* Solve *all* datetime problems
+* Better yet, get lots of people to write more code
+* Solve *all* datetime problems
 ** create good, usable APIs
 ** many small(-ish) modules which work together
-+* Cat herding
+* Cat herding
 
 ----------------------------------------------
 
@@ -36,9 +36,9 @@ presentation_date: September 23, 2006
 
 * Core
 ** |DateTime.pm|
-+** |DateTime::TimeZone| - the Olson time zone database in Perl
-+** |DateTime::Locale| - ICU-based localization
-+** |DateTime::{Set,Span,SpanSet}|
+** |DateTime::TimeZone| - the Olson time zone database in Perl
+** |DateTime::Locale| - ICU-based localization
+** |DateTime::{Set,Span,SpanSet}|
 * Parsing and formatting
 ** |DateTime::Format::ICal|
 ** |DateTime::Format::MySQL|
@@ -69,20 +69,20 @@ presentation_date: September 23, 2006
 ** arithmetical, solar calendar
 ** only based on the earth's rotation around the sun
 ** ignores the moon
-+* Created in the 16th century
-+* Basically the same as the previous Christian calendar (Julian)
+* Created in the 16th century
+* Basically the same as the previous Christian calendar (Julian)
 ** includes a crucial patch for leap year calculation
-+* The current world standard (as of the early 20th century)
+* The current world standard (as of the early 20th century)
 
 ----------------------------------------------
 
 == The Gregorian calendar
 
 * 365 days in a regular year, 366 in a leap year
-+* Begins on January 1, year 1 - its epoch
-+* It does have a year 0
+* Begins on January 1, year 1 - its epoch
+* It does have a year 0
 ** equivalent to 1 BC(E)
-+* May need another leap year adjustment c. 3000
+* May need another leap year adjustment c. 3000
 ** the earth's rotation around the sun is slowing down
 
 ----------------------------------------------
@@ -90,11 +90,11 @@ presentation_date: September 23, 2006
 == UTC
 
 * "Coordinated Universal Time", or "Temps Universel Coordineé"
-+* Basis for calculating current local time = UTC + time zone offset
-+* An international standard based on atomic clocks
-+* Before UTC, the length of a second was based on the earth's revolution
+* Basis for calculating current local time = UTC + time zone offset
+* An international standard based on atomic clocks
+* Before UTC, the length of a second was based on the earth's revolution
 ** but that is slowing down
-+* With atomic clocks, a second's length never changes
+* With atomic clocks, a second's length never changes
 
 
 ----------------------------------------------
@@ -103,7 +103,7 @@ presentation_date: September 23, 2006
 
 * My personal nemesis
 ** they make coding |DateTime.pm| quite difficult
-+* As the earth slows down, days grow longer (> 86,400 seconds)
+* As the earth slows down, days grow longer (> 86,400 seconds)
 ** an occasional leap second syncs rotation and UTC clock
 
 ----------------------------------------------
@@ -112,24 +112,29 @@ presentation_date: September 23, 2006
 
 * Time zones are *geo-political* entities
 ** completely arbitrary, can change at a politician's whim
-+* Canonical data source: the Olson time zone database
-+* Each time zone has several parts
+* Canonical data source: the Olson time zone database
+
+----------------------------------------------
+
+== Time Zones (cont)
+
+* A time zone has several attributes
 ** an offset from UTC in minutes and hours
-+** a name - usually continent or ocean plus city
+** a name - usually continent or ocean plus city
 *** America/Toronto
 *** Europe/London
 *** some have three component names - America/Indiana/Knox
-+** Also includes Daylight Saving Time rules
+** Also includes Daylight Saving Time rules
 *** when do switches happen
-+** a short name for the zone, like EST
+** a short name for the zone, like EST
 
 ----------------------------------------------
 
 == Time Zones (cont)
 
 * The canonical names are the long names!
-+* Short names are *not* unique around the world
-+* An app with users around the world should only use short names for display
+* Short names are *not* unique around the world
+* An app with users around the world should only use short names for display
 
 ----------------------------------------------
 
@@ -139,8 +144,8 @@ presentation_date: September 23, 2006
 ** Gregorian epoch is 0001-01-01 00:00:00
 ** Unix epoch is 1970-01-01 00:00:00 UTC
 ** Other OS's vary
-+* Perl's |time()| uses the OS-native epoch
-+* On many OS's, the epoch is a 32-bit signed int
+* Perl's |time()| uses the OS-native epoch
+* On many OS's, the epoch is a 32-bit signed int
 ** Unix epochs can range from 1901-12-13 to 2038-01-19
 
 ----------------------------------------------
@@ -148,10 +153,10 @@ presentation_date: September 23, 2006
 == Epoch Bad
 
 * Epochs times are not portable
-+* Epoch times have a limited range
+* Epoch times have a limited range
 ** just wait for the y2.038k bug
 ** Or try calculating a 30 year mortgage starting in 2009
-+* The POSIX epoch standard ignores leap seconds in a weird way
+* The POSIX epoch standard ignores leap seconds in a weird way
 
 ----------------------------------------------
 
@@ -166,7 +171,7 @@ presentation_date: September 23, 2006
               month => 6,
               day   => 28 );
 
-+* Can specify up to your desired precision.
+* Can specify up to your desired precision.
 ** unspecified components are "zeroed" out (or "oned" out).
 
 ----------------------------------------------
@@ -174,31 +179,31 @@ presentation_date: September 23, 2006
 == Make it Speak
 
 * |$dt->year| - 2005
-+* |$dt->year_with_secular_era| - 2005CE
+* |$dt->year_with_secular_era| - 2005CE
 ** localized
-+* |$dt->month_name| - June
+* |$dt->month_name| - June
 ** also localized
-+* |$dt->day_name| - Tuesday
+* |$dt->day_name| - Tuesday
 ** again, localized
-+* |$dt->ymd| - "2005-06-28"
+* |$dt->ymd| - "2005-06-28"
 
 ----------------------------------------------
 
 == Slightly more exotic
 
 * |$dt->quarter| - 2
-+* |$dt->nanosecond| - 0
-+* |$dt->mjd| - 53549
+* |$dt->nanosecond| - 0
+* |$dt->mjd| - 53549
 ** "Modified Julian Date"
-+* Many, many more read-only accessors
+* Many, many more read-only accessors
 
 ----------------------------------------------
 
 == Modifiers
 
 * |$dt->set( hour => 12 )| or |$dt->set_hour(12)|
-+* |$dt->truncate( to => 'day' )|
-+* |$dt->add( days => 1 )|
+* |$dt->truncate( to => 'day' )|
+* |$dt->add( days => 1 )|
 
 ----------------------------------------------
 
@@ -234,7 +239,7 @@ presentation_date: September 23, 2006
 
 * *Always*, *always*, *always* store datetimes in UTC
 ** this makes your life easier
-+* For presentation, use the viewer's local time zone
+* For presentation, use the viewer's local time zone
 
     my $dt = get_datetime_from_database();
 
@@ -242,7 +247,11 @@ presentation_date: September 23, 2006
 
     print $dt->datetime;
 
-+* Makes it easy to do calculations on your stored datetimes
+----------------------------------------------
+
+== Always Store in UTC
+
+* Makes it easy to do calculations on your stored datetimes
 ** do appointments overlap?
 ** how long is a meeting?
 ** how many days vacation?
@@ -253,7 +262,7 @@ presentation_date: September 23, 2006
 
 * DateTime::Locale has many locales
 ** based on the ICU project's data
-+* Localization is applied to ...
+* Localization is applied to ...
 ** month names
 ** month abbreviations
 ** day names
@@ -261,7 +270,7 @@ presentation_date: September 23, 2006
 ** era names (BC/AD)
 ** AM/PM
 ** default formats (|strftime()|'s |%c|, |%x|, |%X|)
-+* Default locale is en_US
+* Default locale is en_US
 
 ----------------------------------------------
 
@@ -292,22 +301,22 @@ my $today = DateTime->today
                 ( time_zone => 'floating' );
 my $yapc  =
     DateTime->new
-        ( year => 2007,
-          month => 6, 
-          day => 20 );
+        ( year  => 2007,
+          month => 8,
+          day   => 28 );
 
 my $delta = $yapc->delta_days($today);
 
-print " Days until YAPC::NA 2007: ",
+print " Days until YAPC::EU 2007: ",
       $delta->delta_days, "\n";
 +
                    rrrrrrrrrr 9
               rrrrrrrrrr 12
 .hilite
 
-* This part of the API sucks
-* Sorry
-+* run the script - /delta-days-yapc/
+* This part of the API sucks. Sorry.
+
+* run the script - /delta-days-yapc/
 
 ----------------------------------------------
 
@@ -348,7 +357,7 @@ print " Days until YAPC::NA 2007: ",
         $dt->date, "\n";
 
 * run the script - /chinese-valentine/
-+* If I were a good husband, I would remember this
+* If I were a good husband, I would remember this
 
 ----------------------------------------------
 
@@ -356,7 +365,7 @@ print " Days until YAPC::NA 2007: ",
 
 * Mayan calendar ends at the end of the 13th /baktun/
 ** /baktun/ == 144,000 days
-+* Baktuns occur in a 13-baktun cycle
+* Baktuns occur in a 13-baktun cycle
 
     my $mayan =
         DateTime::Calendar::Mayan->new
@@ -374,7 +383,7 @@ print " Days until YAPC::NA 2007: ",
 == Recurrences
 
 * Recurrences are a type of set
-+* Common ones
+* Common ones
 ** every day
 ** second Wednesday of each month
 ** every other Friday
@@ -443,27 +452,30 @@ for my $dt (@list) {
 my $recur =
     DateTime::Event::Recurrence->weekly
         ( days => [ 1 .. 5 ] );
+
 my @dates = 
     map { DateTime->new(%$_) }
     { year => 2006, month => 7, day => 12 },
     { year => 2006, month => 7, day => 13 }
+
 my $days_off =
     DateTime::Set->from_datetimes
         ( dates => \@dates );
+
 $recur = $recur->complement($days_off);
 
 b+ 1
 b+ 2
 b+ 3
-r+ 8
-r+ 9
 r+ 10
+r+ 11
+r+ 12
 +
-g+ 11
+g+ 14
 .hilite
 
 * run the script - /days-off/
-+* Flavio Glock is my hero - he wrote all the hard set math parts
+* Flavio Glock is my hero - he wrote all the hard set math parts
 
 ----------------------------------------------
 
@@ -478,18 +490,15 @@ my $monday_at_1pm =
 my $appointments =
     DateTime::SpanSet->from_set_and_duration
     ( set => $monday_at_1pm, hours => 1 );
-
 for my $dt ( map { DateTime->new(%$_) }
     { year => 2006, month => 4, day => 3,
       hour => 12 },
     { year => 2006, month => 4, day => 3,
       hour => 13, minute => 30 },
            ) {
-    my $verb =
-        $appointments->intersects($dt)
+    my $verb =  $appointments->intersects($dt)
         ? 'conflicts'
         : q|doesn't conflict|;
-
     print ' ', $dt->datetime,
       " $verb with your weekly 1pm meeting\n";
 }
@@ -502,7 +511,7 @@ rrrrrrrrrrrrrrrrr 4
     rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 5
     rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 6
 +
-        rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 15
+                rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 13
 .hilite
 
 * run the script - /appointment-check/

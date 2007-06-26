@@ -55,5 +55,3 @@ $prev_slide => ''
 $next_slide => ''
 $mouse_controls
 </%args>
-
-
