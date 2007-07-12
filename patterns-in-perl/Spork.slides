@@ -43,6 +43,7 @@ presentation_date: April 5th, 2007
 
 * Sometimes called "Gang of Four" book
 ** Four authors
+** And they're really tough, thus "gang"
 * Examples use C++ and Smalltalk
 * This book is not a bible
 
@@ -184,7 +185,7 @@ presentation_date: April 5th, 2007
 
 === Observer Example Explained
 
-* The observer is |XML::SAX::Printer|
+* The observer is |XML::SAX::Echo|
 * Knows nothing about the parser API
 * Parser just requires that observer implements a defined API
 * Can combine different parsers and observers
@@ -308,6 +309,7 @@ presentation_date: April 5th, 2007
 ** For example, decorators
 * See MJD's cool article again
 ** http://blog.plover.com/prog/design-patterns.html
+* See http://perldesignpatterns.com/
 
 ----
 
