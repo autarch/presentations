@@ -1,0 +1,3 @@
+<& top.mas, %ARGS &>
+% $m->call_next;
+

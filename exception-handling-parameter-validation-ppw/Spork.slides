@@ -520,7 +520,7 @@ my %p =
 
 * Fairly mature, over three years old
 * Is written entirely in XS, so it's fast
-** As fast as it can be, it still is a noticeable performance hit in profiling
+** As fast as it can be, it is still likely to show up in profiling
 * Validation can be turned off with an env var
 ** But I never do this
 

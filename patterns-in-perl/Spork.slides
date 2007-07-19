@@ -1,6 +1,6 @@
 ----
 images_directory: /home/autarch/presentations/patterns-in-perl/images
-banner_bgcolor: red
+banner_bgcolor: #600
 presentation_topic: Patterns in Perl
 presentation_title: Patterns in Perl
 presentation_place: Minneapolis, MN
