@@ -4,7 +4,7 @@ presentation_topic: Wikis
 presentation_title: Wikis for Organizing
 presentation_place: Los Angeles, CA
 presentation_date: July 22, 2007
-presentation_uri: http://www.exploreveg.org/presentations/wikis-for-activism/
+presentation_uri: http://www.exploreveg.org/slides/wikis-for-activism/
 author_email: dave@exploreveg.org
 author_organization: Compassionate Action for Animals
 ----
@@ -12,7 +12,7 @@ author_organization: Compassionate Action for Animals
 == What is a Wiki?
 
 * A bunch of web pages
-* Edit with a browser
+* Editable from the browser
 * Links between pages
 
 ----
@@ -24,7 +24,7 @@ author_organization: Compassionate Action for Animals
 
 ----
 
-== What is a Wiki? Wiki Nature
+== Wiki Nature
 
 * Shared ownership
 ** *Our* pages!
@@ -33,6 +33,7 @@ author_organization: Compassionate Action for Animals
 ** Nothing is lost
 * Well-linked
 ** Supports browsing
+* Link to pages not yet made
 
 ----
 
@@ -55,33 +56,49 @@ author_organization: Compassionate Action for Animals
 
 ----
 
-== Wiki Concepts
-
-* WikiWords vs free links
-* Backlinks - what links to this page?
-* Orphans - pages without incoming links
-
-----
-
 == Wikis and Email
 
-* Email is better for conversation
+* Email is better for conversation and decision-making
 ** Threaded discussion
 * Wikis are good for recording decisions
 * Wikis are good for working collaboratively
 * Use email to point people at wiki pages
 ** "The minutes are at http://..."
-** "I wrote a grant, please edit it at http://..."
+** "I'm working on a grant application, please edit it at http://..."
+* Much better workflow than emailing documents!
 
 ----
 
 == Stuff in CAA's wiki
 
+* Everything!
+* Lots of pages about past events and campaigns
+* Fundraising info
+* Posters, newsletters, fundraising info
+* Work in progress
+** Makes review and changes easy
+* Meeting minutes
 
 ----
 
-== Filling the Blank Slate
+== Stuff not in CAA's wiki
 
+* Donor and volunteer tracking
+** Wikis don't provide enough search and summary features
+* Our blog
+** Wikis discourage an authorial voice
+* Wikis don't allow fine-grained formatting
+** Not a tool for graphic design
+
+----
+
+== How to start your wiki?
+
+* Start with your next event
+* Resource materials
+** Guides to activism
+** Media - logos, letterhead
+* Meeting minutes
 
 ----
 
@@ -97,3 +114,10 @@ author_organization: Compassionate Action for Animals
 ----
 
 == Demo
+
+* http://localhost/mediawiki/
+** This won't work if you're viewing this on the exploreveg.org site
+
+----
+
+== Questions?
