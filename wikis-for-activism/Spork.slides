@@ -1,9 +1,9 @@
 ----
 banner_bgcolor: #EEEECC
 presentation_topic: Wikis
-presentation_title: Wikis for Organizing
-presentation_place: Los Angeles, CA
-presentation_date: July 22, 2007
+presentation_title: Wikis for Activism
+presentation_place: Minneapolis, MN
+presentation_date: June 7, 2008
 presentation_uri: http://www.exploreveg.org/slides/wikis-for-activism/
 author_email: dave@exploreveg.org
 author_organization: Compassionate Action for Animals
@@ -47,6 +47,15 @@ author_organization: Compassionate Action for Animals
 
 ----
 
+== Banquet example
+
+.html
+<a href="images/banquet-example-screenshot-1.png">screenshot 1</a><br />
+<a href="images/banquet-example-screenshot-2.png">screenshot 2</a>
+.html
+
+----
+
 == Publishing with a wiki
 
 * Could make your public site a wiki
@@ -61,10 +70,10 @@ author_organization: Compassionate Action for Animals
 * Email is better for conversation and decision-making
 ** Threaded discussion
 * Wikis are good for recording decisions
-* Wikis are good for working collaboratively
-* Use email to point people at wiki pages
 ** "The minutes are at http://..."
-** "I'm working on a grant application, please edit it at http://..."
+* Wikis are good for working collaboratively
+** "I wrote a grant, please edit it at http://..."
+* Use email to point people at wiki pages
 * Much better workflow than emailing documents!
 
 ----
@@ -72,11 +81,11 @@ author_organization: Compassionate Action for Animals
 == Stuff in CAA's wiki
 
 * Everything!
-* Lots of pages about past events and campaigns
-* Fundraising info
-* Posters, newsletters, fundraising info
+* Event logistics, like this conference
+* Historical information (history of CAA, logos, etc)
+* How-to guides (leafleting, cable access video showings, planning a potluck)
 * Work in progress
-** Makes review and changes easy
+** Makes review and changes easier
 * Meeting minutes
 
 ----
@@ -104,10 +113,12 @@ author_organization: Compassionate Action for Animals
 
 == Wiki Hosting
 
-* pbwiki.com - free!
-** Also has non-free upgrades
+* wikdot.org - free!
+** Featureful, but not polished
 * wikhost.org - also free!
 ** More bare-bones, less user-friendly
+* pbwiki.com - free for 3 users or less
+** Offers a nonprofit discount
 * Many more
 ** http://en.wikipedia.org/wiki/Comparison_of_wiki_farms
 
