@@ -126,7 +126,7 @@ author_organization: Compassionate Action for Animals
 
 == Demo
 
-* http://localhost/mediawiki/
+* http://localhost:3000/
 ** This won't work if you're viewing this on the exploreveg.org site
 
 ----
