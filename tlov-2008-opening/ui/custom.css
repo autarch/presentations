@@ -1,0 +1,38 @@
+body {
+    background: none;
+}
+
+div.image-set {
+    margin-left: 6.5%;
+    margin-top: 1em;
+}
+
+div#header, div#footer {
+    color: black;
+    background: none;
+    background-color: #EEEECC;
+}
+
+div#header {
+    background: #EEEECC url(../images/caa-logo.png) 1% 50% no-repeat;
+}
+
+.slide h1 {
+    background-color: #EEEECC;
+    color: black;
+    margin-left: 100px;
+}
+
+span.date, span.uri {
+    font-size: 80%;
+}
+
+span.uri {
+    color: blue;
+}
+
+h2.subtitle {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
