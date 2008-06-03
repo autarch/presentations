@@ -21,6 +21,8 @@ sub wafl_classes
         );
 }
 
+const all_phrases => [qw(wafl_phrase asis strong em u tt tt2 hyper titlehyper)];
+
 ################################################################################
 package Spork::Formatter::Extra::VerbatimBlock;
 use base 'Spoon::Formatter::WaflBlock';
