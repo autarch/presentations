@@ -1,0 +1,105 @@
+----
+presentation_title: VegGuide.Org: A Tool for Activism
+presentation_topic: VegGuide.Org
+presentation_place: Minneapolis, MN
+presentation_date: June 7, 2008
+banner_bgcolor: #EEEECC
+author_email: dave@exploreveg.org
+author_organization: Compassionate Action for Animals
+----
+== VegGuide.Org
+
+* Have you been there?
+----
+== In Brief
+
+* Worlwide guie to veg-friendly food & shopping
+* Community-maintained
+** anyone can add and edit entries
+** anyone can rate and review entries
+* Over 5,000 entries, nearly 5,000 reviews
+** 62 countries (mostly US and Canada though)
+----
+== Why Bother?
+
+* Competing with HappyCow, VegDining, and many veg city sites?
+* Yes and no
+----
+== Philosophy
+
+* *Making it easier to be more animal-friendly*
+----
+== Philosophy
+* Big, up-to-date
+** can't do that without a large community
+* Adding information must be easy
+* Provide instant feedback
+** new entries, reviews, and ratings show up instantly
+** no filtering *before* posting
+----
+== Philosophy
+
+* "Usefulness" as the primary criterion
+** adding a steak house
+* Avoiding conflicts of interest
+** listings are free
+** accounts are free
+** site is free
+** no ads, ever
+----
+== Philosophy
+
+* *Freedom*
+* Shared license for submissions
+** you always own your content
+** share license rights with VegGuide.Org
+* Site content is freely available for non-commercial use
+** republished on a few other sites already
+----
+== Cooperating with Other Sites
+
+* Partnership with Mercy for Animals
+* Importing data from VegIllinois, VegOhio, & VegPA
+** http://localhost:3000/entry/5126
+----
+== Is this Activism?
+
+* Many people want to go veg
+* Excuses get in the way
+** "It's too hard"
+** "I won't be able to eat anything"
+** "I'll never be able to go out to eat"
+
+----
+== Is this Activism?
+
+* Many abandon being veg
+** "It was too much work"
+----
+== Making Things Easy
+
+* People are lazy
+* VegGuide tries to make being veg *easier*
+----
+== Adopt it Locally
+
+* Please do not make your own site
+* Use the existing tools
+* Let others contribute
+** building community
+----
+== Some Neat Features
+
+* Search by address
+** 301 19th Ave S, Minneapolis, MN
+** ([cheat link http://localhost:3000/entry/near/44.971126%2C-93.245684/filter?unit=mile;distance=5;sort_order=ASC;page=;order_by=distance;address=301+19th+Ave+S%2C+Minneapolis%2C+MN;limit=])
+----
+== More Features
+
+* Hours clearly marked
+* Weighted ratings (sortable)
+* Sort by how veg
+* Favorite local restaurants
+* Printable lists
+
+
