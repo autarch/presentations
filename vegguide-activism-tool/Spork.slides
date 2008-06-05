@@ -31,7 +31,7 @@ author_organization: Compassionate Action for Animals
 ----
 == Philosophy
 * Big, up-to-date
-** can't do that without a large community
+** can't do that without a large, *active* community of users
 * Adding information must be easy
 * Provide instant feedback
 ** new entries, reviews, and ratings show up instantly
@@ -39,8 +39,8 @@ author_organization: Compassionate Action for Animals
 ----
 == Philosophy
 
-* "Usefulness" as the primary criterion
-** adding a steak house
+* *Usefulness* as the primary criterion
+** add a steak house!
 * Avoiding conflicts of interest
 ** listings are free
 ** accounts are free
@@ -61,6 +61,7 @@ author_organization: Compassionate Action for Animals
 * Partnership with Mercy for Animals
 * Importing data from VegIllinois, VegOhio, & VegPA
 ** http://localhost:3000/entry/5126
+* Have data you want to share?
 ----
 == Is this Activism?
 
@@ -69,7 +70,6 @@ author_organization: Compassionate Action for Animals
 ** "It's too hard"
 ** "I won't be able to eat anything"
 ** "I'll never be able to go out to eat"
-
 ----
 == Is this Activism?
 
@@ -85,8 +85,9 @@ author_organization: Compassionate Action for Animals
 
 * Please do not make your own site
 * Use the existing tools
-* Let others contribute
+* Lets others contribute
 ** building community
+* Keep your region up to date
 ----
 == Some Neat Features
 
@@ -94,7 +95,7 @@ author_organization: Compassionate Action for Animals
 ** 301 19th Ave S, Minneapolis, MN
 ** ([cheat link http://localhost:3000/entry/near/44.971126%2C-93.245684/filter?unit=mile;distance=5;sort_order=ASC;page=;order_by=distance;address=301+19th+Ave+S%2C+Minneapolis%2C+MN;limit=])
 ----
-== More Features
+== Some Neat Features
 
 * Hours clearly marked
 * Weighted ratings (sortable)
