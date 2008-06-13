@@ -1,0 +1,364 @@
+----
+presentation_topic: Fey(::ORM), YA(F)ORM
+presentation_title: Fey(::ORM), YA(F)ORM
+presentation_place: Chicago, IL
+presentation_date: Tuesday, June 17, 2008
+----
+== What the fuck, Dave?
+
+* Are you high?
+* Or just stupid?
+----
+== Why another ORM?
+
+* Alzabo is old crap
+* But I still like parts of it
+* Wanted a modern tool without the baggage
+----
+== Fey anatomy
+
+* |Fey| distro - core modules
+* |Fey::Loader|
+* |Fey::DBIManager|
+* |Fey::Test|
+* |Fey::ORM|
+----
+== Fey core modules
+
+* |Fey::Schema|, |Fey::Table|, |Fey::Column|, |Fey::FK|
+** SQL schema in objects
+* |Fey::SQL|, |Fey::Literal|
+** SQL generation through Perl
+----
+== Fey core examples
+
+   my $schema = Fey::Schema->new( name => 'my-cds' );
+
+   my $cd_table = Fey::Table->new( name => 'CD' );
+
+   $cd_table->add_column( ... );
+
+* But don't do this! Use Fey::Loader!
+----
+== Fey core examples
+
+   my $avg_tack_length =
+       Fey::Literal::Function->new
+           ( 'AVG', $track_table->column('length') );
+
+   my $select = Fey::SQL->new_select();
+
+   $select->select( $track_table )
+          # figures out appropriate join
+          ->from( $cd_table, $track_table )
+          ->where( $cd_table->column('year'), '>',
+                   Fey::Placeholder->new() )
+          ->and( $track_table->column('length'), '>',
+                 $avg_track_length )
+          ->order_by( $cd_table->column('name'),
+                      $track_table->column('name') );
+
+   # quotes the crap out of everything
+   print $select->sql($dbh);
+----
+== Fey core auto-placeholders
+
+   my $select = Fey::SQL->new_select();
+
+   $select->select( $track_table )
+          # figures out appropriate join
+          ->from( $cd_table, $track_table )
+          ->where( $cd_table->column('year'), '=', 2005 );
+          ->and( $cd_table->column('artist_id'), '=',
+                 $tommy_heavenly6->artist_id() );
+
+   print $select->sql($dbh);
+   # ... WHERE CD.year = ? AND CD.artist_id = ?
+   print $select->bind_params();
+   # (2005, 19750206)
+
+* Very handy, but can be turned off
+** still always does proper quoting
+----
+== Fey core philosophy
+
+* Awfully verbose for simple SQL!
+* Primary use case - dynamically generating complex SQL
+** I seem to need to do this a lot
+** if you don't, Fey may not be for you
+* Leverages your SQL knowledge
+** looks SQL-y
+** simple data structures, explicit comparisons
+----
+== Fey core goals
+
+* Make it easier to generate SQL dynamically 
+* Support any type of query
+** subselects
+** complex joins with join constraints
+*** |FROM TableA LEFT OUTER JOIN TableB USING (foo_id) WHERE TableB.size > 10|
+** still needs UNION, MINUS, etc
+*** shouldn't be hard to add
+----
+== Fey core goals
+* Be helpful
+** auto joins
+** ignore the same join twice
+* De-coupled from an ORM (unlike Alzabo)
+----
+== Fey::ORM
+
+* Builds on top of |Fey| core and |Fey::DBIManager|
+* SQL-oriented ORM
+** thinking in sets, not objects
+** *not* a dumb object store
+** design your tables first
+* Is extremely Moose
+** subclasses Moose metaclasses
+** declarative
+** don't worry about this
+** you can use all Moose features!
+----
+== Fey::ORM - MyApp::Schema
+
+  package MyApp::Schema;
+
+  use Fey::ORM::Schema;
+
+  {
+      my $source = Fey::DBIManager::Source->new( ... );
+
+      my $schema =
+          Fey::Loader->new( dbh => $source->dbh() )->make_schema();
+
+      has_schema $schema;
+
+      __PACKAGE__->DBIManager()->add_source($source);
+  }
+----
+== Fey::ORM - MyApp::Schema methods
+
+* |MyApp::Schema->Schema()| - returns a |Fey::Schema|
+----
+== Fey::ORM - MyApp::Schema methods
+
+* |MyApp::Schema->DBIManager()| - returns a |Fey::DBIManager|
+** |MyApp::Schema->DBIManager()->default_source()| - a |Fey::DBIManager::Source|
+*** |MyApp::Schema->DBIManager()->default_source()->dbh()| - a |DBI| handle
+----
+== Fey::ORM - MyApp::Schema methods
+* |MyApp::Schema->SQLFactoryClass()| - by default, returns |'Fey::SQL'|
+* |MyApp::Schema->SQLFactoryClass()->new_select()| - a |Fey::SQL::Select| object
+** could subclass it to return something else, for example |'Fey::SQL::Pg'|
+*** (this does not exist (yet))
+----
+== Fey::ORM - MyApp::Schema methods
+* |MyApp::Schema->RunInTransaction( sub { ... } )| - what do you think?
+----
+== Fey::ORM - MyApp::Schema::CD
+
+  package MyApp::Schema::CD;
+
+  use MyApp::Schema;
+
+  use Fey::ORM::Table;
+
+  {
+    my $schema = R2::Schema->Schema();
+
+    has_table( $schema->table('CD') );
+
+    has_one( $schema->table('Artist') );
+
+    has_many 'tracks' =>
+        ( table    => $schema->table('Track'),
+          order_by =>
+              [ $schema->table('Track')->column('track_number') ],
+          cache    => 1,
+        );
+  }
+----
+== Fey::ORM - MyApp::Schema::CD
+
+  package MyApp::Schema::CD;
+
+  {
+     transform 'release_date' =>
+         deflate { blessed $_[1]
+                   ? DateTime::Format::Pg->format_datetime( $_[1] )
+                   : $_[1] },
+         inflate { DateTime::Format::Pg->parse _datetime( $_[1] ) };
+
+     has_many 'artists' =>
+         ( table       => $schema->table('Artist'),
+           # SELECT Artist.*
+           # FROM Track JOIN Artist USING (artist_id)
+           # WHERE Track.cd_id = ?
+           select      => ..., # Fey::SQL::Select object
+           bind_params => sub { $_[0]->cd_id() },
+           cache       => 1,
+         );
+  }
+----
+== Fey::ORM::Table gives you Moose
+
+  package MyApp::Schema::CD;
+
+  use Fey::ORM::Table;
+
+  # Plain old Moose attributes
+  has 'reverse_title' =>
+      ( is      => 'ro',
+        isa     => 'Str',
+        default => sub { reverse $_[0]->title() },
+      );
+
+  # Plain old Moose roles
+  with 'MyApp::Role::OpticalMedia';
+
+  # Plain old Moose method modifiers
+  before 'update' => sub { ... };
+
+* All the power of Moose, plus more!
+----
+== Fey::ORM::Table methods
+
+* |MyApp::Schema::CD->Table()| - returns a |Fey::Table|
+----
+== Fey::ORM::Table methods
+* |MyApp::Schema::CD->new( cd_id => 12 )| - loads CD row from DBMS
+** can load one row based on any unique key
+** can also define alternate "load one row" logic in your class
+*** for example, load user based on username & hashed password
+* |$cd->title()|, |$cd->release_date()| - one method per column
+----
+== Fey::ORM::Table methods
+* |MyApp::Schema::CD->insert()|
+* |$cd->update( title => 'YAPC Rock Party' )|
+* |$cd->delete()|
+----
+== More Fey::ORM features
+
+* Tries very hard to be efficient
+** minimize # of SQL queries
+* Fey::Object::Iterator
+** uses DBI statement handles for iterators
+** can return multiple objects in one |$iterator->next()| call
+* use |Fey::SQL| in your model to build complex queries
+----
+== Fey::ORM is not done!
+
+* Still a work in progress
+* Will expand as I use it
+** next addition - attribute metaclass for SQL query based attributes
+* Will probably need some DBMS-specific logic eventually
+** either in |Fey::ORM|, |Fey::SQL|, or both
+----
+== Fey::Loader
+
+* Define your schema in standard SQL
+* Point |Fey::Loader| at your DBMS
+
+   my $loader = Fey::Loader->new( dbh => $dbh );
+   my $schema = $loader->make_schema();
+----
+== Fey::Loader
+
+* Works with SQLite, Pg, and MySQL so far
+* Uses DBI's |*_info| methods (mostly)
+* If your DBMS supports them, making a |Fey::Loader| subclass is easy(ish)
+----
+== Fey::DBIManager
+
+* Manages a set of 1+ DBI handles
+* Primarily for the benefit of |Fey::ORM|
+** but works standalone too
+* Handles forking & threading properly
+* Can be subclassed for DWIMing with master/slave setups
+----
+== Fey::DBIManager
+
+* Most people will not need to look too closely
+* Just set up your |Fey::DBIManager::Source| at load time
+
+----
+== Fey::DBIManager example
+
+    package MyApp::Schema; # probably uses Fey::ORM::Schema
+
+    my $source =
+        Fey::DBIManager::Source->new
+            ( dsn          => ...,
+              username     => ...,
+              password     => ...,
+              post_connect => \&_set_dbh_attributes,
+            );
+
+    sub _set_dbh_attributes {
+        my $dbh = shift;
+
+        $dbh->{pg_enable_utf8} = 1;
+        $dbh->do( 'SET TIME ZONE UTC' );
+    }
+----
+== Fey::DBIManager post-connect
+
+* Post-connect gets called whenever |Fey::DBIManager| reconnects
+** after a fork or in a new thread
+** more or less transparent to you
+----
+== Fey::Test
+
+* Shared test framework bits for other Fey distros
+* Please ignore this unless you want to hack on Fey
+----
+== Bonus: What's wrong with Alzabo?
+
+* Doesn't support multi-row delete or update
+* Better SQL generation API (more methods, less data structures)
+
+   $select->select( $track_table )
+          # figures out appropriate join
+          ->from( $cd_table, $track_table )
+          ->where( $cd_table->column('year'), '=', 2005 );
+          ->and( $cd_table->column('artist_id'), '=',
+                 $tommy_heavenly6->artist_id() );
+
+   # Alzabo way
+   $schema->join
+       ( select => $track_table,
+         join   => [ $cd_table, $track_table ],
+         where  => [ [ $cd_table->column('year'), '=', 2005 ],
+                     [ $artist_table->column('artist_id'), '=',
+                       $tommy_heavenly6->artist_id() ],
+                   ],
+       );
+----
+== Bonus: What's wrong with Alzabo?
+
+* SQL generation API is coupled to schema object API is coupled to ORM API
+* Alzabo tries too hard to prevent self-foot-ballistic-puncture
+** tons of DBMS-specific code
+** makes supporting a new DBMS really hard
+** ties Alzabo to specific DBMS versions in weird ways
+** makes things bulky and inflexible
+* By contrast, Fey assumes you know what you're doing
+** will generate bad SQL if you ask, but you'll find out soon enough
+----
+== Bonus: What's wrong with Alzabo?
+
+* Separation of ::Create and ::Runtime classes
+** made sense with standard memory available in 2000
+* Too much is-a, not enough has-a
+* Alzabo-specific schema format (Storable dump)
+** screw that, just put your schema in a file of SQL
+* No need for Alzabo's GUI tool any more
+* Alzabo implements referential integrity in Perl because I was using MySQL
+** Fuck MySQL's stupidity - use a real DBMS or suffer the consequences
+*** yes, I know about InnoDB
+----
+== Bonus: What's wrong with Alzabo?
+
+* Alzabo's test suite came well after starting the code. It is *NASTY*!
+* Alzabo does too many things in one package
+** it's hard to document and explain
