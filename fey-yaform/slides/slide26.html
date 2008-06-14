@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::Loader</title>
+<title>More Fey::ORM features</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -187,14 +187,25 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
- <h2>Fey::Loader</h2>
+ <h2>More Fey::ORM features</h2>
 <ul>
-<li>Works with SQLite, Pg, and MySQL so far</li>
-<li>Uses DBI&#39;s <tt>*_info</tt> methods &#40;mostly&#41;</li>
-<li>If your DBMS supports them, making a <tt>Fey::Loader</tt> subclass is easy&#40;ish&#41;</li>
+<li>Tries very hard to be efficient</li>
+
+<ul>
+<li>minimize # of SQL queries</li>
+</ul>
+<li><tt>Fey::Object::Iterator</tt></li>
+
+<ul>
+<li>uses DBI statement handles behind the scenes</li>
+<li>can return multiple objects in one <tt>$iterator-&gt;next&#40;&#41;</tt> call</li>
+
+<ul>
+<li>a &#34;join iterator&#34;</li>
+</ul></ul>
+<li>use <tt>Fey::SQL</tt> in your model to build complex queries</li>
 </ul>
 
 </div>

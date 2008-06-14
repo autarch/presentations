@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::Loader</title>
+<title>Fey::ORM - MyApp::Schema methods</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -187,18 +187,14 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
- <h2>Fey::Loader</h2>
+ <h2>Fey::ORM - MyApp::Schema methods</h2>
 <ul>
-<li>Define your schema in standard SQL</li>
-<li>Point <tt>Fey::Loader</tt> at your DBMS</li>
+<li><tt>MyApp::Schema::CD-&gt;EnableObjectCache&#40;&#41;</tt></li>
+<li><tt>MyApp::Schema::CD-&gt;DisableObjectCache&#40;&#41;</tt></li>
+<li><tt>MyApp::Schema::CD-&gt;ClearObjectCache&#40;&#41;</tt></li>
 </ul>
-<pre class="formatter_pre">
-my $loader = Fey::Loader-&gt;new&#40; dbh =&gt; $dbh &#41;;
-my $schema = $loader-&gt;make_schema&#40;&#41;;
-</pre>
 
 </div>
 <!-- END slide.html -->

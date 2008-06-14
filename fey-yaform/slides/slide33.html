@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Bonus: What&#39;s wrong with Alzabo?</title>
+<title>Fey::DBIManager post-connect</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -187,24 +187,15 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
- <h2>Bonus: What's wrong with Alzabo?</h2>
+ <h2>Fey::DBIManager post-connect</h2>
 <ul>
-<li>SQL generation API is coupled to schema object API is coupled to ORM API</li>
-<li>Alzabo tries too hard to prevent self-foot-ballistic-puncture</li>
+<li>Post-connect gets called whenever <tt>Fey::DBIManager</tt> reconnects</li>
 
 <ul>
-<li>tons of DBMS-specific code</li>
-<li>makes supporting a new DBMS really hard</li>
-<li>ties Alzabo to specific DBMS versions in weird ways</li>
-<li>makes things bulky and inflexible</li>
-</ul>
-<li>By contrast, Fey assumes you know what you&#39;re doing</li>
-
-<ul>
-<li>will generate bad SQL if you ask, but you&#39;ll find out soon enough</li>
+<li>after a fork or in a new thread</li>
+<li>more or less transparent to you</li>
 </ul></ul>
 
 </div>

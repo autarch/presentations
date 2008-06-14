@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Bonus: What&#39;s wrong with Alzabo?</title>
+<title>Fey::Test</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -187,31 +187,13 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
- <h2>Bonus: What's wrong with Alzabo?</h2>
+ <h2>Fey::Test</h2>
 <ul>
-<li>Separation of ::Create and ::Runtime classes</li>
-
-<ul>
-<li>made sense with standard memory available in 2000</li>
+<li>Shared test framework bits for other Fey distros</li>
+<li>Please ignore this unless you want to hack on Fey</li>
 </ul>
-<li>Too much is-a, not enough has-a</li>
-<li>Alzabo-specific schema format &#40;Storable dump&#41;</li>
-
-<ul>
-<li>screw that, just put your schema in a file of SQL</li>
-</ul>
-<li>No need for Alzabo&#39;s GUI tool any more</li>
-<li>Alzabo implements referential integrity in Perl because I was using MySQL</li>
-
-<ul>
-<li>Fuck MySQL&#39;s stupidity - use a real DBMS or suffer the consequences</li>
-
-<ul>
-<li>yes, I know about InnoDB</li>
-</ul></ul></ul>
 
 </div>
 <!-- END slide.html -->

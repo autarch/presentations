@@ -187,19 +187,25 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
  <h2>Fey::ORM - MyApp::Schema methods</h2>
 <ul>
-<li><tt>MyApp::Schema-&gt;DBIManager&#40;&#41;</tt> - returns a <tt>Fey::DBIManager</tt></li>
+<li><tt>MyApp::Schema-&gt;DBIManager&#40;&#41;</tt></li>
 
 <ul>
-<li><tt>MyApp::Schema-&gt;DBIManager&#40;&#41;-&gt;default_source&#40;&#41;</tt> - a <tt>Fey::DBIManager::Source</tt></li>
+<li>returns a <tt>Fey::DBIManager</tt></li>
+</ul>
+<li><tt>MyApp::Schema-&gt;DBIManager&#40;&#41;-&gt;default_source&#40;&#41;</tt></li>
 
 <ul>
-<li><tt>MyApp::Schema-&gt;DBIManager&#40;&#41;-&gt;default_source&#40;&#41;-&gt;dbh&#40;&#41;</tt> - a <tt>DBI</tt> handle</li>
-</ul></ul></ul>
+<li>a <tt>Fey::DBIManager::Source</tt></li>
+</ul>
+<li><tt>MyApp::Schema-&gt;DBIManager&#40;&#41;-&gt;default_source&#40;&#41;-&gt;dbh&#40;&#41;</tt></li>
+
+<ul>
+<li>- a <tt>DBI</tt> handle</li>
+</ul></ul>
 
 </div>
 <!-- END slide.html -->

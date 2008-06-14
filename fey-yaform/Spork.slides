@@ -129,7 +129,8 @@ presentation_date: Tuesday, June 17, 2008
       my $source = Fey::DBIManager::Source->new( ... );
 
       my $schema =
-          Fey::Loader->new( dbh => $source->dbh() )->make_schema();
+          Fey::Loader->new( dbh => $source->dbh() )
+                     ->make_schema();
 
       has_schema $schema;
 
@@ -142,33 +143,36 @@ presentation_date: Tuesday, June 17, 2008
 ----
 == Fey::ORM - MyApp::Schema methods
 
-* |MyApp::Schema->DBIManager()| - returns a |Fey::DBIManager|
-** |MyApp::Schema->DBIManager()->default_source()| - a |Fey::DBIManager::Source|
-*** |MyApp::Schema->DBIManager()->default_source()->dbh()| - a |DBI| handle
+* |MyApp::Schema->DBIManager()|
+** returns a |Fey::DBIManager|
+* |MyApp::Schema->DBIManager()->default_source()|
+** a |Fey::DBIManager::Source|
+* |MyApp::Schema->DBIManager()->default_source()->dbh()|
+** - a |DBI| handle
 ----
 == Fey::ORM - MyApp::Schema methods
-* |MyApp::Schema->SQLFactoryClass()| - by default, returns |'Fey::SQL'|
-** could subclass it to return something else, for example |'Fey::SQL::Pg'|
+* |MyApp::Schema->SQLFactoryClass()|
+** by default, returns |'Fey::SQL'|
+** subclass it to return something else - |'Fey::SQL::Pg'|
 *** (this does not exist (yet))
-* |MyApp::Schema->SQLFactoryClass()->new_select()| - a |Fey::SQL::Select| object
+* |MyApp::Schema->SQLFactoryClass()->new_select()|
+** a |Fey::SQL::Select| object
 ----
 == Fey::ORM - MyApp::Schema methods
 * |MyApp::Schema->EnableObjectCaches()|
 * |MyApp::Schema->DisableObjectCaches()|
 * |MyApp::Schema->ClearObjectCaches()|
-* Enable/disable/clear caching for all table-based classes
+* Affects caching for all table-based classes
 * Fairly dumb in-memory object cache
 ** designed to catch attempt to create same object >1 time
 ----
 == Fey::ORM - MyApp::Schema methods
-* |MyApp::Schema->RunInTransaction( sub { ... } )| - what do you think?
+* |MyApp::Schema->RunInTransaction( sub { ... } )|
 ----
 == Fey::ORM - MyApp::Schema::CD
 
   package MyApp::Schema::CD;
-
   use MyApp::Schema;
-
   use Fey::ORM::Table;
 
   {
@@ -181,7 +185,8 @@ presentation_date: Tuesday, June 17, 2008
     has_many 'tracks' =>
         ( table    => $schema->table('Track'),
           order_by =>
-              [ $schema->table('Track')->column('track_number') ],
+              [ $schema->table('Track') 
+                       ->column('track_number') ],
           cache    => 1,
         );
   }
@@ -193,10 +198,18 @@ presentation_date: Tuesday, June 17, 2008
   {
      transform 'release_date' =>
          deflate { blessed $_[1]
-                   ? DateTime::Format::Pg->format_datetime( $_[1] )
+                   ? DateTime::Format::Pg
+                         ->format_datetime( $_[1] )
                    : $_[1] },
-         inflate { DateTime::Format::Pg->parse _datetime( $_[1] ) };
+         inflate { DateTime::Format::Pg
+                       ->parse _datetime( $_[1] ) };
+  }
+----
+== Fey::ORM - MyApp::Schema::CD
 
+  package MyApp::Schema::CD;
+
+  {
      has_many 'artists' =>
          ( table       => $schema->table('Artist'),
            # SELECT Artist.*
@@ -234,11 +247,13 @@ presentation_date: Tuesday, June 17, 2008
 * |MyApp::Schema::CD->Table()| - returns a |Fey::Table|
 ----
 == Fey::ORM::Table methods
-* |MyApp::Schema::CD->new( cd_id => 12 )| - loads CD row from DBMS
+* |MyApp::Schema::CD->new( cd_id => 12 )|
+** loads CD row from DBMS
 ** can load one row based on any unique key
 ** can also define alternate "load one row" logic in your class
 *** for example, load user based on username & hashed password
-* |$cd->title()|, |$cd->release_date()| - one method per column
+* |$cd->title()|, |$cd->release_date()|
+** one method per column
 ----
 == Fey::ORM::Table methods
 * |MyApp::Schema::CD->insert()|
@@ -298,7 +313,7 @@ presentation_date: Tuesday, June 17, 2008
 ----
 == Fey::DBIManager example
 
-    package MyApp::Schema; # probably uses Fey::ORM::Schema
+    package MyApp::Schema;
 
     my $source =
         Fey::DBIManager::Source->new
@@ -330,6 +345,8 @@ presentation_date: Tuesday, June 17, 2008
 
 * Doesn't support multi-row delete or update
 * Better SQL generation API (more methods, less data structures)
+----
+== Bonus: What's wrong with Alzabo?
 
    $select->select( $track_table )
           # figures out appropriate join
@@ -342,10 +359,11 @@ presentation_date: Tuesday, June 17, 2008
    $schema->join
        ( select => $track_table,
          join   => [ $cd_table, $track_table ],
-         where  => [ [ $cd_table->column('year'), '=', 2005 ],
-                     [ $artist_table->column('artist_id'), '=',
-                       $tommy_heavenly6->artist_id() ],
-                   ],
+         where  =>
+            [ [ $cd_table->column('year'), '=', 2005 ],
+              [ $artist_table->column('artist_id'), '=',
+                $tommy_heavenly6->artist_id() ],
+            ],
        );
 ----
 == Bonus: What's wrong with Alzabo?

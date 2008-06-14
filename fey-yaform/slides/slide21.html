@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM::Table methods</title>
+<title>Fey::ORM::Table gives you Moose</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -187,21 +187,28 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
- <h2>Fey::ORM::Table methods</h2>
-<ul>
-<li><tt>MyApp::Schema::CD-&gt;new&#40; cd_id =&gt; 12 &#41;</tt> - loads CD row from DBMS</li>
+ <h2>Fey::ORM::Table gives you Moose</h2>
+<pre class="formatter_pre">package MyApp::Schema::CD;
 
-<ul>
-<li>can load one row based on any unique key</li>
-<li>can also define alternate &#34;load one row&#34; logic in your class</li>
+use Fey::ORM::Table;
 
+# Plain old Moose attributes
+has &#39;reverse_title&#39; =&gt;
+    &#40; is      =&gt; &#39;ro&#39;,
+      isa     =&gt; &#39;Str&#39;,
+      default =&gt; sub { reverse $_[0]-&gt;title&#40;&#41; },
+    &#41;;
+
+# Plain old Moose roles
+with &#39;MyApp::Role::OpticalMedia&#39;;
+
+# Plain old Moose method modifiers
+before &#39;update&#39; =&gt; sub { ... };
+</pre>
 <ul>
-<li>for example, load user based on username &#38; hashed password</li>
-</ul></ul>
-<li><tt>$cd-&gt;title&#40;&#41;</tt>, <tt>$cd-&gt;release_date&#40;&#41;</tt> - one method per column</li>
+<li>All the power of Moose, plus more!</li>
 </ul>
 
 </div>

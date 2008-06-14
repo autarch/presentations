@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM is not done!</title>
+<title>Bonus: What&#39;s wrong with Alzabo?</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -120,11 +120,11 @@ pre {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide28.html';
+    window.location = 'slide39.html';
 }
 
 function prevSlide() {
-    window.location = 'slide26.html';
+    window.location = 'slide37.html';
 }
 
 function indexSlide() {
@@ -179,7 +179,7 @@ document.onkeypress = handleKey
     <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
    </td>
    <td align="right" width="13%">
-    27
+    38
    </td>
   </tr>
  </table>
@@ -189,19 +189,28 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>Fey::ORM is not done!</h2>
+ <h2>Bonus: What's wrong with Alzabo?</h2>
 <ul>
-<li>Still a work in progress</li>
-<li>Will expand as I use it</li>
+<li>Separation of ::Create and ::Runtime classes</li>
 
 <ul>
-<li>next addition - attribute metaclass for SQL query based attributes</li>
+<li>made sense with standard memory available in 2000</li>
 </ul>
-<li>Will probably need some DBMS-specific logic eventually</li>
+<li>Too much is-a, not enough has-a</li>
+<li>Alzabo-specific schema format &#40;Storable dump&#41;</li>
 
 <ul>
-<li>either in <tt>Fey::ORM</tt>, <tt>Fey::SQL</tt>, or both</li>
-</ul></ul>
+<li>screw that, just put your schema in a file of SQL</li>
+</ul>
+<li>No need for Alzabo&#39;s GUI tool any more</li>
+<li>Alzabo implements referential integrity in Perl because I was using MySQL</li>
+
+<ul>
+<li>Fuck MySQL&#39;s stupidity - use a real DBMS or suffer the consequences</li>
+
+<ul>
+<li>yes, I know about InnoDB</li>
+</ul></ul></ul>
 
 </div>
 <!-- END slide.html -->

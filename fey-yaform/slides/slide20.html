@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM::Table methods</title>
+<title>Fey::ORM - MyApp::Schema::CD</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -187,13 +187,23 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
- <h2>Fey::ORM::Table methods</h2>
-<ul>
-<li><tt>MyApp::Schema::CD-&gt;Table&#40;&#41;</tt> - returns a <tt>Fey::Table</tt></li>
-</ul>
+ <h2>Fey::ORM - MyApp::Schema::CD</h2>
+<pre class="formatter_pre">package MyApp::Schema::CD;
+
+{
+   has_many &#39;artists&#39; =&gt;
+       &#40; table       =&gt; $schema-&gt;table&#40;&#39;Artist&#39;&#41;,
+         # SELECT Artist.*
+         # FROM Track JOIN Artist USING &#40;artist_id&#41;
+         # WHERE Track.cd_id = ?
+         select      =&gt; ..., # Fey::SQL::Select object
+         bind_params =&gt; sub { $_[0]-&gt;cd_id&#40;&#41; },
+         cache       =&gt; 1,
+       &#41;;
+}
+</pre>
 
 </div>
 <!-- END slide.html -->

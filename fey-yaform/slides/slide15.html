@@ -187,20 +187,24 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
  <h2>Fey::ORM - MyApp::Schema methods</h2>
 <ul>
-<li><tt>MyApp::Schema-&gt;SQLFactoryClass&#40;&#41;</tt> - by default, returns <tt>&#39;Fey::SQL&#39;</tt></li>
-<li><tt>MyApp::Schema-&gt;SQLFactoryClass&#40;&#41;-&gt;new_select&#40;&#41;</tt> - a <tt>Fey::SQL::Select</tt> object</li>
+<li><tt>MyApp::Schema-&gt;SQLFactoryClass&#40;&#41;</tt></li>
 
 <ul>
-<li>could subclass it to return something else, for example <tt>&#39;Fey::SQL::Pg&#39;</tt></li>
+<li>by default, returns <tt>&#39;Fey::SQL&#39;</tt></li>
+<li>subclass it to return something else - <tt>&#39;Fey::SQL::Pg&#39;</tt></li>
 
 <ul>
 <li>&#40;this does not exist &#40;yet&#41;&#41;</li>
-</ul></ul></ul>
+</ul></ul>
+<li><tt>MyApp::Schema-&gt;SQLFactoryClass&#40;&#41;-&gt;new_select&#40;&#41;</tt></li>
+
+<ul>
+<li>a <tt>Fey::SQL::Select</tt> object</li>
+</ul></ul>
 
 </div>
 <!-- END slide.html -->

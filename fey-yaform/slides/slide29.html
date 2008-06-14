@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::DBIManager example</title>
+<title>Fey::Loader</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -187,27 +187,14 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
- <h2>Fey::DBIManager example</h2>
-<pre class="formatter_pre">package MyApp::Schema; # probably uses Fey::ORM::Schema
-
-my $source =
-    Fey::DBIManager::Source-&gt;new
-        &#40; dsn          =&gt; ...,
-          username     =&gt; ...,
-          password     =&gt; ...,
-          post_connect =&gt; \&#38;_set_dbh_attributes,
-        &#41;;
-
-sub _set_dbh_attributes {
-    my $dbh = shift;
-
-    $dbh-&gt;{pg_enable_utf8} = 1;
-    $dbh-&gt;do&#40; &#39;SET TIME ZONE UTC&#39; &#41;;
-}
-</pre>
+ <h2>Fey::Loader</h2>
+<ul>
+<li>Works with SQLite, Pg, and MySQL so far</li>
+<li>Uses DBI&#39;s <tt>*_info</tt> methods &#40;mostly&#41;</li>
+<li>If your DBMS supports them, making a <tt>Fey::Loader</tt> subclass is easy&#40;ish&#41;</li>
+</ul>
 
 </div>
 <!-- END slide.html -->

@@ -187,28 +187,27 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
  <h2>Fey::ORM - MyApp::Schema::CD</h2>
 <pre class="formatter_pre">package MyApp::Schema::CD;
+use MyApp::Schema;
+use Fey::ORM::Table;
 
 {
-   transform &#39;release_date&#39; =&gt;
-       deflate { blessed $_[1]
-                 ? DateTime::Format::Pg-&gt;format_datetime&#40; $_[1] &#41;
-                 : $_[1] },
-       inflate { DateTime::Format::Pg-&gt;parse _datetime&#40; $_[1] &#41; };
+  my $schema = R2::Schema-&gt;Schema&#40;&#41;;
 
-   has_many &#39;artists&#39; =&gt;
-       &#40; table       =&gt; $schema-&gt;table&#40;&#39;Artist&#39;&#41;,
-         # SELECT Artist.*
-         # FROM Track JOIN Artist USING &#40;artist_id&#41;
-         # WHERE Track.cd_id = ?
-         select      =&gt; ..., # Fey::SQL::Select object
-         bind_params =&gt; sub { $_[0]-&gt;cd_id&#40;&#41; },
-         cache       =&gt; 1,
-       &#41;;
+  has_table&#40; $schema-&gt;table&#40;&#39;CD&#39;&#41; &#41;;
+
+  has_one&#40; $schema-&gt;table&#40;&#39;Artist&#39;&#41; &#41;;
+
+  has_many &#39;tracks&#39; =&gt;
+      &#40; table    =&gt; $schema-&gt;table&#40;&#39;Track&#39;&#41;,
+        order_by =&gt;
+            [ $schema-&gt;table&#40;&#39;Track&#39;&#41; 
+                     -&gt;column&#40;&#39;track_number&#39;&#41; ],
+        cache    =&gt; 1,
+      &#41;;
 }
 </pre>
 

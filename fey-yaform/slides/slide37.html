@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM is not done!</title>
+<title>Bonus: What&#39;s wrong with Alzabo?</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -120,11 +120,11 @@ pre {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide28.html';
+    window.location = 'slide38.html';
 }
 
 function prevSlide() {
-    window.location = 'slide26.html';
+    window.location = 'slide36.html';
 }
 
 function indexSlide() {
@@ -179,7 +179,7 @@ document.onkeypress = handleKey
     <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
    </td>
    <td align="right" width="13%">
-    27
+    37
    </td>
   </tr>
  </table>
@@ -189,18 +189,21 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>Fey::ORM is not done!</h2>
+ <h2>Bonus: What's wrong with Alzabo?</h2>
 <ul>
-<li>Still a work in progress</li>
-<li>Will expand as I use it</li>
+<li>SQL generation API is coupled to schema object API is coupled to ORM API</li>
+<li>Alzabo tries too hard to prevent self-foot-ballistic-puncture</li>
 
 <ul>
-<li>next addition - attribute metaclass for SQL query based attributes</li>
+<li>tons of DBMS-specific code</li>
+<li>makes supporting a new DBMS really hard</li>
+<li>ties Alzabo to specific DBMS versions in weird ways</li>
+<li>makes things bulky and inflexible</li>
 </ul>
-<li>Will probably need some DBMS-specific logic eventually</li>
+<li>By contrast, Fey assumes you know what you&#39;re doing</li>
 
 <ul>
-<li>either in <tt>Fey::ORM</tt>, <tt>Fey::SQL</tt>, or both</li>
+<li>will generate bad SQL if you ask, but you&#39;ll find out soon enough</li>
 </ul></ul>
 
 </div>

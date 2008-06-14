@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM - MyApp::Schema::CD</title>
+<title>Fey::ORM - MyApp::Schema methods</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -187,31 +187,12 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
- <h2>Fey::ORM - MyApp::Schema::CD</h2>
-<pre class="formatter_pre">package MyApp::Schema::CD;
-
-use MyApp::Schema;
-
-use Fey::ORM::Table;
-
-{
-  my $schema = R2::Schema-&gt;Schema&#40;&#41;;
-
-  has_table&#40; $schema-&gt;table&#40;&#39;CD&#39;&#41; &#41;;
-
-  has_one&#40; $schema-&gt;table&#40;&#39;Artist&#39;&#41; &#41;;
-
-  has_many &#39;tracks&#39; =&gt;
-      &#40; table    =&gt; $schema-&gt;table&#40;&#39;Track&#39;&#41;,
-        order_by =&gt;
-            [ $schema-&gt;table&#40;&#39;Track&#39;&#41;-&gt;column&#40;&#39;track_number&#39;&#41; ],
-        cache    =&gt; 1,
-      &#41;;
-}
-</pre>
+ <h2>Fey::ORM - MyApp::Schema methods</h2>
+<ul>
+<li><tt>MyApp::Schema-&gt;RunInTransaction&#40; sub { ... } &#41;</tt></li>
+</ul>
 
 </div>
 <!-- END slide.html -->

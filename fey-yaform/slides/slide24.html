@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM is not done!</title>
+<title>Fey::ORM::Table methods</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -187,22 +187,14 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
- <h2>Fey::ORM is not done!</h2>
+ <h2>Fey::ORM::Table methods</h2>
 <ul>
-<li>Still a work in progress</li>
-<li>Will expand as I use it</li>
-
-<ul>
-<li>next addition - attribute metaclass for SQL query based attributes</li>
+<li><tt>MyApp::Schema::CD-&gt;insert&#40;&#41;</tt></li>
+<li><tt>$cd-&gt;update&#40; title =&gt; &#39;YAPC Rock Party&#39; &#41;</tt></li>
+<li><tt>$cd-&gt;delete&#40;&#41;</tt></li>
 </ul>
-<li>Will probably need some DBMS-specific logic eventually</li>
-
-<ul>
-<li>either in <tt>Fey::ORM</tt>, <tt>Fey::SQL</tt>, or both</li>
-</ul></ul>
 
 </div>
 <!-- END slide.html -->

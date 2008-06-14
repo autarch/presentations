@@ -187,13 +187,19 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
  <h2>Fey::ORM - MyApp::Schema methods</h2>
 <ul>
-<li><tt>MyApp::Schema-&gt;RunInTransaction&#40; sub { ... } &#41;</tt> - what do you think?</li>
-</ul>
+<li><tt>MyApp::Schema-&gt;EnableObjectCaches&#40;&#41;</tt></li>
+<li><tt>MyApp::Schema-&gt;DisableObjectCaches&#40;&#41;</tt></li>
+<li><tt>MyApp::Schema-&gt;ClearObjectCaches&#40;&#41;</tt></li>
+<li>Affects caching for all table-based classes</li>
+<li>Fairly dumb in-memory object cache</li>
+
+<ul>
+<li>designed to catch attempt to create same object &gt;1 time</li>
+</ul></ul>
 
 </div>
 <!-- END slide.html -->

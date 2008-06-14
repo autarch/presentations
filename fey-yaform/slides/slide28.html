@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::DBIManager</title>
+<title>Fey::Loader</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -187,15 +187,17 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
- <h2>Fey::DBIManager</h2>
+ <h2>Fey::Loader</h2>
 <ul>
-<li>Most people will not need to look too closely</li>
-<li>Just set up your <tt>Fey::DBIManager::Source</tt> at load time</li>
+<li>Define your schema in standard SQL</li>
+<li>Point <tt>Fey::Loader</tt> at your DBMS</li>
 </ul>
-
+<pre class="formatter_pre">
+my $loader = Fey::Loader-&gt;new&#40; dbh =&gt; $dbh &#41;;
+my $schema = $loader-&gt;make_schema&#40;&#41;;
+</pre>
 
 </div>
 <!-- END slide.html -->

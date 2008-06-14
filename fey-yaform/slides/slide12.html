@@ -187,8 +187,7 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
  <h2>Fey::ORM - MyApp::Schema</h2>
 <pre class="formatter_pre">package MyApp::Schema;
@@ -199,7 +198,8 @@ use Fey::ORM::Schema;
     my $source = Fey::DBIManager::Source-&gt;new&#40; ... &#41;;
 
     my $schema =
-        Fey::Loader-&gt;new&#40; dbh =&gt; $source-&gt;dbh&#40;&#41; &#41;-&gt;make_schema&#40;&#41;;
+        Fey::Loader-&gt;new&#40; dbh =&gt; $source-&gt;dbh&#40;&#41; &#41;
+                   -&gt;make_schema&#40;&#41;;
 
     has_schema $schema;
 

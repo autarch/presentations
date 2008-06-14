@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::DBIManager post-connect</title>
+<title>Fey::DBIManager</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -187,17 +187,19 @@ document.onkeypress = handleKey
 <!-- END top.html -->
 
 <!-- BEGIN slide -->
-<div id="content"><p />
- <div class="top_spacer"></div>
+<div id="content">
  
- <h2>Fey::DBIManager post-connect</h2>
+ <h2>Fey::DBIManager</h2>
 <ul>
-<li>Post-connect gets called whenever <tt>Fey::DBIManager</tt> reconnects</li>
+<li>Manages a set of 1+ DBI handles</li>
+<li>Primarily for the benefit of <tt>Fey::ORM</tt></li>
 
 <ul>
-<li>after a fork or in a new thread</li>
-<li>more or less transparent to you</li>
-</ul></ul>
+<li>but works standalone too</li>
+</ul>
+<li>Handles forking &#38; threading properly</li>
+<li>Can be subclassed for DWIMing with master/slave setups</li>
+</ul>
 
 </div>
 <!-- END slide.html -->
