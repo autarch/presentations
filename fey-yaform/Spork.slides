@@ -148,9 +148,17 @@ presentation_date: Tuesday, June 17, 2008
 ----
 == Fey::ORM - MyApp::Schema methods
 * |MyApp::Schema->SQLFactoryClass()| - by default, returns |'Fey::SQL'|
-* |MyApp::Schema->SQLFactoryClass()->new_select()| - a |Fey::SQL::Select| object
 ** could subclass it to return something else, for example |'Fey::SQL::Pg'|
 *** (this does not exist (yet))
+* |MyApp::Schema->SQLFactoryClass()->new_select()| - a |Fey::SQL::Select| object
+----
+== Fey::ORM - MyApp::Schema methods
+* |MyApp::Schema->EnableObjectCaches()|
+* |MyApp::Schema->DisableObjectCaches()|
+* |MyApp::Schema->ClearObjectCaches()|
+* Enable/disable/clear caching for all table-based classes
+* Fairly dumb in-memory object cache
+** designed to catch attempt to create same object >1 time
 ----
 == Fey::ORM - MyApp::Schema methods
 * |MyApp::Schema->RunInTransaction( sub { ... } )| - what do you think?
@@ -237,13 +245,19 @@ presentation_date: Tuesday, June 17, 2008
 * |$cd->update( title => 'YAPC Rock Party' )|
 * |$cd->delete()|
 ----
+== Fey::ORM - MyApp::Schema methods
+* |MyApp::Schema::CD->EnableObjectCache()|
+* |MyApp::Schema::CD->DisableObjectCache()|
+* |MyApp::Schema::CD->ClearObjectCache()|
+----
 == More Fey::ORM features
 
 * Tries very hard to be efficient
 ** minimize # of SQL queries
-* Fey::Object::Iterator
-** uses DBI statement handles for iterators
+* |Fey::Object::Iterator|
+** uses DBI statement handles behind the scenes
 ** can return multiple objects in one |$iterator->next()| call
+*** a "join iterator"
 * use |Fey::SQL| in your model to build complex queries
 ----
 == Fey::ORM is not done!
