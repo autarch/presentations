@@ -1,0 +1,340 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>The University of Toledo : Page not found  
+</title>
+<link rel="alternate" type="application/rss+xml" title="UT News" href="http://utnews.utoledo.edu/publish/rss.xml" >
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<style type="text/css" media="handheld" >
+div{display:none;}
+</style>
+<base href="http://utoledo.edu/">
+<style type="text/css" media="screen" >
+
+@import url("css/utBanner.css");
+@import url("css/utLayout.css");
+
+#newPict {
+	
+	  background: url('homepageImage.jpg') no-repeat top left;
+	  height: 131px
+	
+}
+</style>
+
+<!--<style type="text/css" media="print">
+DIV {display:none;}
+DIV.masterpagebody{display:inline;}
+#pageTitle{display:block}
+</style>-->
+
+<script language="JavaScript" type="text/javascript">
+<!--
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+//-->
+</script>
+
+</head>
+<body>
+<div id="skiplinks">
+	<img src="http://utoledo.edu/images/nav/pda_ut_logo_2006.gif" height="100" width="250" alt="The University of Toledo"> 
+  <h1> 
+      : Page Not Found</h1>
+  <a 	href="#menu"  		title="Skip to menu"		>Skip to menu</a> | <a href="#content">
+	Skip to content</a> | <a 	href="#search" 		title="Skip to search box"	>
+	Skip to search</a> | <a 	href="#nav"  		title="Skip to global navigation">
+	Skip to global navigation</a></div>
+<div id="shield" onclick="window.location='http://utoledo.edu';" title="UT home page" style="cursor:pointer;"></div>
+<div id="banner_wrap"><a name="nav"></a> 
+  <div id="topNav_wrap"> 
+    <ul id="topNav">
+      <li id="topNav_first"><a href="index.html">Home</a></li>
+      <li><a href="http://utoledo.edu/campus/about/index.html">About UT</a></li>
+      <li><a href="http://utoledo.edu/campus/maps/index.html">Directions/Maps</a></li>
+      <li><a href="http://utoledo.edu/eDirectory/default.asp">Campus Directory</a></li>
+      <li><a href="http://utoledo.edu/campus/about/address.html">Contact</a></li>
+      <li id="myut"><a href="http://myut.utoledo.edu/" target="_blank">myUT</a></li>
+    </ul>
+  </div>
+  <div id="topHead_wrap"> 
+    <div id="titleHold"></div>
+    <div id="headSearchHold"><a name="search"></a> 
+      <div id="headSearch"> 
+        <form name="form1" method="get" action="http://find.utoledo.edu:3242/custom/utoledo/query.html">
+          <input name="qt" type="text" class="searchbox" size="20">
+		  <input type="hidden" name="col" value="utoledo">
+          <input name="Search" type="submit" class="searchbtn" id="Search" value="SEARCH">
+        </form>
+      </div>
+      <ul id="headSearchSubs">
+        <li id="headSearchSubs_first"><a href="http://find.utoledo.edu:3242/custom/utoledo/query.html?ql=a&qt=&charset=iso-8859-1&col=utoledo">
+		Advanced Search</a></li>
+        <li><a href="http://transcoder.usablenet.com/tt/referrer">Text Only</a></li>
+        <li><a href="http://www.enrollmentservices.utoledo.edu/events/register.asp?event_id=624">
+		Feedback</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="mainNav_wrap">
+    <ul id="mainNav">
+      <li id="mainNav_first">
+		<a href="http://utoledo.edu/menu/prospective.html" id="mainNav_first">
+		Prospective Students</a></li>
+      <li><a href="http://admission.utoledo.edu/">Admission</a></li>
+      <li><a href="http://utoledo.edu/menu/academics.html">Academics</a></li>
+      <li><a href="http://utoledo.edu/menu/campus_life.html">Campus Life</a></li>
+      <li><a href="http://utoledo.edu/menu/current.html">Current Students</a></li>
+      <li><a href="http://utoledo.edu/menu/faculty_staff.html">Faculty &amp; Staff</a></li>
+      <li><a href="http://utoledo.edu/research">Research</a></li>
+      <li><a href="http://utrockets.cstv.com/">Athletics</a></li>
+      <li><a href="http://utoledo.edu/menu/alumni.html">Alumni &amp; Community</a></li>
+    </ul>
+  </div>
+  <div id="headShad" style="padding-bottom:0;"></div>
+  <div id="breadcrumb_wrap" style="padding-bottom:0;">
+    <ul id="breadcrumb">
+      <li>
+        <script type="text/javascript">
+		   var now = new Date();
+		   var yr = now.getYear();
+		   if(yr < 2000) { yr = yr + 1900; }
+
+		   var mName = now.getMonth() + 1;
+		   var dName = now.getDay() + 1;
+		   var dayNr = ((now.getDate()<10) ? "0" : "")+ now.getDate();
+		
+		   if(dName==1) Day = "Sunday";
+		   if(dName==2) Day = "Monday";
+		   if(dName==3) Day = "Tuesday";
+		   if(dName==4) Day = "Wednesday";
+		   if(dName==5) Day = "Thursday";
+		   if(dName==6) Day = "Friday";
+		   if(dName==7) Day = "Saturday";
+		   
+		   if(mName==1) Month="January";
+		   if(mName==2) Month="February";
+		   if(mName==3) Month="March";
+		   if(mName==4) Month="April";
+		   if(mName==5) Month="May";
+		   if(mName==6) Month="June";
+		   if(mName==7) Month="July";
+		   if(mName==8) Month="August";
+		   if(mName==9) Month="September";
+		   if(mName==10) Month="October";
+		   if(mName==11) Month="November";
+		   if(mName==12) Month="December";
+	
+		   var DateString =(Day +", " + Month + " " + dayNr + ", " + yr);
+		   document.write(DateString);
+		  </script>
+      </li>
+    </ul>
+    <ul id="extras" style="padding-bottom:0;">
+      <li id="extras_first">
+        <script type="text/javascript">
+  //<!--
+  var txt = "Bookmark"
+ 
+  // url to be bookmarked
+  var url = window.location;
+ 
+  // title to appear with it
+  var who =  document.title;
+ 
+  var ver = navigator.appName
+  var num = parseInt(navigator.appVersion)
+  if ((ver=="Microsoft Internet Explorer")&&(num >= 4)&&(navigator.userAgent.toLowerCase().indexOf("mac")==-1)) {
+     document.write('<' + 'a href="javascript:window.external.AddFavorite(url,who);" ');
+     document.write('onMouseOver=" window.status=')
+     document.write("txt; return true ")
+     document.write('"onMouseOut=" window.status=')
+     document.write("' '; return true ")
+     document.write('">'+ txt + '</' + 'a>')
+  }else{
+     txt += "&nbsp;&nbsp;("
+     if (navigator.userAgent.toLowerCase().indexOf("mac")!=-1) {
+         txt += "Apple"
+     }
+     else{
+      txt += "Ctrl"
+     }
+     txt += "+D)&nbsp;"
+     document.write(txt)
+  } 
+  //-->
+        </script>
+      </li>
+      <li><a href="#">Print</a></li>
+    </ul>
+  </div>
+</div>
+<div align="center" class="noPaddingNoMargin">
+  <div  id="layout_wrap">
+    <div id="header"> 
+      <div id="headerCorner"> 
+        <div id="headerTitle">  
+            </div>
+      </div>
+    </div>
+    <div id="content_rht"> 
+      <div id="content_lft"> 
+        <div id="content_wrap">
+          <div id="redLine"></div>
+          
+          <div id="topLineNav_wrap" style="display:none"><a id="menu" name="menu"></a>  
+            <li>No top menu<br></li>
+            &lt;!-- no script --&gt;<br>
+            
+          </div><div 
+          id="navContent_wrap"><div 
+          id="navContentOverflow" align="left"><div 
+          id="lftNavHold"> <div class="navHead" 
+          id="navHead">Welcome</div><div class="lftNav_wrap" 
+          id="lftNav_wrap"> <div id="lftNav_wrap"> 
+                    <ul><li><a href="http://utoledo.edu/campus/about/index.html">
+						About UT</a> 
+                      </li><li><a href="http://utoledo.edu/campus/maps/index.html">
+						Directions/Maps</a> 
+                      </li><li><a href="http://utoledo.edu/eDirectory/default.asp">
+						Campus Directory</a> 
+                      </li><li><a href="http://utoledo.edu/offices/hr/index.html">
+						Employment/HR</a> 
+                      </li><li><a href="http://utoledo.edu/campus/offices/index.html">
+						Administrative Offices</a> 
+                      </li><li><a href="http://hsc.utoledo.edu/">Health Science 
+						Campus</a> 
+                      </li><li><a href="http://utoledo.edu/campus/centers/index.html">
+						Centers and Institutes</a> 
+                      </li><li><a href="http://utoledo.edu/campus/academic/index.html">
+						Academic Departments</a> 
+                      </li><li><a href="http://diversity.utoledo.edu">
+						Diversity</a> 
+                      </li><li><a href="http://utfoundation.com/">Giving</a> 
+                      </li><li><a href="http://library.utoledo.edu/">Libraries</a> 
+                      </li><li><a href="http://utoledo.edu/bookstores/">
+						Bookstores</a> 
+                      </li><li><a href="http://utnews.utoledo.edu/publish/index.html">
+						News</a> 
+                      </li><li><a href="http://calendar.utoledo.edu">Calendars</a> 
+                      </li></ul>
+                  </div></div> <div class="navHead" 
+          id="relateHead" style="display:none">Colleges and Programs</div><div 
+          id="relateNav_wrap" class="lftNav_wrap" style="display:none"> <div id="relateNav_wrap"> 
+                    <ul><li><a href="http://www.utoledo.edu/colleges/as/">Arts 
+						and Sciences</a> 
+                      </li><li><a href="http://utoledo.edu/business">
+						Business Administration</a> 
+                      </li><li><a href="http://www.dl.utoledo.edu/">Distance and 
+						eLearning 
+                        </a> 
+                      </li><li><a href="http://education.utoledo.edu/home.asp">
+						Education</a> 
+                      </li><li><a href="http://eng.utoledo.edu/">Engineering</a> 
+                      </li><li><a href="http://gradschool.utoledo.edu/">Graduate 
+						Studies</a> 
+                      </li><li><a href="http://www.hhs.utoledo.edu/">Health 
+						Science and Human Service</a> 
+                      </li><li><a href="http://honors.utoledo.edu/home.asp">
+						Honors Program</a> 
+                      </li><li><a href="http://law.utoledo.edu/">Law</a> 
+                      </li><li><a href="http://hsc.utoledo.edu/med/">Medicine</a> 
+                      </li><li><a href="http://hsc.utoledo.edu/nursing/">Nursing</a> 
+                      </li><li><a href="http://www.utpharmacy.org/">Pharmacy</a> 
+                      </li><li><a href="http://studentsuccesscenter.utoledo.edu/">
+						Student Success Center</a> 
+                      </li><li><a href="http://www.ucollege.utoledo.edu/">
+						University College</a> </li></ul>
+                  </div> </div> <script>document.getElementById('relateHead').style.display='block';document.getElementById('relateNav_wrap').style.display='block';</script> </div><div 
+          id="textHold_wrap" ><div id="textHold" ><div class="rhtNav_bg" 
+          id="rhtNav_bg" style="display:none;">  <div id="rhtNavHead"></div><div 
+          id="rhtNav">  <script>document.getElementById('rhtNav_bg').style.display='block';</script> </div> </div><div 
+          class="pageTitle"><a name="content"></a>  Page not found  </div><div 
+          id="masterpagebody"><p>
+							<img src="http://utoledo.edu/images/nav/sorry.jpg" height="175" width="200" border="0" align="right" hspace="3" vspace="3" alt="" class="">I'm 
+							sorry, but the Web page you are attempting to view 
+							does not exist. It is possible that you clicked a 
+							link to a page that has been moved or you may have 
+							typed an address incorrectly. 
+<script type="text/javascript">
+bolPagesInPath = false;
+strNewPath ="";	
+strPath = document.location.toString().split("/");
+for (items in strPath){
+	if (strPath[items]=="pages"){
+		bolPagesInPath="true";
+	}
+	else{			
+		strNewPath += strPath[items]+"/";
+	}	
+	if (bolPagesInPath=="true"){
+		document.write("Many pages were moved out of the 'pages' folder, so it is very likely that the new link to the page you want is this: <a href='" + strNewPath.substr(0,strNewPath.length-1) +"'>" + strNewPath.substr(0,strNewPath.length-1) + "</a>. ");
+		break;
+	}
+}
+   function reverse(inp) {
+    var outp="";
+    for (i=0;i<inp.length;i++) {
+     outp=inp.charAt(i) + outp;
+    }
+    outp="mailto:"+outp;
+    return outp;
+   }
+                            </script> <br>&nbsp;</p>
+<p>To find what you were looking for, please choose from the links at the left 
+or try the search box at the top of this page. If you still have trouble, please 
+contact <a href="#" onclick='this.href=reverse("ude.odelotu@tnempolevedbew");'>Web Development</a>.</p>
+
+
+
+</div><div 
+          id="textFoot_wrap" ><div 
+          id="dateModified" > Page updated:&nbsp;December 20, 2006 
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          </div><div 
+          id="pageTop"><a href="#top">Page top</a></div></div></div></div></div></div><div 
+          class="ends"></div></div></div></div><div 
+          id="contentBotCtr"><div 
+          id="contentBotRht"><div 
+          id="contentBotLft"></div></div></div><div 
+          id="footerNav_wrap"><ul id="footerNav"><li id="footerNav_first">
+			<a href="http://utoledo.edu/menu/prospective.html" id="footerNav_first">
+			Prospective Students</a></li>
+        <li><a href="http://admission.utoledo.edu/">Admission</a></li>
+        <li><a href="http://utoledo.edu/menu/academics.html">Academics</a></li>
+        <li><a href="http://utoledo.edu/menu/campus_life.html">Campus Life</a></li>
+        <li><a href="http://utoledo.edu/menu/current.html">Current Students</a></li>
+        <li><a href="http://utoledo.edu/menu/faculty_staff.html">Faculty &amp; Staff</a></li>
+        <li><a href="http://utoledo.edu/research">Research</a></li>
+        <li><a href="http://utrockets.cstv.com/">Athletics</a></li>
+        <li><a href="http://utoledo.edu/menu/alumni.html">Alumni &amp; Community</a></li>
+      </ul>
+    </div><div 
+    id="copyright_wrap" ><div 
+    id="copyrightHold" >? 2004-2005 The University of Toledo. All rights 
+			reserved.<br>
+        	Send all feedback / comments to <a href="mailto:webmaster&#64;utoledo&#46;edu">
+			webmaster@utoledo.edu</a>.</div><ul id="privateHold">
+        <li id="private_first">
+		<a href="http://utoledo.edu/campus/terms.html">Terms 
+		of Use</a></li>
+      </ul></div></div></div><script type="text/javascript">
+   if(document.getElementById("rhtNav_bg").style.display!="none"){
+		document.getElementById("masterpagebody").style.marginRight = "186px";
+		document.getElementById("textFoot_wrap").style.marginRight = "210px";     
+   }
+</script></body></html>

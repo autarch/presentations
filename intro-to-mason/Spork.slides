@@ -4,8 +4,8 @@ logo_image: mason-trowel.png
 banner_bgcolor: #E6E6DA
 presentation_topic: Mason
 presentation_title: Introduction to Mason
-presentation_place: Houston, TX
-presentation_date: June 26, 2007
+presentation_place: Chicago, IL
+presentation_date: Tuesday, June 17, 2008
 ----------------------------------------------
 
 {image: http://www.af.mil/news/airman/0597/retire2.jpg}
@@ -35,7 +35,7 @@ b+ 1
 
 * Mason components consist of three basic pieces:
 ** text (HTML, XML, etc.)
-** code which generates output
+** substitutions - output result of code expression
 ** inline code
 * Plain text is *always* plain text.
 
@@ -67,7 +67,9 @@ b+ 1
 b+ 3
 .hilite
 
-* Component calls are like function calls, and can take arguments.
+* Component call =~ function call
+** takes arguments (usually named)
+** called by component path - |/path/to/comp|
 
 ----------------------------------------------
 
@@ -78,7 +80,7 @@ b+ 3
 * An autohandler wraps a request for a component.
 * Make a request for _/view/file-list.html_.
 * Mason looks for _/view/autohandler_ and _/autohandler_.
-+* And then each component is executed in order from least to most specific.
+* And then each component is executed in order from least to most specific.
 ** _/autohandler_
 ** _/view/autohandler_
 ** _/view/file-list.html_
@@ -108,24 +110,9 @@ b+ 7
 
 ----------------------------------------------
 
-{image: http://www.hawaii.gov/dbedt/ert/activitybook/pg02-car.gif}
-
-== autohandler example
-
-* http://www.masonhq.com/
-
-----------------------------------------------
-
-{image: http://www.ralphmag.org/1/letter-D-183x181.gif}
-
-== dhandlers
-
-* dhandlers create virtual URLs.
-* Make a request for _/view/files/id-1.html_.
-** but there is no such component.
-+* Mason looks for _/view/files/dhandler_ ...
-** ... then _/view/dhandler_ ...
-** ... and finally _/dhandler_.
+.html
+<img src="images/autohandler-example-marked.png" />
+.html
 
 ----------------------------------------------
 
@@ -133,7 +120,7 @@ b+ 7
 
 == Caching
 
-* Integration with [=Cache::Cache] is built-in.
+* Integration with |Cache::Cache| and |CHI| is built-in.
 * You can cache anything:
 
     $m->cache->set( $key => $value, $expiration );
@@ -206,7 +193,13 @@ b+ 2
 
 * Most blocks contain pure Perl.
 ** but how the Perl is used depends on the block.
-* The pure Perl blocks are [=<%perl>], [=<%init>], [=<%once>], [=<%filter>], [=<%shared>], and [=<%cleanup>].
+* Pure Perl blocks are ...
+** |<%perl>|
+** |<%init>|
+** |<%once>|
+** |<%filter>|
+** |<%shared>|
+** |<%cleanup>|
 
 ----------------------------------------------
 
@@ -214,7 +207,7 @@ b+ 2
 
 == <%args>
 
-* The most important non-Perl block is [=<%args>].
+* The most important non-Perl block is |<%args>|.
 +* Argument declaration for a component:
 
 .hilite
@@ -239,7 +232,7 @@ b+ 2
 
 == <%args>
 
-* This looks like real Perl, but it's not.
+* Looks like real Perl, but isn't
 
     <%args>
     # Default to 5
@@ -250,8 +243,8 @@ b+ 2
     %labels => ()
     </%args>
 
-** a declaration (name + default) cannot be >1 line.
-+* Args become lexically-scoped variables inside the component.
+** declaration (name + default) cannot be >1 line.
+* Args become lexically-scoped variables inside the component.
 
 ----------------------------------------------
 
@@ -259,12 +252,12 @@ b+ 2
 
 == Other non-Perl blocks
 
-* [=<%text>] - not parsed for Mason constructs
-* [=<%doc>] - ignored by Mason
-* [=<%def>] and [=<%method] - contain subcomponents and methods
+* |<%text>| - not parsed for Mason constructs
+* |<%doc>| - ignored by Mason
+* |<%def>| and |<%method>| - contain subcomponents and methods
 ** ... which are components embedded in other components.
-* [=<%attr>] - simple key-value pairs
-* [=<%flags>] - instructions for Mason
+* |<%attr>| - simple key-value pairs
+* |<%flags>| - instructions for Mason
 
 ----------------------------------------------
 
@@ -272,10 +265,12 @@ b+ 2
 
 == $m
 
-* Saw it with autohandlers ([=call_next()]) and caching ([=cache()], [=cache_self()]).
-* It's the Mason Request object.
-* Has a bunch of handy methods, particularly for calling other components.
-* It's a global available in all components, all the time.
+* Saw it already
+** autohandlers - |$m->call_next()|
+** caching - |$m->cache()|, |$m->cache_self()|
+* Mason Request object.
+* Many handy methods, particularly for calling other components.
+* Globally available in all components, all the time.
 
 ----------------------------------------------
 
@@ -284,13 +279,13 @@ b+ 2
 == $m
 
 * Methods include:
-** [=scomp()] - returns component output in a scalar
+** |scomp()| - returns component output in a scalar
 
     my $link =
         $m->scomp( '/lib/link_to_person.mas',
                    person => $person );
 
-** [=abort()] - stops processing, in its tracks!
+** |abort()| - stops processing, in its tracks!
 
     $m->abort unless $user->is_editor;
 
@@ -302,27 +297,25 @@ b+ 2
 
 == Other globals
 
-* Mason provide two other globals besides [=$m].
-** [=%ARGS]
-** [=$r]
+* Mason provide two other globals besides |$m|.
+** |%ARGS|
+** |$r|
 
 ----------------------------------------------
 
 == %ARGS
 
-* [=%ARGS] contains all of the arguments /passed/ to the component
-** ... but not defaults set by the [=<%args>] block.
+* |%ARGS| contains all of the arguments /passed/ to the component
+** ... but not defaults set by the |<%args>| block.
 
 ----------------------------------------------
 
 == $r
 
-* [=$r] is available when Mason runs under mod_perl.
+* |$r| is available when Mason runs under mod_perl.
 ** this is the Apache request object.
 
 ----------------------------------------------
-
-{image: http://home.vigay.com/photos/03-05-03/l/342F0007.jpg}
 
 == Configuration under mod_perl
 
@@ -350,15 +343,25 @@ r+ 4
 
 * With Catalyst, controller code is all Perl
 
-  package MyApp::Controller::Use;
+  package MyApp::Controller::User;
 
   use base 'Catalyst::Controller';
 
-  sub view : Path { ... }
-  sub create : Path { ... }
+  sub view : Path('/user') : Args(1) {
+      my ($self, $c, $user_id) = @_;
 
-* Go to _/user/view_, _/user/create_
+      $c->stash()->{user} =
+          MyApp::User->new( user_id => $user_id );
+
+      # this will be a Mason template
+      $c->stash()->{template} = '/user/view';
+  }
+
+  sub create_form : Path { ... }
+
+* Go to _/user/42_, _/user/create_form_
 * Catalyst can use Mason for views
+* Please use Catalyst!
 
 ----------------------------------------------
 
@@ -396,7 +399,7 @@ g+ 8
 g+ 9
 .hilite
 
-+* Attributes are "inherited" from autohandlers
+* Attributes are "inherited" from autohandlers
 
 ----------------------------------------------
 
@@ -409,7 +412,7 @@ g+ 9
     </%method>
 
 * Also "inherited" from the autohandler
-+* Can be called with a special component call syntax:
+* Has special component call "path":
 
 .hilite
 <h1><& SELF:title &></h1>
@@ -484,9 +487,9 @@ b+ 6
 
 ==  Resources
 
-* Mason HQ (www.masonhq.com) - the Mason site.
+* Mason HQ (http://www.masonhq.com/) - the Mason site.
 * Embedding Perl in HTML with Mason - the Mason book.
 ** Published by O'Reilly, written by Ken Williams and me.
-** Available online at www.masonbook.com
-
-----------------------------------------------
+** Available online at http://www.masonbook.com/
+* Catalyst - http://catalyst.perl.org/
+** Catalyst workshop - 1pm today
