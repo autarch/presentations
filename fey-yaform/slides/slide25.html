@@ -120,7 +120,7 @@ pre {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide26.html';
+    window.location = 'slide26a.html';
 }
 
 function prevSlide() {
@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     25
@@ -191,9 +191,7 @@ document.onkeypress = handleKey
  
  <h2>Fey::ORM - MyApp::Schema methods</h2>
 <ul>
-<li><tt>MyApp::Schema::CD-&gt;EnableObjectCache&#40;&#41;</tt></li>
-<li><tt>MyApp::Schema::CD-&gt;DisableObjectCache&#40;&#41;</tt></li>
-<li><tt>MyApp::Schema::CD-&gt;ClearObjectCache&#40;&#41;</tt></li>
+<li><tt>MyApp::Schema-&gt;RunInTransaction&#40; sub { ... } &#41;</tt></li>
 </ul>
 
 </div>

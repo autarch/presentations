@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     10
@@ -191,14 +191,18 @@ document.onkeypress = handleKey
  
  <h2>Fey core goals</h2>
 <ul>
-<li>Be helpful</li>
+<li>Make it easier to generate SQL dynamically </li>
+<li>Support any type of query</li>
 
 <ul>
-<li>auto joins</li>
-<li>ignore the same join twice</li>
-</ul>
-<li>De-coupled from an ORM &#40;unlike Alzabo&#41;</li>
-</ul>
+<li>subselects</li>
+<li>complex joins with join constraints</li>
+</ul></ul>
+<pre class="formatter_pre">
+FROM TableA
+     LEFT OUTER JOIN TableB USING &#40;foo_id&#41;
+     WHERE TableB.size &gt; 10
+</pre>
 
 </div>
 <!-- END slide.html -->

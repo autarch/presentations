@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM - MyApp::Schema methods</title>
+<title>Fey::DBIManager</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     15
@@ -189,22 +189,17 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>Fey::ORM - MyApp::Schema methods</h2>
+ <h2>Fey::DBIManager</h2>
 <ul>
-<li><tt>MyApp::Schema-&gt;SQLFactoryClass&#40;&#41;</tt></li>
+<li>Manages a set of 1+ DBI handles</li>
+<li>Primarily for the benefit of <tt>Fey::ORM</tt></li>
 
 <ul>
-<li>by default, returns <tt>&#39;Fey::SQL&#39;</tt></li>
-<li>subclass it to return something else - <tt>&#39;Fey::SQL::Pg&#39;</tt></li>
-
-<ul>
-<li>&#40;this does not exist &#40;yet&#41;&#41;</li>
-</ul></ul>
-<li><tt>MyApp::Schema-&gt;SQLFactoryClass&#40;&#41;-&gt;new_select&#40;&#41;</tt></li>
-
-<ul>
-<li>a <tt>Fey::SQL::Select</tt> object</li>
-</ul></ul>
+<li>but works standalone too</li>
+</ul>
+<li>Handles forking &#38; threading properly</li>
+<li>Can be subclassed for DWIMing with master/slave setups</li>
+</ul>
 
 </div>
 <!-- END slide.html -->

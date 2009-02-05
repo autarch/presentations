@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM - MyApp::Schema</title>
+<title>Fey::Loader</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     12
@@ -189,22 +189,14 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>Fey::ORM - MyApp::Schema</h2>
-<pre class="formatter_pre">package MyApp::Schema;
-
-use Fey::ORM::Schema;
-
-{
-    my $source = Fey::DBIManager::Source-&gt;new&#40; ... &#41;;
-
-    my $schema =
-        Fey::Loader-&gt;new&#40; dbh =&gt; $source-&gt;dbh&#40;&#41; &#41;
-                   -&gt;make_schema&#40;&#41;;
-
-    has_schema $schema;
-
-    __PACKAGE__-&gt;DBIManager&#40;&#41;-&gt;add_source&#40;$source&#41;;
-}
+ <h2>Fey::Loader</h2>
+<ul>
+<li>Define your schema in standard SQL</li>
+<li>Point <tt>Fey::Loader</tt> at your DBMS</li>
+</ul>
+<pre class="formatter_pre">
+my $loader = Fey::Loader-&gt;new&#40; dbh =&gt; $dbh &#41;;
+my $schema = $loader-&gt;make_schema&#40;&#41;;
 </pre>
 
 </div>

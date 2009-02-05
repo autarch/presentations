@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Bonus: What&#39;s wrong with Alzabo?</title>
+<title>Fey::ORM MOP</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     36
@@ -189,25 +189,12 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>Bonus: What's wrong with Alzabo?</h2>
-<pre class="formatter_pre">$select-&gt;select&#40; $track_table &#41;
-       # figures out appropriate join
-       -&gt;from&#40; $cd_table, $track_table &#41;
-       -&gt;where&#40; $cd_table-&gt;column&#40;&#39;year&#39;&#41;, &#39;=&#39;, 2005 &#41;;
-       -&gt;and&#40; $cd_table-&gt;column&#40;&#39;artist_id&#39;&#41;, &#39;=&#39;,
-              $tommy_heavenly6-&gt;artist_id&#40;&#41; &#41;;
-
-# Alzabo way
-$schema-&gt;join
-    &#40; select =&gt; $track_table,
-      join   =&gt; [ $cd_table, $track_table ],
-      where  =&gt;
-         [ [ $cd_table-&gt;column&#40;&#39;year&#39;&#41;, &#39;=&#39;, 2005 ],
-           [ $artist_table-&gt;column&#40;&#39;artist_id&#39;&#41;, &#39;=&#39;,
-             $tommy_heavenly6-&gt;artist_id&#40;&#41; ],
-         ],
-    &#41;;
-</pre>
+ <h2>Fey::ORM MOP</h2>
+<ul>
+<li>Full introspection for attributes &#38; methods</li>
+<li>New metaclasses for HasA &#40;has one and has many&#41;</li>
+<li>Like Moose, extendable via the meta API</li>
+</ul>
 
 </div>
 <!-- END slide.html -->

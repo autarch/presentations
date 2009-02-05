@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM - MyApp::Schema methods</title>
+<title>Fey::DBIManager example</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     17
@@ -189,10 +189,24 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>Fey::ORM - MyApp::Schema methods</h2>
-<ul>
-<li><tt>MyApp::Schema-&gt;RunInTransaction&#40; sub { ... } &#41;</tt></li>
-</ul>
+ <h2>Fey::DBIManager example</h2>
+<pre class="formatter_pre">package MyApp::Schema;
+
+my $source =
+    Fey::DBIManager::Source-&gt;new
+        &#40; dsn          =&gt; ...,
+          username     =&gt; ...,
+          password     =&gt; ...,
+          post_connect =&gt; \&#38;_set_dbh_attributes,
+        &#41;;
+
+sub _set_dbh_attributes {
+    my $dbh = shift;
+
+    $dbh-&gt;{pg_enable_utf8} = 1;
+    $dbh-&gt;do&#40; &#39;SET TIME ZONE UTC&#39; &#41;;
+}
+</pre>
 
 </div>
 <!-- END slide.html -->

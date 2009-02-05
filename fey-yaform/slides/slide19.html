@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM - MyApp::Schema::CD</title>
+<title>Fey::ORM</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -120,7 +120,7 @@ pre {
 <script type="text/javascript">
 // BEGIN controls.js
 function nextSlide() {
-    window.location = 'slide20.html';
+    window.location = 'slide20a.html';
 }
 
 function prevSlide() {
@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     19
@@ -189,19 +189,23 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>Fey::ORM - MyApp::Schema::CD</h2>
-<pre class="formatter_pre">package MyApp::Schema::CD;
+ <h2>Fey::ORM</h2>
+<ul>
+<li>Builds on top of <tt>Fey</tt> core and <tt>Fey::DBIManager</tt></li>
+<li>SQL-oriented ORM</li>
 
-{
-   transform &#39;release_date&#39; =&gt;
-       deflate { blessed $_[1]
-                 ? DateTime::Format::Pg
-                       -&gt;format_datetime&#40; $_[1] &#41;
-                 : $_[1] },
-       inflate { DateTime::Format::Pg
-                     -&gt;parse _datetime&#40; $_[1] &#41; };
-}
-</pre>
+<ul>
+<li>thinking in sets, not objects</li>
+<li><strong>not</strong> a dumb object store</li>
+<li>design your tables first</li>
+</ul>
+<li>Is extremely Moose</li>
+
+<ul>
+<li>subclasses Moose metaclasses</li>
+<li>declarative</li>
+<li>you can use all Moose features!</li>
+</ul></ul>
 
 </div>
 <!-- END slide.html -->

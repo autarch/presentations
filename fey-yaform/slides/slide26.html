@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>More Fey::ORM features</title>
+<title>Fey::ORM - MyApp::Schema::CD</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     26
@@ -189,24 +189,28 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>More Fey::ORM features</h2>
-<ul>
-<li>Tries very hard to be efficient</li>
+ <h2>Fey::ORM - MyApp::Schema::CD</h2>
+<pre>
+package MyApp::Schema::CD;
+use MyApp::Schema;
+<span class="hilite_blue">use Fey::ORM::Table;</span>
 
-<ul>
-<li>minimize # of SQL queries</li>
-</ul>
-<li><tt>Fey::Object::Iterator</tt></li>
+{
+  my $schema = MyApp::Schema-&gt;Schema();
 
-<ul>
-<li>uses DBI statement handles behind the scenes</li>
-<li>can return multiple objects in one <tt>$iterator-&gt;next&#40;&#41;</tt> call</li>
+<span class="hilite_blue">  has_table( $schema-&gt;table(&#39;CD&#39;) );</span>
 
-<ul>
-<li>a &#34;join iterator&#34;</li>
-</ul></ul>
-<li>use <tt>Fey::SQL</tt> in your model to build complex queries</li>
-</ul>
+  has_one( $schema-&gt;table(&#39;Artist&#39;) );
+
+  has_many &#39;tracks&#39; =&gt;
+      ( table    =&gt; $schema-&gt;table(&#39;Track&#39;),
+        order_by =&gt;
+            [ $schema-&gt;table(&#39;Track&#39;) 
+                     -&gt;column(&#39;track_number&#39;) ],
+        cache    =&gt; 1,
+      );
+}
+</pre>
 
 </div>
 <!-- END slide.html -->

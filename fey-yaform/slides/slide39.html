@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Bonus: What&#39;s wrong with Alzabo?</title>
+<title>Fey::ORM::Mock - Data seeding</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     39
@@ -189,14 +189,21 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>Bonus: What's wrong with Alzabo?</h2>
-<ul>
-<li>Alzabo&#39;s test suite came well after starting the code. It is <strong>NASTY</strong>!</li>
-<li>Alzabo does too many things in one package</li>
+ <h2>Fey::ORM::Mock - Data seeding</h2>
+<pre class="formatter_pre">use MyApp::Schema;
 
-<ul>
-<li>it&#39;s hard to document and explain</li>
-</ul></ul>
+my $mock = Fey::ORM::Mock-&gt;new
+               &#40; schema_class =&gt; &#39;MyApp::Schema&#39; &#41;
+
+$mock-&gt;seed_class&#40; &#39;MyApp::Schema::CD&#39; =&gt;
+                   { title  =&gt; &#39;Get Lost&#39;,
+                     artist =&gt; &#39;Magnetic Fields&#39;,
+                   },
+                   { ... },
+                 &#41;;
+
+# next select will see this data
+</pre>
 
 </div>
 <!-- END slide.html -->

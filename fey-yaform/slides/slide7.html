@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     7
@@ -190,20 +190,20 @@ document.onkeypress = handleKey
 <div id="content">
  
  <h2>Fey core auto-placeholders</h2>
-<pre class="formatter_pre">my $select = Fey::SQL-&gt;new_select&#40;&#41;;
+<pre>
+my $select = Fey::SQL-&gt;new_select();
 
-$select-&gt;select&#40; $track_table &#41;
+$select-&gt;select( $track_table )
        # figures out appropriate join
-       -&gt;from&#40; $cd_table, $track_table &#41;
-       -&gt;where&#40; $cd_table-&gt;column&#40;&#39;year&#39;&#41;, &#39;=&#39;, 2005 &#41;;
-       -&gt;and&#40; $cd_table-&gt;column&#40;&#39;artist_id&#39;&#41;, &#39;=&#39;,
-              $tommy_heavenly6-&gt;artist_id&#40;&#41; &#41;;
+       -&gt;from( $cd_table, $track_table )
+       -&gt;where( $cd_table-&gt;column(&#39;year&#39;), &#39;=&#39;, <span class="hilite_blue">2005</span> );
+       -&gt;and( $cd_table-&gt;column(&#39;artist_id&#39;), &#39;=&#39;,
+              <span class="hilite_blue">$tommy_heavenly6-&gt;artist_id()</span> );
 
-print $select-&gt;sql&#40;$dbh&#41;;
-# ... WHERE CD.year = ? AND CD.artist_id = ?
-print $select-&gt;bind_params&#40;&#41;;
-# &#40;2005, 19750206&#41;
+my $sth = $dbh-&gt;prepare( $select-&gt;sql($dbh) );
+$sth-&gt;execute( <span class="hilite_green">$select-&gt;bind_params()</span> );
 </pre>
+
 <ul>
 <li>Very handy, but can be turned off</li>
 

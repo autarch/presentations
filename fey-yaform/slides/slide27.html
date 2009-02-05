@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM is not done!</title>
+<title>Fey::ORM - MyApp::Schema::CD</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -124,7 +124,7 @@ function nextSlide() {
 }
 
 function prevSlide() {
-    window.location = 'slide26.html';
+    window.location = 'slide26b.html#end';
 }
 
 function indexSlide() {
@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     27
@@ -189,19 +189,19 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>Fey::ORM is not done!</h2>
-<ul>
-<li>Still a work in progress</li>
-<li>Will expand as I use it</li>
+ <h2>Fey::ORM - MyApp::Schema::CD</h2>
+<pre class="formatter_pre">package MyApp::Schema::CD;
 
-<ul>
-<li>next addition - attribute metaclass for SQL query based attributes</li>
-</ul>
-<li>Will probably need some DBMS-specific logic eventually</li>
-
-<ul>
-<li>either in <tt>Fey::ORM</tt>, <tt>Fey::SQL</tt>, or both</li>
-</ul></ul>
+{
+   transform &#39;release_date&#39;
+       =&gt; deflate { blessed $_[1]
+                    ? DateTime::Format::Pg
+                          -&gt;format_datetime&#40; $_[1] &#41;
+                    : $_[1] }
+       =&gt; inflate { DateTime::Format::Pg
+                        -&gt;parse_datetime&#40; $_[1] &#41; };
+}
+</pre>
 
 </div>
 <!-- END slide.html -->

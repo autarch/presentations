@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM - MyApp::Schema methods</title>
+<title>Fey::Loader</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     13
@@ -189,9 +189,11 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>Fey::ORM - MyApp::Schema methods</h2>
+ <h2>Fey::Loader</h2>
 <ul>
-<li><tt>MyApp::Schema-&gt;Schema&#40;&#41;</tt> - returns a <tt>Fey::Schema</tt></li>
+<li>Works with SQLite, Pg, and MySQL so far</li>
+<li>Uses DBI&#39;s <tt>*_info</tt> methods &#40;mostly&#41;</li>
+<li>If your DBMS supports them, making a <tt>Fey::Loader</tt> subclass is easy&#40;ish&#41;</li>
 </ul>
 
 </div>

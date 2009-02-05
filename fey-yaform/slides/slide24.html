@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Fey::ORM::Table methods</title>
+<title>Fey::ORM - MyApp::Schema methods</title>
 <meta name="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Spork v0.20">
 <link rel='stylesheet' href='slide.css' type='text/css'>
@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     24
@@ -189,12 +189,17 @@ document.onkeypress = handleKey
 <!-- BEGIN slide -->
 <div id="content">
  
- <h2>Fey::ORM::Table methods</h2>
+ <h2>Fey::ORM - MyApp::Schema methods</h2>
 <ul>
-<li><tt>MyApp::Schema::CD-&gt;insert&#40;&#41;</tt></li>
-<li><tt>$cd-&gt;update&#40; title =&gt; &#39;YAPC Rock Party&#39; &#41;</tt></li>
-<li><tt>$cd-&gt;delete&#40;&#41;</tt></li>
-</ul>
+<li><tt>MyApp::Schema-&gt;EnableObjectCaches&#40;&#41;</tt></li>
+<li><tt>MyApp::Schema-&gt;DisableObjectCaches&#40;&#41;</tt></li>
+<li><tt>MyApp::Schema-&gt;ClearObjectCaches&#40;&#41;</tt></li>
+<li>Affects caching for all table-based classes</li>
+<li>Fairly dumb in-memory object cache</li>
+
+<ul>
+<li>designed to catch attempt to create same object &gt;1 time</li>
+</ul></ul>
 
 </div>
 <!-- END slide.html -->

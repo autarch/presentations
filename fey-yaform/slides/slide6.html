@@ -176,7 +176,7 @@ document.onkeypress = handleKey
   <tr>
    <td width="13%"></td>
    <td align="center" width="73%">
-    <a accesskey="s" href="index.html">Fey(::ORM), YA(F)ORM</a>
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
    </td>
    <td align="right" width="13%">
     6
@@ -207,7 +207,8 @@ $select-&gt;select&#40; $track_table &#41;
                    $track_table-&gt;column&#40;&#39;name&#39;&#41; &#41;;
 
 # quotes the crap out of everything
-print $select-&gt;sql&#40;$dbh&#41;;
+my $sth = $dbh-&gt;prepare&#40; $select-&gt;sql&#40;$dbh&#41; &#41;;
+$sth-&gt;execute&#40; 1990 &#41;;
 </pre>
 
 </div>

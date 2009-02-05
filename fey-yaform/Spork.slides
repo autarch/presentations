@@ -1,8 +1,8 @@
 ----
-presentation_topic: Fey(::ORM), YA(F)ORM
-presentation_title: Fey(::ORM), YA(F)ORM
-presentation_place: Chicago, IL
-presentation_date: Tuesday, June 17, 2008
+presentation_topic: Fey, Another Freakin' ORM
+presentation_title: Fey, Another Freakin' ORM
+presentation_place: Minneapolis, MN
+presentation_date: Saturday, February 5, 2009
 ----
 == What the fuck, Dave?
 
@@ -22,12 +22,13 @@ presentation_date: Tuesday, June 17, 2008
 * |Fey::DBIManager|
 * |Fey::Test|
 * |Fey::ORM|
+** |Fey::ORM::Mock|
 ----
 == Fey core modules
 
 * |Fey::Schema|, |Fey::Table|, |Fey::Column|, |Fey::FK|
 ** SQL schema in objects
-* |Fey::SQL|, |Fey::Literal|
+* |Fey::SQL|, |Fey::Literal|, |Fey::Placeholder|
 ** SQL generation through Perl
 ----
 == Fey core examples
@@ -59,229 +60,60 @@ presentation_date: Tuesday, June 17, 2008
                       $track_table->column('name') );
 
    # quotes the crap out of everything
-   print $select->sql($dbh);
+   my $sth = $dbh->prepare( $select->sql($dbh) );
+   $sth->execute( 1990 );
+   
 ----
 == Fey core auto-placeholders
 
-   my $select = Fey::SQL->new_select();
+.hilite
+my $select = Fey::SQL->new_select();
 
-   $select->select( $track_table )
-          # figures out appropriate join
-          ->from( $cd_table, $track_table )
-          ->where( $cd_table->column('year'), '=', 2005 );
-          ->and( $cd_table->column('artist_id'), '=',
-                 $tommy_heavenly6->artist_id() );
+$select->select( $track_table )
+       # figures out appropriate join
+       ->from( $cd_table, $track_table )
+       ->where( $cd_table->column('year'), '=', 2005 );
+       ->and( $cd_table->column('artist_id'), '=',
+              $tommy_heavenly6->artist_id() );
 
-   print $select->sql($dbh);
-   # ... WHERE CD.year = ? AND CD.artist_id = ?
-   print $select->bind_params();
-   # (2005, 19750206)
+my $sth = $dbh->prepare( $select->sql($dbh) );
+$sth->execute( $select->bind_params() );
+
+                                                bbbb 6
+              bbbbbbbbbbbbbbbbbbbbbbbbbbbbb 8
+               gggggggggggggggggggggg 11
+.hilite
 
 * Very handy, but can be turned off
 ** still always does proper quoting
 ----
 == Fey core philosophy
-
-* Awfully verbose for simple SQL!
-* Primary use case - dynamically generating complex SQL
-** I seem to need to do this a lot
-** if you don't, Fey may not be for you
 * Leverages your SQL knowledge
 ** looks SQL-y
 ** simple data structures, explicit comparisons
 ----
+== Why use it?
+* Awfully verbose for simple SQL!
+* Primary use case - dynamically generating complex SQL
+** I seem to need to do this a lot
+** if you don't, Fey may not be for you
+----
 == Fey core goals
-
 * Make it easier to generate SQL dynamically 
 * Support any type of query
 ** subselects
 ** complex joins with join constraints
-*** |FROM TableA LEFT OUTER JOIN TableB USING (foo_id) WHERE TableB.size > 10|
-** still needs UNION, MINUS, etc
-*** shouldn't be hard to add
+
+  FROM TableA
+       LEFT OUTER JOIN TableB USING (foo_id)
+       WHERE TableB.size > 10
+
 ----
 == Fey core goals
 * Be helpful
 ** auto joins
 ** ignore the same join twice
 * De-coupled from an ORM (unlike Alzabo)
-----
-== Fey::ORM
-
-* Builds on top of |Fey| core and |Fey::DBIManager|
-* SQL-oriented ORM
-** thinking in sets, not objects
-** *not* a dumb object store
-** design your tables first
-* Is extremely Moose
-** subclasses Moose metaclasses
-** declarative
-** don't worry about this
-** you can use all Moose features!
-----
-== Fey::ORM - MyApp::Schema
-
-  package MyApp::Schema;
-
-  use Fey::ORM::Schema;
-
-  {
-      my $source = Fey::DBIManager::Source->new( ... );
-
-      my $schema =
-          Fey::Loader->new( dbh => $source->dbh() )
-                     ->make_schema();
-
-      has_schema $schema;
-
-      __PACKAGE__->DBIManager()->add_source($source);
-  }
-----
-== Fey::ORM - MyApp::Schema methods
-
-* |MyApp::Schema->Schema()| - returns a |Fey::Schema|
-----
-== Fey::ORM - MyApp::Schema methods
-
-* |MyApp::Schema->DBIManager()|
-** returns a |Fey::DBIManager|
-* |MyApp::Schema->DBIManager()->default_source()|
-** a |Fey::DBIManager::Source|
-* |MyApp::Schema->DBIManager()->default_source()->dbh()|
-** - a |DBI| handle
-----
-== Fey::ORM - MyApp::Schema methods
-* |MyApp::Schema->SQLFactoryClass()|
-** by default, returns |'Fey::SQL'|
-** subclass it to return something else - |'Fey::SQL::Pg'|
-*** (this does not exist (yet))
-* |MyApp::Schema->SQLFactoryClass()->new_select()|
-** a |Fey::SQL::Select| object
-----
-== Fey::ORM - MyApp::Schema methods
-* |MyApp::Schema->EnableObjectCaches()|
-* |MyApp::Schema->DisableObjectCaches()|
-* |MyApp::Schema->ClearObjectCaches()|
-* Affects caching for all table-based classes
-* Fairly dumb in-memory object cache
-** designed to catch attempt to create same object >1 time
-----
-== Fey::ORM - MyApp::Schema methods
-* |MyApp::Schema->RunInTransaction( sub { ... } )|
-----
-== Fey::ORM - MyApp::Schema::CD
-
-  package MyApp::Schema::CD;
-  use MyApp::Schema;
-  use Fey::ORM::Table;
-
-  {
-    my $schema = R2::Schema->Schema();
-
-    has_table( $schema->table('CD') );
-
-    has_one( $schema->table('Artist') );
-
-    has_many 'tracks' =>
-        ( table    => $schema->table('Track'),
-          order_by =>
-              [ $schema->table('Track') 
-                       ->column('track_number') ],
-          cache    => 1,
-        );
-  }
-----
-== Fey::ORM - MyApp::Schema::CD
-
-  package MyApp::Schema::CD;
-
-  {
-     transform 'release_date' =>
-         deflate { blessed $_[1]
-                   ? DateTime::Format::Pg
-                         ->format_datetime( $_[1] )
-                   : $_[1] },
-         inflate { DateTime::Format::Pg
-                       ->parse _datetime( $_[1] ) };
-  }
-----
-== Fey::ORM - MyApp::Schema::CD
-
-  package MyApp::Schema::CD;
-
-  {
-     has_many 'artists' =>
-         ( table       => $schema->table('Artist'),
-           # SELECT Artist.*
-           # FROM Track JOIN Artist USING (artist_id)
-           # WHERE Track.cd_id = ?
-           select      => ..., # Fey::SQL::Select object
-           bind_params => sub { $_[0]->cd_id() },
-           cache       => 1,
-         );
-  }
-----
-== Fey::ORM::Table gives you Moose
-
-  package MyApp::Schema::CD;
-
-  use Fey::ORM::Table;
-
-  # Plain old Moose attributes
-  has 'reverse_title' =>
-      ( is      => 'ro',
-        isa     => 'Str',
-        default => sub { reverse $_[0]->title() },
-      );
-
-  # Plain old Moose roles
-  with 'MyApp::Role::OpticalMedia';
-
-  # Plain old Moose method modifiers
-  before 'update' => sub { ... };
-
-* All the power of Moose, plus more!
-----
-== Fey::ORM::Table methods
-
-* |MyApp::Schema::CD->Table()| - returns a |Fey::Table|
-----
-== Fey::ORM::Table methods
-* |MyApp::Schema::CD->new( cd_id => 12 )|
-** loads CD row from DBMS
-** can load one row based on any unique key
-** can also define alternate "load one row" logic in your class
-*** for example, load user based on username & hashed password
-* |$cd->title()|, |$cd->release_date()|
-** one method per column
-----
-== Fey::ORM::Table methods
-* |MyApp::Schema::CD->insert()|
-* |$cd->update( title => 'YAPC Rock Party' )|
-* |$cd->delete()|
-----
-== Fey::ORM - MyApp::Schema methods
-* |MyApp::Schema::CD->EnableObjectCache()|
-* |MyApp::Schema::CD->DisableObjectCache()|
-* |MyApp::Schema::CD->ClearObjectCache()|
-----
-== More Fey::ORM features
-
-* Tries very hard to be efficient
-** minimize # of SQL queries
-* |Fey::Object::Iterator|
-** uses DBI statement handles behind the scenes
-** can return multiple objects in one |$iterator->next()| call
-*** a "join iterator"
-* use |Fey::SQL| in your model to build complex queries
-----
-== Fey::ORM is not done!
-
-* Still a work in progress
-* Will expand as I use it
-** next addition - attribute metaclass for SQL query based attributes
-* Will probably need some DBMS-specific logic eventually
-** either in |Fey::ORM|, |Fey::SQL|, or both
 ----
 == Fey::Loader
 
@@ -296,6 +128,10 @@ presentation_date: Tuesday, June 17, 2008
 * Works with SQLite, Pg, and MySQL so far
 * Uses DBI's |*_info| methods (mostly)
 * If your DBMS supports them, making a |Fey::Loader| subclass is easy(ish)
+----
+== Fey::Loader
+
+* Use it, don't define your schema in Perl
 ----
 == Fey::DBIManager
 
@@ -336,10 +172,263 @@ presentation_date: Tuesday, June 17, 2008
 ** after a fork or in a new thread
 ** more or less transparent to you
 ----
+== Fey::ORM
+
+* Builds on top of |Fey| core and |Fey::DBIManager|
+* SQL-oriented ORM
+** thinking in sets, not objects
+** *not* a dumb object store
+** design your tables first
+* Is extremely Moose
+** subclasses Moose metaclasses
+** declarative
+** you can use all Moose features!
+----
+== Fey::ORM - MyApp::Schema
+
+.hilite
+package MyApp::Schema;
+
+use Fey::ORM::Schema;
+
+{
+    my $source = Fey::DBIManager::Source->new( ... );
+
+    my $schema =
+        Fey::Loader->new( dbh => $source->dbh() )
+                   ->make_schema();
+
+    has_schema $schema;
+
+    __PACKAGE__->DBIManager()->add_source($source);
+}
+
+b+ 3
+b+ 12
++
+b+ 14
+.hilite
+
+----
+== Fey::ORM - MyApp::Schema methods
+
+* |MyApp::Schema->Schema()| - returns a |Fey::Schema|
+----
+== Fey::ORM - MyApp::Schema methods
+
+* |MyApp::Schema->DBIManager()|
+** returns a |Fey::DBIManager|
+* |MyApp::Schema->DBIManager()->default_source()|
+** a |Fey::DBIManager::Source|
+* |MyApp::Schema->DBIManager()->default_source()->dbh()|
+** - a |DBI| handle
+----
+== Fey::ORM - MyApp::Schema methods
+* |MyApp::Schema->SQLFactoryClass()|
+** by default, returns |'Fey::SQL'|
+** subclass it to return something else - |'Fey::SQL::Pg'|
+*** (this does not exist (yet))
+* |MyApp::Schema->SQLFactoryClass()->new_select()|
+** a |Fey::SQL::Select| object
+----
+== Fey::ORM - MyApp::Schema methods
+* |MyApp::Schema->EnableObjectCaches()|
+* |MyApp::Schema->DisableObjectCaches()|
+* |MyApp::Schema->ClearObjectCaches()|
+* Affects caching for all table-based classes
+* Fairly dumb in-memory object cache
+** designed to catch attempt to create same object >1 time
+----
+== Fey::ORM - MyApp::Schema methods
+* |MyApp::Schema->RunInTransaction( sub { ... } )|
+----
+== Fey::ORM - MyApp::Schema::CD
+
+.hilite
+package MyApp::Schema::CD;
+use MyApp::Schema;
+use Fey::ORM::Table;
+
+{
+  my $schema = MyApp::Schema->Schema();
+
+  has_table( $schema->table('CD') );
+
+  has_one( $schema->table('Artist') );
+
+  has_many 'tracks' =>
+      ( table    => $schema->table('Track'),
+        order_by =>
+            [ $schema->table('Track') 
+                     ->column('track_number') ],
+        cache    => 1,
+      );
+}
+
+b+ 3
+b+ 8
++
+b+ 10
+b+ 12
+b+ 13
+b+ 14
+b+ 15
+b+ 16
+b+ 17
+b+ 18
+.hilite
+----
+== Fey::ORM - MyApp::Schema::CD
+
+  package MyApp::Schema::CD;
+
+  {
+     transform 'release_date'
+         => deflate { blessed $_[1]
+                      ? DateTime::Format::Pg
+                            ->format_datetime( $_[1] )
+                      : $_[1] }
+         => inflate { DateTime::Format::Pg
+                          ->parse_datetime( $_[1] ) };
+  }
+----
+== Fey::ORM - MyApp::Schema::CD
+
+  package MyApp::Schema::CD;
+
+  {
+     has_many 'artists' =>
+         ( table       => $schema->table('Artist'),
+           # SELECT Artist.*
+           # FROM Track JOIN Artist USING (artist_id)
+           # WHERE Track.cd_id = ?
+           select      => ..., # Fey::SQL::Select object
+           bind_params => sub { $_[0]->cd_id() },
+           cache       => 1,
+         );
+  }
+----
+== Fey::ORM - MyApp::Schema::CD
+
+* "Select-based" attributes
+
+  has 'track_count' =>
+      ( metaclass   => 'FromSelect',
+        select      => $select,
+        bind_params => sub { $_[0]->cd_id() },
+      );
+
+----
+== Fey::ORM::Table gives you Moose
+
+  package MyApp::Schema::CD;
+
+  use Fey::ORM::Table;
+
+  # Plain old Moose attributes
+  has 'reverse_title' =>
+      ( is      => 'ro',
+        isa     => 'Str',
+        default => sub { reverse $_[0]->title() },
+      );
+
+  # Plain old Moose roles
+  with 'MyApp::Role::OpticalMedia';
+
+  # Plain old Moose method modifiers
+  before 'update' => sub { ... };
+
+* All the power of Moose, plus more!
+----
+== Fey::ORM::Table methods
+
+* |MyApp::Schema::CD->Table()| - returns a |Fey::Table|
+----
+== Fey::ORM::Table methods
+* |MyApp::Schema::CD->new( cd_id => 12 )|
+** loads CD row from DBMS
+** can load one row based on any unique key
+** can also define alternate "load one row" logic in your class
+*** for example, load user based on username & hashed password
+* |$cd->title()|, |$cd->release_date()|
+** one method per column
+----
+== Fey::ORM::Table methods
+* |MyApp::Schema::CD->insert()|
+* |$cd->update( title => 'Frozen Perl Rock Party' )|
+* |$cd->delete()|
+----
+== Fey::ORM::Table - MyApp::Schema::CD methods
+* |MyApp::Schema::CD->EnableObjectCache()|
+* |MyApp::Schema::CD->DisableObjectCache()|
+* |MyApp::Schema::CD->ClearObjectCache()|
+----
+== More Fey::ORM features
+
+* Tries very hard to be efficient
+** minimize # of SQL queries
+* |Fey::Object::Iterator|
+** uses DBI statement handles behind the scenes
+** can return multiple objects in one |$iterator->next()| call
+*** a "join iterator"
+* use |Fey::SQL| in your model to build complex queries
+----
+== Fey::ORM MOP
+
+* Full introspection for attributes & methods
+* New metaclasses for HasA (has one and has many)
+* Like Moose, extendable via the meta API
+----
+== Fey::ORM is not done!
+
+* Still a work in progress
+* Will expand as I use it
+* Will probably need some DBMS-specific logic eventually
+** either in |Fey::ORM|, |Fey::SQL|, or both
+----
+== Fey::ORM::Mock
+
+* Data seeding and insert/update/delete tracking
+* Ever used |DBD::Mock|?
+** it's really annoying
+* Built on top of |DBD::Mock|
+----
+== Fey::ORM::Mock - Data seeding
+
+  use MyApp::Schema;
+
+  my $mock = Fey::ORM::Mock->new
+                 ( schema_class => 'MyApp::Schema' )
+
+  $mock->seed_class( 'MyApp::Schema::CD' =>
+                     { title  => 'Get Lost',
+                       artist => 'Magnetic Fields',
+                     },
+                     { ... },
+                   );
+
+  # next select will see this data
+
+----
+== Fey::ORM::Mock - Tracking insert/update/delete
+
+  use MyApp::Schema;
+
+  my $mock = Fey::ORM::Mock->new
+                 ( schema_class => 'MyApp::Schema' )
+
+  my $cd = MyApp::Schema::CD->insert(...);
+  $cd->delete();
+
+  my $history =
+      $mock->recorder()->actions_for('MyApp::Schema::CD');
+----
 == Fey::Test
 
 * Shared test framework bits for other Fey distros
 * Please ignore this unless you want to hack on Fey
+----
+== Thank you
 ----
 == Bonus: What's wrong with Alzabo?
 
@@ -394,5 +483,3 @@ presentation_date: Tuesday, June 17, 2008
 * Alzabo's test suite came well after starting the code. It is *NASTY*!
 * Alzabo does too many things in one package
 ** it's hard to document and explain
-----
-== Thank you
