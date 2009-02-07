@@ -428,6 +428,14 @@ b+ 18
 * Shared test framework bits for other Fey distros
 * Please ignore this unless you want to hack on Fey
 ----
+== Learning More
+
+* Best place for help is #fey on irc.perl.org
+* Also a mailing list with no traffic yet
+* http://www.fey-project.org/ - not much content yet
+** link to mailing list
+** link to Mercurial repo
+----
 == Thank you
 ----
 == Bonus: What's wrong with Alzabo?
