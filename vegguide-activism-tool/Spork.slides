@@ -2,12 +2,11 @@
 presentation_title: VegGuide.Org: A Tool for Activism
 presentation_topic: VegGuide.Org
 presentation_place: Minneapolis, MN
-presentation_date: June 7, 2008
-banner_bgcolor: #EEEECC
+presentation_date: June 14, 2009
+banner_bgcolor: #E5F8C9
 author_email: dave@exploreveg.org
 author_organization: Compassionate Action for Animals
 author_name: Dave Rolsky
-author_email: autarch@urth.org
 author_webpage: http://www.vegguide.org/
 ----
 == VegGuide.Org
@@ -20,8 +19,8 @@ author_webpage: http://www.vegguide.org/
 * Community-maintained
 ** anyone can add and edit entries
 ** anyone can rate and review entries
-* Over 5,000 entries, nearly 5,000 reviews
-** 62 countries (mostly US and Canada though)
+* Over 8,000 entries, nearly 8,000 reviews
+** 74 countries (mostly US and Canada though)
 ----
 == Why Bother?
 
@@ -32,27 +31,40 @@ author_webpage: http://www.vegguide.org/
 
 * *Making it easier to be more animal-friendly*
 ----
-== Philosophy
-* Big, up-to-date
-** can't do that without a large, *active* community of users
-* Adding information must be easy
-* Provide instant feedback
-** new entries, reviews, and ratings show up instantly
-** no filtering *before* posting
-----
-== Philosophy
+== Big, Up-to-date
 
-* *Usefulness* as the primary criterion
-** add a steak house!
-* Avoiding conflicts of interest
-** listings are free
-** accounts are free
-** site is free
-** no ads, ever
-----
-== Philosophy
+* need a large, *active* community of users
 
-* *Freedom*
+----
+== Contributing Should Be Easy
+
+* Big buttons for "add entry" and "write review"
+* Click button, (log in/sign up), submit form
+
+----
+
+== Instant gratification
+
+* new submissions show up instantly
+* no filtering *before* posting
+
+----
+== Usefulness Rules
+
+* Only rule is new additions must be useful
+* Add a steak house!
+** really
+
+----
+== Conflicts of Interest are Bad
+* Listings are free
+* Accounts are free
+* Site is free
+* No ads, ever
+
+----
+== Freedom
+
 * Shared license for submissions
 ** you always own your content
 ** share license rights with VegGuide.Org
@@ -62,8 +74,8 @@ author_webpage: http://www.vegguide.org/
 == Cooperating with Other Sites
 
 * Partnership with Mercy for Animals
-* Importing data from VegIllinois, VegOhio, & VegPA
-** http://localhost:3000/entry/5126
+* Importing from VegIllinois, VegOhio, VegPA, & VegNC
+** http://localhost:3000/entry/5227
 * Have data you want to share?
 ----
 == Is this Activism?
@@ -76,7 +88,9 @@ author_webpage: http://www.vegguide.org/
 ----
 == Is this Activism?
 
-* Many abandon being veg
+* Ever heard "I used to be veg but ..."
+** "I got tired of never eating out"
+** "I couldn't eat out with my friends"
 ** "It was too much work"
 ----
 == Making Things Easy
@@ -105,5 +119,7 @@ author_webpage: http://www.vegguide.org/
 * Sort by how veg
 * Favorite local restaurants
 * Printable lists
+----
+== Thank You
 
-
+* Questions?
