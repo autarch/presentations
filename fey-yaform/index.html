@@ -111,12 +111,13 @@ img#me05 {top: 43px;left: 36px;}
  
  <h1>Fey core examples</h1>
 <pre><code>my $schema =
-    Fey::Schema-&gt;new( name =&gt; 'MusicCollection' );
+    Fey::Schema-&gt;new(
+        name =&gt; 'MusicCollection' );
 
-my $album_table =
+my $album_t =
     Fey::Table-&gt;new( name =&gt; 'Album' );
 
-$album_table-&gt;add_column( ... );
+$album_t-&gt;add_column( ... );
 </code></pre>
 <ul>
 <li>But don't do this! Use Fey::Loader!</li>
@@ -128,8 +129,9 @@ $album_table-&gt;add_column( ... );
  
  <h1>Fey core examples</h1>
 <pre><code>my $avg_track_length =
-    Fey::Literal::Function-&gt;new
-        ( 'AVG', $track_table-&gt;column('length') );
+    Fey::Literal::Function-&gt;new(
+        'AVG', $track_t-&gt;column('length')
+    );
 
 my $select = Fey::SQL-&gt;new_select();</code></pre>
 
@@ -139,15 +141,15 @@ my $select = Fey::SQL-&gt;new_select();</code></pre>
  
  <h1>Fey core examples</h1>
 <pre class="small"><code>$select
-  <span class="incremental">-&gt;select( $track_table )</span>
+  <span class="incremental">-&gt;select( $track_t )</span>
   <span class="incremental"># figures out appropriate join
-  -&gt;from( $album_table, $track_table )</span>
-  <span class="incremental">-&gt;where( $album_table-&gt;column('year'), '&gt;',
+  -&gt;from( $album_t, $track_t )</span>
+  <span class="incremental">-&gt;where( $album_t-&gt;column('year'), '&gt;',
            Fey::Placeholder-&gt;new() )
-  -&gt;and( $track_table-&gt;column('length'), '&gt;',
+  -&gt;and( $track_t-&gt;column('length'), '&gt;',
          $avg_track_length )</span>
-  <span class="incremental">-&gt;order_by( $album_table-&gt;column('name'),
-              $track_table-&gt;column('name') );</span>
+  <span class="incremental">-&gt;order_by( $album_t-&gt;column('name'),
+              $track_t-&gt;column('name') );</span>
 
 <span class="incremental"># quotes the crap out of everything
 my $sth = $dbh-&gt;prepare( $select-&gt;sql($dbh) );
@@ -160,12 +162,12 @@ $sth-&gt;execute( 1990 );</span>
   <h1>Fey core auto-placeholders</h1>
   <pre class="small"><code>my $select = Fey::SQL-&gt;new_select();
 
-$select-&gt;select( $track_table )
+$select-&gt;select( $track_t )
        # figures out appropriate join
-       -&gt;from( $album_table, $track_table )
-       -&gt;where( $album_table-&gt;column('year'),
+       -&gt;from( $album_t, $track_t )
+       -&gt;where( $album_t-&gt;column('year'),
                    '=', <span class="highlight">2005</span> );
-       -&gt;and( $album_table-&gt;column('artist_id'), '=',
+       -&gt;and( $album_t-&gt;column('artist_id'), '=',
               <span class="highlight">$tommy_heavenly6-&gt;artist_id()</span> );
 
 my $sth = $dbh-&gt;prepare( $select-&gt;sql($dbh) );
@@ -237,7 +239,7 @@ $sth-&gt;execute( <span class="hilite_green">$select-&gt;bind_params()</span> );
     <li>Point <code>Fey::Loader</code> at your DBMS</li>
   </ul>
 
-  <pre><code>my $loader = Fey::Loader-&gt;new( dbh =&gt; $dbh );
+  <pre class="small"><code>my $loader = Fey::Loader-&gt;new( dbh =&gt; $dbh );
 my $schema = $loader-&gt;make_schema();</code></pre>
 
 </div>
@@ -361,7 +363,7 @@ sub _set_dbh_attributes {
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM - MyApp::Schema methods</h1>
+  <h1>MyApp::Schema methods</h1>
 
   <ul>
     <li><code>MyApp::Schema-&gt;Schema()</code> - returns a <code>Fey::Schema</code></li>
@@ -369,7 +371,7 @@ sub _set_dbh_attributes {
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM - MyApp::Schema methods</h1>
+  <h1>MyApp::Schema methods</h1>
 
   <ul>
     <li><code>MyApp::Schema-&gt;DBIManager()</code> - returns a <code>Fey::DBIManager</code></li>
@@ -379,7 +381,7 @@ sub _set_dbh_attributes {
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM - MyApp::Schema methods</h1>
+  <h1>MyApp::Schema methods</h1>
 
   <ul>
     <li><code>MyApp::Schema-&gt;SQLFactoryClass()</code></li>
@@ -391,7 +393,7 @@ sub _set_dbh_attributes {
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM - MyApp::Schema methods</h1>
+  <h1>MyApp::Schema methods</h1>
 
   <ul>
     <li><code>MyApp::Schema-&gt;EnableObjectCaches()</code></li>
@@ -404,7 +406,7 @@ sub _set_dbh_attributes {
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM - MyApp::Schema methods</h1>
+  <h1>MyApp::Schema methods</h1>
 
   <ul>
     <li><code>MyApp::Schema-&gt;RunInTransaction<br />&nbsp;&nbsp;&nbsp;&nbsp;( sub { ... } )</code></li>
@@ -412,7 +414,7 @@ sub _set_dbh_attributes {
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM - MyApp::Schema::Album</h1>
+  <h1>MyApp::Schema::Album</h1>
 
   <pre class="small"><code>package MyApp::Schema::Album;
 use MyApp::Schema;
@@ -421,7 +423,7 @@ use MyApp::Schema;
 {
     my $schema = MyApp::Schema->Schema();
 
-    <span class="incremental">has_table( $schema->table('Album') );</span>
+    <span class="incremental">has_t( $schema->table('Album') );</span>
 
     <span class="incremental">has_one( $schema->table('Artist') );
 
@@ -437,7 +439,7 @@ use MyApp::Schema;
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM - MyApp::Schema::Album</h1>
+  <h1>MyApp::Schema::Album</h1>
 
 <pre class="small"><code>package MyApp::Schema::Album;
 
@@ -452,7 +454,7 @@ transform 'release_date'
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM - MyApp::Schema::Album</h1>
+  <h1>MyApp::Schema::Album</h1>
 
 <pre class="small"><code>package MyApp::Schema::Album;
 
@@ -469,22 +471,23 @@ has_many 'artists' =&gt;
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM - MyApp::Schema::Album</h1>
+  <h1>MyApp::Schema::Album</h1>
 
   <ul>
     <li>&#34;Select-based&#34; attributes</li>
   </ul>
 
-<pre><code>has 'track_count' =&gt;
-    ( metaclass   =&gt; 'FromSelect',
-      select      =&gt; $select,
-      bind_params =&gt; sub { $_[0]-&gt;album_id() },
-    );</code></pre>
+<pre><code>has 'track_count' =&gt; (
+    metaclass   =&gt; 'FromSelect',
+    select      =&gt; $select,
+    bind_params =&gt;
+        sub { $_[0]-&gt;album_id() },
+);</code></pre>
 
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM::Table gives you Moose</h1>
+  <h1>Fey::ORM::Table + Moose</h1>
 
   <pre class="small"><code>package MyApp::Schema::Album;
 
@@ -542,7 +545,7 @@ before 'update' =&gt; sub { ... };</code></pre>
 
   <ul>
     <li><code>MyApp::Schema::Album-&gt;insert()</code></li>
-    <li><code>$album-&gt;update<br />&nbsp;&nbsp;&nbsp;&nbsp;( title =&gt; 'Frozen Perl Rock Party' )</code></li>
+    <li><code>$album-&gt;update<br />&nbsp;&nbsp;&nbsp;&nbsp;( title =&gt; 'Frozen Perl Rock' )</code></li>
     <li><code>$album-&gt;delete()</code></li>
   </ul>
 </div>
@@ -551,9 +554,9 @@ before 'update' =&gt; sub { ... };</code></pre>
   <h1>Fey::ORM::Table methods</h1>
 
   <ul>
-    <li><code>MyApp::Schema::Album-&gt;EnableObjectCache()</code></li>
-    <li><code>MyApp::Schema::Album-&gt;DisableObjectCache()</code></li>
-    <li><code>MyApp::Schema::Album-&gt;ClearObjectCache()</code></li>
+    <li><code>MyApp::Schema::Album<br />&nbsp;&nbsp;&nbsp;&nbsp;-&gt;EnableObjectCache()</code></li>
+    <li><code>MyApp::Schema::Album<br />&nbsp;&nbsp;&nbsp;&nbsp;-&gt;DisableObjectCache()</code></li>
+    <li><code>MyApp::Schema::Album<br />&nbsp;&nbsp;&nbsp;&nbsp;-&gt;ClearObjectCache()</code></li>
   </ul>
 </div>
 
@@ -672,7 +675,7 @@ my $history =
 </div>
 
 <div class="slide">
-  <h1>Bonus: What's wrong with Alzabo?</h1>
+  <h1>What's wrong with Alzabo?</h1>
 
   <ul>
     <li>Doesn't support multi-row delete or update</li>
@@ -681,22 +684,22 @@ my $history =
 </div>
 
 <div class="slide">
-  <h1>Bonus: What's wrong with Alzabo?</h1>
+  <h1>What's wrong with Alzabo?</h1>
 
-<pre class="small"><code>$select-&gt;select( $track_table )
+<pre class="small"><code>$select-&gt;select( $track_t )
        # figures out appropriate join
-       -&gt;from( $album_table, $track_table )
-       -&gt;where( $album_table-&gt;column('year'), '=', 2005 );
-       -&gt;and( $album_table-&gt;column('artist_id'), '=',
+       -&gt;from( $album_t, $track_t )
+       -&gt;where( $album_t-&gt;column('year'), '=', 2005 );
+       -&gt;and( $album_t-&gt;column('artist_id'), '=',
               $tommy_heavenly6-&gt;artist_id() );
 
 # Alzabo way
 $schema-&gt;join
-    ( select =&gt; $track_table,
-      join   =&gt; [ $album_table, $track_table ],
+    ( select =&gt; $track_t,
+      join   =&gt; [ $album_t, $track_t ],
       where  =&gt;
-         [ [ $album_table-&gt;column('year'), '=', 2005 ],
-           [ $artist_table-&gt;column('artist_id'), '=',
+         [ [ $album_t-&gt;column('year'), '=', 2005 ],
+           [ $artist_t-&gt;column('artist_id'), '=',
              $tommy_heavenly6-&gt;artist_id() ],
          ],
     );</code></pre>
@@ -704,11 +707,18 @@ $schema-&gt;join
 </div>
 
 <div class="slide">
-  <h1>Bonus: What's wrong with Alzabo?</h1>
+  <h1>What's wrong with Alzabo?</h1>
 
   <ul>
     <li>SQL generation API is coupled to schema object API is coupled to ORM API</li>
     <li>Alzabo tries too hard to prevent self-foot-ballistic-puncture</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>What's wrong with Alzabo?</h1>
+
+  <ul>
     <li>Tons of DBMS-specific code</li>
     <li>Makes supporting a new DBMS really hard</li>
     <li>Ties Alzabo to specific DBMS versions in weird ways</li>
@@ -719,7 +729,7 @@ $schema-&gt;join
 </div>
 
 <div class="slide">
-  <h1>Bonus: What's wrong with Alzabo?</h1>
+  <h1>What's wrong with Alzabo?</h1>
 
   <ul>
     <li>Separation of ::Create and ::Runtime classes</li>
@@ -732,7 +742,7 @@ $schema-&gt;join
 </div>
 
 <div class="slide">
-  <h1>Bonus: What's wrong with Alzabo?</h1>
+  <h1>What's wrong with Alzabo?</h1>
 
   <ul>
     <li>Alzabo implements referential integrity in Perl because I was using MySQL</li>
@@ -742,7 +752,7 @@ $schema-&gt;join
 </div>
 
 <div class="slide">
-  <h1>Bonus: What's wrong with Alzabo?</h1>
+  <h1>What's wrong with Alzabo?</h1>
 
   <ul>
     <li>Alzabo's test suite came well after starting the code. It is <strong>NASTY</strong>!</li>
