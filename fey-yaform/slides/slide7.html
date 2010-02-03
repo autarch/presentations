@@ -195,9 +195,9 @@ my $select = Fey::SQL-&gt;new_select();
 
 $select-&gt;select( $track_table )
        # figures out appropriate join
-       -&gt;from( $cd_table, $track_table )
-       -&gt;where( $cd_table-&gt;column(&#39;year&#39;), &#39;=&#39;, <span class="hilite_blue">2005</span> );
-       -&gt;and( $cd_table-&gt;column(&#39;artist_id&#39;), &#39;=&#39;,
+       -&gt;from( $album_table, $track_table )
+       -&gt;where( $album_table-&gt;column(&#39;year&#39;), &#39;=<span class="hilite_blue">&#39;, 2</span>005 );
+       -&gt;and( $album_table-&gt;column(&#39;artist_id&#39;), &#39;=&#39;,
               <span class="hilite_blue">$tommy_heavenly6-&gt;artist_id()</span> );
 
 my $sth = $dbh-&gt;prepare( $select-&gt;sql($dbh) );

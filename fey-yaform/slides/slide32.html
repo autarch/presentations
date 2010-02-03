@@ -191,17 +191,17 @@ document.onkeypress = handleKey
  
  <h2>Fey::ORM::Table methods</h2>
 <ul>
-<li><tt>MyApp::Schema::CD-&gt;new&#40; cd_id =&gt; 12 &#41;</tt></li>
+<li><tt>MyApp::Schema::Album-&gt;new&#40; album_id =&gt; 12 &#41;</tt></li>
 
 <ul>
-<li>loads CD row from DBMS</li>
+<li>loads Album row from DBMS</li>
 <li>can load one row based on any unique key</li>
 <li>can also define alternate &#34;load one row&#34; logic in your class</li>
 
 <ul>
 <li>for example, load user based on username &#38; hashed password</li>
 </ul></ul>
-<li><tt>$cd-&gt;title&#40;&#41;</tt>, <tt>$cd-&gt;release_date&#40;&#41;</tt></li>
+<li><tt>$album-&gt;title&#40;&#41;</tt>, <tt>$album-&gt;release_date&#40;&#41;</tt></li>
 
 <ul>
 <li>one method per column</li>

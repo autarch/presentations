@@ -192,17 +192,17 @@ document.onkeypress = handleKey
  <h2>Bonus: What's wrong with Alzabo?</h2>
 <pre class="formatter_pre">$select-&gt;select&#40; $track_table &#41;
        # figures out appropriate join
-       -&gt;from&#40; $cd_table, $track_table &#41;
-       -&gt;where&#40; $cd_table-&gt;column&#40;&#39;year&#39;&#41;, &#39;=&#39;, 2005 &#41;;
-       -&gt;and&#40; $cd_table-&gt;column&#40;&#39;artist_id&#39;&#41;, &#39;=&#39;,
+       -&gt;from&#40; $album_table, $track_table &#41;
+       -&gt;where&#40; $album_table-&gt;column&#40;&#39;year&#39;&#41;, &#39;=&#39;, 2005 &#41;;
+       -&gt;and&#40; $album_table-&gt;column&#40;&#39;artist_id&#39;&#41;, &#39;=&#39;,
               $tommy_heavenly6-&gt;artist_id&#40;&#41; &#41;;
 
 # Alzabo way
 $schema-&gt;join
     &#40; select =&gt; $track_table,
-      join   =&gt; [ $cd_table, $track_table ],
+      join   =&gt; [ $album_table, $track_table ],
       where  =&gt;
-         [ [ $cd_table-&gt;column&#40;&#39;year&#39;&#41;, &#39;=&#39;, 2005 ],
+         [ [ $album_table-&gt;column&#40;&#39;year&#39;&#41;, &#39;=&#39;, 2005 ],
            [ $artist_table-&gt;column&#40;&#39;artist_id&#39;&#41;, &#39;=&#39;,
              $tommy_heavenly6-&gt;artist_id&#40;&#41; ],
          ],

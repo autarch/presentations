@@ -11,9 +11,9 @@ presentation_date: Saturday, February 5, 2009
 ----
 == Why another ORM?
 
-* Alzabo is old crap
-* But I still like parts of it
-* Wanted a modern tool without the baggage
+* Alzabo was *really* old crap
+* But I still liked parts of it
+* Wanted a similar but modern tool without the baggage
 ----
 == Fey anatomy
 
@@ -33,17 +33,18 @@ presentation_date: Saturday, February 5, 2009
 ----
 == Fey core examples
 
-   my $schema = Fey::Schema->new( name => 'my-cds' );
+   my $schema =
+       Fey::Schema->new( name => 'MusicCollection' );
 
-   my $cd_table = Fey::Table->new( name => 'CD' );
+   my $album_table = Fey::Table->new( name => 'Album' );
 
-   $cd_table->add_column( ... );
+   $album_table->add_column( ... );
 
 * But don't do this! Use Fey::Loader!
 ----
 == Fey core examples
 
-   my $avg_tack_length =
+   my $avg_track_length =
        Fey::Literal::Function->new
            ( 'AVG', $track_table->column('length') );
 
@@ -51,12 +52,12 @@ presentation_date: Saturday, February 5, 2009
 
    $select->select( $track_table )
           # figures out appropriate join
-          ->from( $cd_table, $track_table )
-          ->where( $cd_table->column('year'), '>',
+          ->from( $album_table, $track_table )
+          ->where( $album_table->column('year'), '>',
                    Fey::Placeholder->new() )
           ->and( $track_table->column('length'), '>',
                  $avg_track_length )
-          ->order_by( $cd_table->column('name'),
+          ->order_by( $album_table->column('name'),
                       $track_table->column('name') );
 
    # quotes the crap out of everything
@@ -71,9 +72,9 @@ my $select = Fey::SQL->new_select();
 
 $select->select( $track_table )
        # figures out appropriate join
-       ->from( $cd_table, $track_table )
-       ->where( $cd_table->column('year'), '=', 2005 );
-       ->and( $cd_table->column('artist_id'), '=',
+       ->from( $album_table, $track_table )
+       ->where( $album_table->column('year'), '=', 2005 );
+       ->and( $album_table->column('artist_id'), '=',
               $tommy_heavenly6->artist_id() );
 
 my $sth = $dbh->prepare( $select->sql($dbh) );
@@ -242,17 +243,17 @@ b+ 14
 == Fey::ORM - MyApp::Schema methods
 * |MyApp::Schema->RunInTransaction( sub { ... } )|
 ----
-== Fey::ORM - MyApp::Schema::CD
+== Fey::ORM - MyApp::Schema::Album
 
 .hilite
-package MyApp::Schema::CD;
+package MyApp::Schema::Album;
 use MyApp::Schema;
 use Fey::ORM::Table;
 
 {
   my $schema = MyApp::Schema->Schema();
 
-  has_table( $schema->table('CD') );
+  has_table( $schema->table('Album') );
 
   has_one( $schema->table('Artist') );
 
@@ -278,9 +279,9 @@ b+ 17
 b+ 18
 .hilite
 ----
-== Fey::ORM - MyApp::Schema::CD
+== Fey::ORM - MyApp::Schema::Album
 
-  package MyApp::Schema::CD;
+  package MyApp::Schema::Album;
 
   {
      transform 'release_date'
@@ -292,36 +293,36 @@ b+ 18
                           ->parse_datetime( $_[1] ) };
   }
 ----
-== Fey::ORM - MyApp::Schema::CD
+== Fey::ORM - MyApp::Schema::Album
 
-  package MyApp::Schema::CD;
+  package MyApp::Schema::Album;
 
   {
      has_many 'artists' =>
          ( table       => $schema->table('Artist'),
            # SELECT Artist.*
            # FROM Track JOIN Artist USING (artist_id)
-           # WHERE Track.cd_id = ?
+           # WHERE Track.album_id = ?
            select      => ..., # Fey::SQL::Select object
-           bind_params => sub { $_[0]->cd_id() },
+           bind_params => sub { $_[0]->album_id() },
            cache       => 1,
          );
   }
 ----
-== Fey::ORM - MyApp::Schema::CD
+== Fey::ORM - MyApp::Schema::Album
 
 * "Select-based" attributes
 
   has 'track_count' =>
       ( metaclass   => 'FromSelect',
         select      => $select,
-        bind_params => sub { $_[0]->cd_id() },
+        bind_params => sub { $_[0]->album_id() },
       );
 
 ----
 == Fey::ORM::Table gives you Moose
 
-  package MyApp::Schema::CD;
+  package MyApp::Schema::Album;
 
   use Fey::ORM::Table;
 
@@ -342,26 +343,26 @@ b+ 18
 ----
 == Fey::ORM::Table methods
 
-* |MyApp::Schema::CD->Table()| - returns a |Fey::Table|
+* |MyApp::Schema::Album->Table()| - returns a |Fey::Table|
 ----
 == Fey::ORM::Table methods
-* |MyApp::Schema::CD->new( cd_id => 12 )|
-** loads CD row from DBMS
+* |MyApp::Schema::Album->new( album_id => 12 )|
+** loads Album row from DBMS
 ** can load one row based on any unique key
 ** can also define alternate "load one row" logic in your class
 *** for example, load user based on username & hashed password
-* |$cd->title()|, |$cd->release_date()|
+* |$album->title()|, |$album->release_date()|
 ** one method per column
 ----
 == Fey::ORM::Table methods
-* |MyApp::Schema::CD->insert()|
-* |$cd->update( title => 'Frozen Perl Rock Party' )|
-* |$cd->delete()|
+* |MyApp::Schema::Album->insert()|
+* |$album->update( title => 'Frozen Perl Rock Party' )|
+* |$album->delete()|
 ----
-== Fey::ORM::Table - MyApp::Schema::CD methods
-* |MyApp::Schema::CD->EnableObjectCache()|
-* |MyApp::Schema::CD->DisableObjectCache()|
-* |MyApp::Schema::CD->ClearObjectCache()|
+== Fey::ORM::Table - MyApp::Schema::Album methods
+* |MyApp::Schema::Album->EnableObjectCache()|
+* |MyApp::Schema::Album->DisableObjectCache()|
+* |MyApp::Schema::Album->ClearObjectCache()|
 ----
 == More Fey::ORM features
 
@@ -400,7 +401,7 @@ b+ 18
   my $mock = Fey::ORM::Mock->new
                  ( schema_class => 'MyApp::Schema' )
 
-  $mock->seed_class( 'MyApp::Schema::CD' =>
+  $mock->seed_class( 'MyApp::Schema::Album' =>
                      { title  => 'Get Lost',
                        artist => 'Magnetic Fields',
                      },
@@ -417,11 +418,11 @@ b+ 18
   my $mock = Fey::ORM::Mock->new
                  ( schema_class => 'MyApp::Schema' )
 
-  my $cd = MyApp::Schema::CD->insert(...);
-  $cd->delete();
+  my $album = MyApp::Schema::Album->insert(...);
+  $album->delete();
 
   my $history =
-      $mock->recorder()->actions_for('MyApp::Schema::CD');
+      $mock->recorder()->actions_for('MyApp::Schema::Album');
 ----
 == Fey::Test
 
@@ -447,17 +448,17 @@ b+ 18
 
    $select->select( $track_table )
           # figures out appropriate join
-          ->from( $cd_table, $track_table )
-          ->where( $cd_table->column('year'), '=', 2005 );
-          ->and( $cd_table->column('artist_id'), '=',
+          ->from( $album_table, $track_table )
+          ->where( $album_table->column('year'), '=', 2005 );
+          ->and( $album_table->column('artist_id'), '=',
                  $tommy_heavenly6->artist_id() );
 
    # Alzabo way
    $schema->join
        ( select => $track_table,
-         join   => [ $cd_table, $track_table ],
+         join   => [ $album_table, $track_table ],
          where  =>
-            [ [ $cd_table->column('year'), '=', 2005 ],
+            [ [ $album_table->column('year'), '=', 2005 ],
               [ $artist_table->column('artist_id'), '=',
                 $tommy_heavenly6->artist_id() ],
             ],

@@ -190,7 +190,7 @@ document.onkeypress = handleKey
 <div id="content">
  
  <h2>Fey core examples</h2>
-<pre class="formatter_pre">my $avg_tack_length =
+<pre class="formatter_pre">my $avg_track_length =
     Fey::Literal::Function-&gt;new
         &#40; &#39;AVG&#39;, $track_table-&gt;column&#40;&#39;length&#39;&#41; &#41;;
 
@@ -198,12 +198,12 @@ my $select = Fey::SQL-&gt;new_select&#40;&#41;;
 
 $select-&gt;select&#40; $track_table &#41;
        # figures out appropriate join
-       -&gt;from&#40; $cd_table, $track_table &#41;
-       -&gt;where&#40; $cd_table-&gt;column&#40;&#39;year&#39;&#41;, &#39;&gt;&#39;,
+       -&gt;from&#40; $album_table, $track_table &#41;
+       -&gt;where&#40; $album_table-&gt;column&#40;&#39;year&#39;&#41;, &#39;&gt;&#39;,
                 Fey::Placeholder-&gt;new&#40;&#41; &#41;
        -&gt;and&#40; $track_table-&gt;column&#40;&#39;length&#39;&#41;, &#39;&gt;&#39;,
               $avg_track_length &#41;
-       -&gt;order_by&#40; $cd_table-&gt;column&#40;&#39;name&#39;&#41;,
+       -&gt;order_by&#40; $album_table-&gt;column&#40;&#39;name&#39;&#41;,
                    $track_table-&gt;column&#40;&#39;name&#39;&#41; &#41;;
 
 # quotes the crap out of everything

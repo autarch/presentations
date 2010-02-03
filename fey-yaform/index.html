@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>Fey, Another Freaking' ORM</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<!-- metadata -->
+<meta name="generator" content="S5" />
+<meta name="version" content="S5 1.2a2" />
+<meta name="author" content="Eric A. Meyer" />
+<meta name="company" content="Complex Spiral Consulting" />
+<!-- configuration parameters -->
+<meta name="defaultView" content="slideshow" />
+<meta name="controlVis" content="hidden" />
+<!-- style sheet links -->
+<link rel="stylesheet" href="ui/default/slides.css" type="text/css" media="projection" id="slideProj" />
+<link rel="stylesheet" href="ui/default/outline.css" type="text/css" media="screen" id="outlineStyle" />
+<link rel="stylesheet" href="ui/default/print.css" type="text/css" media="print" id="slidePrint" />
+<link rel="stylesheet" href="ui/default/opera.css" type="text/css" media="projection" id="operaFix" />
+<!-- embedded styles -->
+<style type="text/css" media="all">
+.imgcon {width: 525px; margin: 0 auto; padding: 0; text-align: center;}
+#anim {width: 270px; height: 320px; position: relative; margin-top: 0.5em;}
+#anim img {position: absolute; top: 42px; left: 24px;}
+img#me01 {top: 0; left: 0;}
+img#me02 {left: 23px;}
+img#me04 {top: 44px;}
+img#me05 {top: 43px;left: 36px;}
+</style>
+<!-- S5 JS -->
+<script src="ui/default/slides.js" type="text/javascript"></script>
+<link rel="stylesheet" href="ui/custom.css" type="text/css" />
+</head>
+<body>
+
+<div class="layout">
+<div id="controls"><!-- DO NOT EDIT --></div>
+<div id="currentSlide"><!-- DO NOT EDIT --></div>
+<div id="header"></div>
+<div id="footer">
+  <div id="license">
+    <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/"><img alt="Creative Commons License" style="border-width:0" src="ui/creative-commons.png" /></a>
+    <br /><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">Fey, Another Freaking' ORM</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">David Rolsky</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/">Creative Commons Attribution-Share Alike 3.0 United States License</a>.
+  </div>
+
+  <h2>Fey, Another Freaking' ORM</h2>
+</div>
+</div>
+
+<div class="presentation">
+
+<div class="slide">
+  <h1>Fey, Another Freaking' ORM</h1>
+  <h2>Dave Rolsky</h2>
+</div>
+
+<div class="slide">
+  <h1>What the fuck, Dave?</h1>
+
+  <ul>
+    <li>Wikitext-ish</li>
+    <li>Matches existing plaintext "markup"</li>
+    <li>Standard</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>Why is Markdown Important?</h1>
+
+  <ul>
+    <li>Standard!</li>
+    <li>Easy to use</li>
+    <li>(Please do not invent your own wikitext)</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>An Example</h1>
+
+<pre><code>This is **bold**, this is *italic*.
+
+* A list
+* of items
+
+> A blockquote which contains
+> [a link](http://example.com)
+</code></pre>
+</div>
+
+<div class="slide">
+  <h1>Why a New Parser?</h1>
+
+  <ul>
+    <li>Existing tools just converted to HTML</li>
+    <li>No way to parse interesting data</li>
+    <li>HTML conversion can be lossy</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>With Markdent You Can ...</h1>
+
+  <ul>
+    <li>Convert to HTML (duh)</li>
+    <li>Extract all links</li>
+    <li>Extract all tables</li>
+    <li>Extract all text (for full text search)</li>
+    <li>Filter out some markup (raw HTML)</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>But Wait, There's More!</h1>
+
+  <ul>
+    <li>Extend the markup syntax</li>
+    <li>Cache parsed data, but not result</li>
+    <li>[Insert your invention here]</li>
+    <li>Markdent is a parse <strong>toolkit</strong></li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>What is "Event-Driven"?</h1>
+
+  <ul>
+    <li>Just like SAX</li>
+    <li>Parser generates a <em>sequence of events</em>
+      <ol style="font-size: 70%">
+        <li>start document</li>
+        <li>start paragraph</li>
+        <li>text</li>
+        <li>start emphasis</li>
+        <li>text</li>
+        <li>end emphasis</li>
+        <li>end paragraph</li>
+        <li>end document</li>
+      </ol>
+    </li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>What is "Event-Driven"?</h1>
+
+  <ul>
+    <li>Parser passes events to a "handler"</li>
+    <li>Handler can do anything</li>
+    <ul>
+      <li>Cache events</li>
+      <li>Generate HTML</li>
+      <li>Filter events</li>
+    </ul>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>Handlers Can Chain</h1>
+
+<pre><code>           Parser
+             |
+             |
+           Filter
+             |
+             |
+         Multiplexer
+          /       \
+         /         \
+Event Cache       HTML Output
+</code></pre>
+</div>
+
+<div class="slide">
+  <h1>Chained Handlers</h1>
+
+  <pre class="small"><code>my $buffer = q{};
+open my $fh, '&gt;', \$buffer;
+
+<span class="incremental">my $capture = Markdent::Handler::CaptureEvents-&gt;new();<span class="annotation">
+^ Event Cache</span></span>
+<span class="incremental">my $html = Markdent::Handler::HTMLStream( output =&gt; $fh );<span class="annotation">
+^ HTML Output</span></span>
+
+<span class="incremental">my $multi = Markdent::Handler::Multiplexer-&gt;new(
+    handlers =&gt; [ $capture, $html ],
+);<span class="annotation">
+^ Multiplexer</span></span>
+
+<span class="incremental">my $filter =
+    Markdent::Handler::HTMLFilter-&gt;new( handler =&gt; $multi );<span class="annotation">
+^ Filter</span></span>
+
+<span class="incremental">my $parser = Markdent::Parser-&gt;new( handler =&gt; $filter );<span class="annotation">
+^ Parser</span></span>
+
+$parser-&gt;parse( markdown =&gt; ... );</code></pre>
+</div>
+
+<div class="slide">
+  <h1>Custom Dialect</h1>
+
+  <pre class="small"><code>package MyWiki::Dialect::SpanParser;
+
+use Moose;
+extends 'Markdent::Dialect::Standard::SpanParser';
+
+<span class="incremental">overrides _possible_span_matches</span> => sub {
+    my $self = shift;
+    my @look_for = super();
+
+    # inside code span
+    return @look_for if @look_for == 1;
+
+    <span class="incremental">insert_after_string
+        'code_start', 'wiki_link', @look_for;</span>
+    return @look_for;
+};</code></pre>
+</div>  
+
+<div class="slide">
+  <h1>Custom Dialect</h1>
+
+  <pre class="small"><code>package MyWiki::Dialect::SpanParser;
+
+<span class="incremental">sub _match_wiki_link</span> {
+    my $self = shift;
+    my $text = shift;
+
+    <span class="incremental">return unless ${$text} =~ / ... /xmgc;</span>
+
+    <span class="incremental">my %p = ( link_text => $1 );
+    $p{display_text} = $2
+        if defined $2;
+
+    my $event = $self->_make_event
+        ( 'MyWiki::Event::WikiLink' => %p );
+
+    $self->_markup_event($event);</span>
+
+    return 1;
+}</code></pre>
+</div>
+
+<div class="slide">
+  <h1>In the Box - Standard Dialect</h1>
+
+  <ul>
+    <li>Original Markdown</li>
+    <li>Passes mdtest suite</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>In the Box - Theory Dialect</h1>
+
+  <ul>
+    <li>Support for tables</li>
+    <li>Header rows, cell alignment, colspan &gt; 1, multi-line cells, multiple &lt;tbody&gt;</li>
+  </ul>
+
+  <pre class="small"><code>+------+-------------+-----------------------+--------+
+| id   | name        | description           | price  |
++------+-------------+-----------------------+--------+
+|    1 | gizmo       | Frabbles the blatzer  |   1.99 |
+|    2 | doodad      | Collects *gizmos*     |  23.80 |
+|   10 | dojigger    | Foo                   | 102.98 |
+| 1024 | thingamabob | Self-explanatory, no? |   0.99 |
++------+-------------+-----------------------+--------+</code></pre>
+</div>
+
+<div class="slide">
+  <h1>In the Box - Handlers</h1>
+
+  <ul>
+    <li>Event capture (for caching</li>
+    <li>HTML output</li>
+    <li>Raw HTML removal filter</li>
+    <li>Multiplexer</li>
+    <li>Minimal tree (mostly for testing)</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>In the Box - Simple HTML Output</h1>
+
+  <pre><code>use Markdent::Simple;
+
+my $mds  = Markdent::Simple->new();
+my $html = $mss->markdown_to_html(
+    title    => 'My Document',
+    markdown => $markdown,
+);</code></pre>
+</div>
+
+<div class="slide">
+  <h1>Questions?</h1>
+
+</div>
+
+</div> 
+</body>
+</html>
+
+<!--
+
+Copyright 2010 David Rolsky. All Rights Reserved.
+
+This work is licensed under a Creative Commons Attribution-Share Alike
+3.0 United States License See
+http://creativecommons.org/licenses/by-sa/3.0/us/ for details.
+
+-->

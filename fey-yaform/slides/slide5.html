@@ -190,11 +190,12 @@ document.onkeypress = handleKey
 <div id="content">
  
  <h2>Fey core examples</h2>
-<pre class="formatter_pre">my $schema = Fey::Schema-&gt;new&#40; name =&gt; &#39;my-cds&#39; &#41;;
+<pre class="formatter_pre">my $schema =
+    Fey::Schema-&gt;new&#40; name =&gt; &#39;MusicCollection&#39; &#41;;
 
-my $cd_table = Fey::Table-&gt;new&#40; name =&gt; &#39;CD&#39; &#41;;
+my $album_table = Fey::Table-&gt;new&#40; name =&gt; &#39;Album&#39; &#41;;
 
-$cd_table-&gt;add_column&#40; ... &#41;;
+$album_table-&gt;add_column&#40; ... &#41;;
 </pre>
 <ul>
 <li>But don&#39;t do this! Use Fey::Loader!</li>
