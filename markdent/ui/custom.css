@@ -1,0 +1,87 @@
+html>body {
+    background: none;
+    font-family: Verdana, Helvetica, sans-serif;
+}
+
+div#header, div#footer {
+    color: black;
+    background: #8cc63f;
+}
+
+div#license {
+    float: left;
+    font-size: 20%;
+    margin-left: 1em;
+    width: 40%;
+}
+
+.slide h1 {
+    background: #8cc63f;
+    color: black;
+}
+
+.slide h1 {
+    text-transform: none;
+}
+
+span.date, span.uri {
+    font-size: 80%;
+}
+
+span.uri {
+    color: blue;
+}
+
+img.for-slide {
+    float: right;
+}
+
+/* copied from pretty.css for ul */
+.slide ol {margin-left: 5%; margin-right: 7%;}
+
+.slide ul, .slide ul li ul, .slide ol {
+    line-height: 1.2em;
+}
+
+.slide li {
+    margin-top: 0.5em;
+}
+
+.slide pre {
+    font-size: 100%;
+    line-height: 110%;
+}
+
+.slide .current,
+.highlight {
+    color: #03c;
+}
+
+.delete {
+    text-decoration: line-through;
+    color: #eee;
+}
+
+.slide h2 {
+    margin: 0.1em 0 0.1em 0;
+}
+
+.slide ul + h2,   
+.slide ul + pre {
+    margin-top: 0.5em;
+}
+
+pre.small, ol.small {
+    font-size: 70%;
+}
+
+.annotation {
+    display: none;
+    color: #093;
+}
+
+.current .annotation {
+    display: inline;
+}
+
+.slide code { padding: 0; font-weight: bold; color: #533;}
