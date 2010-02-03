@@ -1,0 +1,210 @@
+<!-- BEGIN top.mas -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Fey::ORM::Mock - Data seeding</title>
+<meta name="Content-Type" content="text/html; charset=utf-8">
+<meta name="generator" content="Spork v0.20">
+<link rel='stylesheet' href='slide.css' type='text/css'>
+<link rel='icon' HREF='favicon.png'>
+<style type="text/css"><!--
+body {
+    font-size: 170%;
+}
+
+/* BEGIN slide.css */
+hr {
+    color: #202040;
+    height: 0px;
+    border-top: 0px;
+    border-bottom: 3px #202040 ridge;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+a:link {
+    color: #123422;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #123333;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    font-size: 24pt;
+    margin: 6pt;
+}
+
+div p {
+    font-size: 18pt;
+    margin-top: 12pt;
+    margin-bottom: 12pt;
+    margin-left: 6pt;
+    margin-right: 6pt;
+}
+
+tt {
+    font-size: 120%;
+}
+
+small {
+    font-size: 80%;
+    font-style: italic;
+}
+
+#topbar {
+    background: lightgray;
+    color: blue;
+    position:absolute;
+    right: 5px;
+    left: 5px;
+    top: 5px;
+}
+
+#bottombar {
+    background: lightgray;
+    color: blue;
+    position: fixed;
+    right: 5px;
+    left: 5px;
+    bottom: 5px;
+    height: 50px;
+    z-index: 0;
+}
+
+.top_spacer {
+    height: 0px;
+    margin: 0px 0px 0px 0px;
+    padding: 1px 0px 0px 0px;
+}
+
+.spacer {
+    bottom: 5px;
+    height: 50px;
+}
+
+#content {
+    background:#fff;
+    margin-left: 20px;
+    margin-right:20px;
+    margin-top: 80px;
+}
+
+pre {
+    font-size: 120%;
+    background-color: #EEE;
+    padding: 0.5em;
+    width: 80%;
+}
+
+#logo {
+    position: fixed;
+    right: 40px;
+    bottom: 51px;
+    width: 130px;
+    height: 150px;
+    z-index:3;
+    background-repeat: no-repeat;
+}
+/* END index.css */
+
+
+--></style>
+<script type="text/javascript">
+// BEGIN controls.js
+function nextSlide() {
+    window.location = 'slide40.html';
+}
+
+function prevSlide() {
+    window.location = 'slide38.html';
+}
+
+function indexSlide() {
+    window.location = 'index.html';
+}
+
+function startSlide() {
+    window.location = 'start.html';
+}
+
+function closeSlide() {
+    window.close();
+}
+
+function handleKey(e) {
+    var key;
+    if (e == null) {
+        // IE
+        key = event.keyCode
+    } 
+    else {
+        // Mozilla
+        if (e.altKey || e.ctrlKey) {
+            return true
+        }
+        key = e.which
+    }
+    switch(key) {
+        case 8: prevSlide(); break
+        case 13: nextSlide(); break
+        case 32: nextSlide(); break
+        case 81: closeSlide(); break
+        case 105: indexSlide(); break
+        case 110: nextSlide(); break
+        case 112: prevSlide(); break
+        case 115: startSlide(); break
+        default: //xxx(e.which)
+    }
+}
+
+document.onkeypress = handleKey
+// END controls.js
+
+</script>
+</head>
+<body>
+<div id="topbar">
+ <table width='100%'>
+  <tr>
+   <td width="13%"></td>
+   <td align="center" width="73%">
+    <a accesskey="s" href="index.html">Fey, Another Freakin&#39; ORM</a>
+   </td>
+   <td align="right" width="13%">
+    39
+   </td>
+  </tr>
+ </table>
+</div>
+<!-- END top.html -->
+
+<!-- BEGIN slide -->
+<div id="content">
+ 
+ <h2>Fey::ORM::Mock - Data seeding</h2>
+<pre class="formatter_pre">use MyApp::Schema;
+
+my $mock = Fey::ORM::Mock-&gt;new
+               &#40; schema_class =&gt; &#39;MyApp::Schema&#39; &#41;
+
+$mock-&gt;seed_class&#40; &#39;MyApp::Schema::CD&#39; =&gt;
+                   { title  =&gt; &#39;Get Lost&#39;,
+                     artist =&gt; &#39;Magnetic Fields&#39;,
+                   },
+                   { ... },
+                 &#41;;
+
+# next select will see this data
+</pre>
+
+</div>
+<!-- END slide.html -->
+<!-- END slide -->
+
