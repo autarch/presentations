@@ -1,1 +1,592 @@
-Spork.slides.en
+----
+images_directory: /home/autarch/presentations/jsan/images
+banner_bgcolor: #006400
+presentation_topic: JSAN, AJAX, and Perl
+presentation_title: JSAN, AJAX, and Perl
+presentation_place: YAPC::NA, Chicago, IL
+presentation_date: June 26, 2006
+----
+
+{image: http://images.amazon.com/images/P/B00008OE4V.01._PE10_SCLZZZZZZZ_.jpg}
+
+=== JavaScript Is the New Sex
+
+* All the cool kids are using it
+* If your website does not use AJAX you are *DOOMED* to Web 1.0 obscurity
+* Perl is dead!
+
+----
+
+{image: http://i.xanga.com/bjs1023/t/skull.jpg}
+
+=== Grave Robbing
+
+* But Perl did have one or two good ideas
+* And one of its best was CPAN
+
+----
+
+{image: http://www.lancashire.gov.uk/corporate/news/press_releases/2003/04/10/001_800x1000.jpg}
+
+=== Finding Reusable JavaScript is Painful
+
+* Besides just a Google search, options were limited
+* Terrible sites like HotScripts
+** Lots of bad code
+** No documentation standards (and often no docs)
+** A lot of commercially licensed code
+
+----
+
+{image: http://www.lancashire.gov.uk/corporate/news/press_releases/2003/04/10/001_800x1000.jpg}
+
+=== Finding Reusable JavaScript is Painful
+
+* There is good code out there ...
+** ... but it is hard to find, and mostly linked from someone's blog
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== Enter JSAN (www.openjsan.org)
+
+* The obvious idea is CPAN for JS, JSAN
+** http://www.openjsan.org/
+* Casey West started this project mid-2005
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== Enter JSAN (www.openjsan.org)
+
+* Central repository for JS libraries, with some expected standards:
+** Tests
+** API docs in POD
+** Changes file, README, etc.
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== Enter JSAN (www.openjsan.org)
+
+* One big problem ...
+** ... JavaScript has no facility for loading libraries!
+* Nothing like Perl's |use| or |require|
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== Enter JSAN (www.openjsan.org)
+
+* Loading of multiple libraries can only be done from an HTML file:
+
+  <script type="text/javascript"
+          src="/js/Lib/Foo.js" />
+  <script type="text/javascript"
+          src="/js/Lib/Bar.js" />
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== The JSAN.js Library Loader
+
+* Actually, there is a way to load libraries from a script file
+** several ways, in fact
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== The JSAN.js Library Loader
+
+* It is possible to use XMLHttpRequest to load a script from inside a script
+
+----
+
+{image: http://www.openjsan.org/images/logo/jsan-logo-rhino.png}
+
+=== The JSAN.js Library Loader
+
+* JSAN.js does this for you
+** and provides Perl-style "exporting" as well
++* In your HTML:
+
+.hilite
+  <script type="text/javascript"
+          src="/js/JSAN.js" />
+  <script type="text/javascript">
+    JSAN.addRepository('/js');
+    JSAN.use('Lib.Foo');
+    JSAN.use('Lib.Bar');
+  </script>
++
+  g+ 2
++
+  g+ 4
++
+  g+ 5
+  g+ 6
++
+              ggggggg  5
+              ggggggg  6
+.hilite
+
+----
+
+{image: http://upload.wikimedia.org/wikipedia/en/4/4c/Biggus.jpg}
+
+=== Caveat
+
+* There's always a caveat
+* Some browsers (Firefox, IE sometimes) do not respect caching headers when using XHR
+
+----
+
+{image: http://upload.wikimedia.org/wikipedia/en/4/4c/Biggus.jpg}
+
+=== Caveat
+
+* If you load 50k worth of JS libraries on each page ...
++** ... 100,000 page view per day
++** ... 500MB per day
++** ... approximately 15GB per month!
+* Now do the math for 1,000,000 or 100,000,000 page views per day
+
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Workarounds
+
+* For dynamic sites, use |JSAN::ServerSide| from CPAN
+* Reads a JSAN-using JavaScript library ...
+** ... analyzes dependencies ...
+** ... spits out a bunch of URIs to load libraries in the right order
+** ... but does not support exporting (yet)
+
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Workarounds
+
+* In your code:
+
+  my $js =
+      JSAN::ServerSide->new
+          ( uri_prefix =>
+               '/uri/to/js',
+            fs_prefix =>
+               '/usr/local/js' );
+
+  $js->add('HTTP.Request');
+  $js->add('My.Class');
+
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Workarounds
+
+* When generating HTML:
+
+.hilite
+  <script type="text/javascript">
+    var JSAN = {};
+    JSAN.use = function () {};
+  </script>
+  % for my $uri ( $js->uris() ) {
+  <script type="text/javascript"
+          src="<% $uri %>" />
+  % }
+
++
+    ggggggggggggg 2
+    ggggggggggggggggggggggggg 3
+.hilite
+
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Another Workaround
+
+* Just do it by hand
+* Analyze dependencies by looking at file
+
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Another Workaround
+
+* Mock out JSAN.js
+
+  <script type="text/javascript">
+    var JSAN = {};
+    JSAN.use = function () {};
+  </script>
+
+----
+
+{image: http://www.star-e.com/company/factory-work.jpg}
+
+=== Another Workaround
+
+* Load libraries in correct order
+
+  <script type="text/javascript"
+          src="/js/Lib/Foo.js" />
+  <script type="text/javascript"
+          src="/js/Lib/Prereq.js" />
+  <script type="text/javascript"
+          src="/js/Lib/Bar.js" />
+
+* |JSAN.js| and |JSAN::ServerSide| are always optional
+
+----
+
+=== What's on JSAN?
+
+* Test.Simple
+** JS port of Perl's |Test::Simple|, |Test::More|, and |Test::Harness|
+
+----
+
+=== Test.More
+
+.hilite
+  <html>
+  <head>
+   <script type="text/javascript" src="lib/JSAN.js" />
+   <script type="text/javascript">
+    JSAN.addRepository("lib", "../lib");
+    JSAN.use("Test.More");
+   </script>
+  </head>
+  <body>
+
+   <pre style="white-space: pre" id="test">
+    <script type="text/javascript">
+     plan({ tests: 2 });
+
+     JSAN.use("DOM.Ready");
+     DOM.Ready._clearTimer();
+
+     is( typeof DOM.Ready, "object", "namespace exists" );
+     ok( DOM.Ready.VERSION, "found library VERSION" );
+    </script>
+   </pre>
+
+  </body>
+  </html>
++
+   g+ 3
+    g+ 5
+    g+ 6
++
+     g+ 13
++
+     g+ 18
+     g+ 19
+
+----
+
+=== Test.Harness
+
+  <html>
+  <head>
+   <script type="text/javascript"
+           src="lib/JSAN.js" />
+  </head>
+  <body>
+
+   <script type="text/javascript">
+     JSAN.use('Test.Harness.Browser');
+
+     var t = new Test.Harness.Browser();
+
+     t.runTests(
+       "constructor.t.html",
+       "ready.t.html",
+       "run_callbacks.t.html"
+     );
+   </script>
+
+  </body>
+  </html>
+
+----
+
+=== DOM.Events
+
+* Attach events to any DOM element.
+** cross-platform
+** memory-leak free - events on IE are notorious for leaking
+** stack multiple listener callbacks on the same event
+** a nice way to handle the need for multiple window.onLoad events
+
+----
+
+=== DOM.Events
+
+* Example ...
+
+  DOM.Events.addListener
+      ( window, "load",
+        AdServer.AnnoyingPopupDiv );
+
+  var divs =
+      document.getElementsByTagName("div");
+  for ( var i = 0; i < divs.length; i++ ) {
+    DOM.Events.addListener
+        ( divs[i], "click", Effect.Bounce );
+  }
+
+----
+
+=== DOM.Ready
+
+* Setup callbacks to be executed when an element is available
+** ... instead of using window.onLoad
+* window.onLoad not called until *all* page elements are loaded
+** including images
+* Images fetched from another server could take a while
+
+----
+
+=== DOM.Ready
+
+* Example:
+
+  DOM.Ready.onIdReady( "div_id", addDivEvent );
+
++* Use this at the end of the page to run all remaining callbacks:
+
+   ...
+
+   <script type="text/javascript">
+     DOM.Ready.runReadyCallbacks();
+   </script>
+  </body>
+  </html>
+
+----
+
+=== Lots more
+
+* Some ports of Perl modules: |File.Basename|
+* Widgets: |Widget.SortableTable|, |Widget.TableOfContentGenerator|
+* Effects: |Effect.DropShadow|, |Effect.RoundedCorners|
+* DOM Manipulation & Instrumentation: |DOM.Triggers|, |DOM.Insert|, |Display.Swap|
+* Cross-platform XHR: |HTTP.Request|
+* Class creation: |Class.Setup|, |Class|
+
+----
+
+{image: http://blog.labnotes.org/wp-content/uploads/ajax.jpg}
+
+=== AJAX
+
+* *A*{{synchronous}} *J*{{avascript}} *a*{{nd}} *X*{{ML}}
+* Core of AJAX ...
+** Server request without page refresh
+
+----
+
+{image: http://www.transload.net/~marneysplace/misc/lie.gif}
+
+=== AJAX is a Lie
+
+* Can be synchronous
+* No need for XML
+* Doesn't even need Javascript
+** Similar techniques for Flash, for example
+
+----
+
+=== XMLHttpRequest
+
+* Modern browsers have XMLHttpRequest (XHR) in Javascript
+* API for making server request in JS
+* Mozilla Firefox, modern IE, Opera, Safari, Konqueror
+
+----
+
+{image: http://www.seismo.unr.edu/ftp/pub/louie/class/100/earth-core.GIF}
+
+== Core of AJAX
+
+* Use XHR to send an HTTP request to the server
+* Server can return anything ...
+** XML
+** HTML
+** Javascript
+** JSON (Javascript Object Notation)
+* Use DHTML techniques to update page based on server response
+
+----
+
+{image: http://www.channel4.com/entertainment/tv/microsites/I/itcrowd/images/moss-profile.jpg}
+
+=== Why it is cool
+
+* No page reloads
+* Use it with timers for automatic updates
+* More desktop-like web applications
+
+----
+
+{image: http://www.meredy.com/lisrobot.jpg}
+
+=== Danger, Will Robinson!
+
+* Breaks the back button
+* Can defy user expectations
+** Users expect a page reload when they hit a button
+* A whole new way of doing web apps
+** Not as well explored, lacking standards for UI design
+
+----
+
+{image: http://static.flickr.com/26/60097639_c00d822480_d.jpg}
+
+=== Socialtext Example
+
+.html
+<ul>
+ <li><a href="http://www.socialtext.net/exchange/">http://www.socialtext.net/exchange/</a></li>
+</ul>
+.html
+
+----
+
+{image: http://static.flickr.com/26/60097639_c00d822480_d.jpg}
+
+=== Socialtext Example
+
+* Side box content is loaded if box is opened
+* Content is just an HTML blob:
+
+  <div class="box_item">
+      <a title="Attention"
+         href="index.cgi?attention">Attention</a>
+  </div>
+
+  <div class="box_item">
+      <a title="Best Practices"
+         href="index.cgi?best_practices">
+      Best Practices</a>
+  </div>
+
+
+----
+
+{image: http://static.flickr.com/26/60097639_c00d822480_d.jpg}
+
+=== Socialtext Example
+
+* Uses normal DHTML to change the page:
+
+  content_div.innerHTML = response;
+
+----
+
+{image: http://www.lay-lo.com/graff/h-l/json_001.jpg}
+
+=== JSON Example
+
+* JSON is just Javascript, in this case an anonymous object.
+
+    {
+     html: { 'element-id-1':
+               'blob of <strong>HTML</strong>',
+             'element-id-2':
+               'another blob of <em>HTML</em>'
+           }
+    }
+
+----
+
+{image: http://www.lay-lo.com/graff/h-l/json_001.jpg}
+
+=== JSON Example
+
+* On the client side:
+
+.hilite
+receive_update: function (transport) {
+  var response;
+
+  try { eval("response = "
+             + transport.responseText) }
+  catch (e) { alert(e + "\n"
+                    + transport.responseText) }
+
+  for (elt_id in response.html) {
+    var element =
+       document.getElementById(elt_id);
+    if (element) {
+      element.innerHTML =
+         response.html[elt_id];
+    }
+  }
+}
+
++
+  g+ 4
+  g+ 5
+
++
+  g+ 9
+  g+ 10
+  g+ 11
+  g+ 12
+  g+ 13
+  g+ 14
+  g+ 15
+  g+ 16
+.hilite
+
+----
+
+{image: http://www.urth.org/~autarch/jsan-ajax.png}
+
+=== AJAX and JSAN
+
+* |HTTP.Request|, cross-platform XHR library
+* With XHR, you specify a function to be called when the response arrives
+* The XHR object is passed to the callback
+
+----
+
+{image: http://www.maztravel.com/perl/images/camel.jpg}
+
+=== Perl Modules
+
+* |JSON::Syck| - convert Perl data structures to JSON
+** Also |Data::JavaScript| and |Data::JavaScript::Anon|
+* |JSAN::ServerSide| - JSAN dependency analyzer
+
+----
+
+{image: http://www.urth.org/~autarch/camel-ajax.jpg}
+
+=== Perl and AJAX
+
+* The Perl side is simple
+* Get a request for a URI
+* Serve some sort of data in response
+* Standard webapp behavior
+
+----
+
+=== Thank You
+
+* Questions?
+
