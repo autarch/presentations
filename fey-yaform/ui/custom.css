@@ -5,7 +5,7 @@ html>body {
 
 div#header, div#footer {
     color: black;
-    background: #8cc63f;
+    background: #aaa;
 }
 
 div#license {
@@ -16,7 +16,7 @@ div#license {
 }
 
 .slide h1 {
-    background: #8cc63f;
+    background: #aaa;
     color: black;
 }
 
