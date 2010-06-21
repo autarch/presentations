@@ -56,15 +56,6 @@ img#me05 {top: 43px;left: 36px;}
 </div>
 
 <div class="slide">
-  <h1>What the fuck, Dave?</h1>
-
-  <ul>
-    <li>Are you high?</li>
-    <li>Or just stupid?</li>
-  </ul>
-</div>
-
-<div class="slide">
   <h1>Why another ORM?</h1>
 
   <ul>
@@ -87,47 +78,17 @@ img#me05 {top: 43px;left: 36px;}
 </div>
 
 <div class="slide">
-  <h1>Fey core modules</h1>
+  <h1>SQL generation with Perl</h1>
   <ul>
-    <li>SQL schema in objects
-      <ul>
-        <li><code>Fey::Schema</code></li>
-        <li><code>Fey::Table</code></li>
-        <li><code>Fey::Column</code></li>
-        <li><code>Fey::FK</code></li>
-      </ul>
-    </li>
-    <li>SQL generation with Perl
-      <ul>
-        <li><code>Fey::SQL</code></li>
-        <li><code>Fey::Literal</code></li>
-        <li><code>Fey::Placeholder</code></li>
-      </ul>
-    </li>
+    <li><code>Fey::SQL</code></li>
+    <li><code>Fey::Literal</code></li>
+    <li><code>Fey::Placeholder</code></li>
   </ul>
 </div>
 
 <div class="slide">
- 
- <h1>Fey core examples</h1>
-<pre><code>my $schema =
-    Fey::Schema-&gt;new(
-        name =&gt; 'MusicCollection' );
+  <h1>SQL Functions</h1>
 
-my $album_t =
-    Fey::Table-&gt;new( name =&gt; 'Album' );
-
-$album_t-&gt;add_column( ... );
-</code></pre>
-<ul>
-<li>But don't do this! Use Fey::Loader!</li>
-</ul>
-
-</div>
-
-<div class="slide">
- 
- <h1>Fey core examples</h1>
 <pre><code>my $avg_track_length =
     Fey::Literal::Function-&gt;new(
         'AVG', $track_t-&gt;column('length')
@@ -138,8 +99,8 @@ my $select = Fey::SQL-&gt;new_select();</code></pre>
 </div>
 
 <div class="slide">
- 
- <h1>Fey core examples</h1>
+  <h1>Select</h1>
+
 <pre class="small"><code>$select
   <span class="incremental">-&gt;select( $track_t )</span>
   <span class="incremental"># figures out appropriate join
@@ -159,7 +120,7 @@ $sth-&gt;execute( 1990 );</span>
 </div>
 
 <div class="slide">
-  <h1>Fey core auto-placeholders</h1>
+  <h1>Auto-placeholders</h1>
   <pre class="small"><code>my $select = Fey::SQL-&gt;new_select();
 
 $select-&gt;select( $track_t )
@@ -263,6 +224,31 @@ my $schema = $loader-&gt;make_schema();</code></pre>
 </div>
 
 <div class="slide">
+  <h1>Schema Introspection</h1>
+
+  <pre class="small"><code>my $loader = Fey::Loader-&gt;new( dbh =&gt; $dbh );
+my $schema = $loader-&gt;make_schema();
+
+for my $table ( $schema-&gt;tables() ) {
+    print $table-&gt;name(), "\n";
+
+    for my $column ( $table-&gt;columns() ) {
+        print $column-&gt;name(), "\n";
+    }
+}</code></pre>
+</div> 
+
+<div class="slide">
+  <h1>Logical Schema Only</h1>
+
+  <ul>
+    <li>Schema, tables, columns, foreign keys</li>
+    <li>No indexes</li>
+    <li>Also no triggers, stored procs, domains, etc.</li>
+  </ul>
+</div>
+
+<div class="slide">
   <h1>Fey::DBIManager</h1>
 
   <ul>
@@ -288,12 +274,12 @@ my $schema = $loader-&gt;make_schema();</code></pre>
   <pre class="small"><code>package MyApp::Schema;
 
 my $source =
-    Fey::DBIManager::Source-&gt;new
-        ( dsn          =&gt; ...,
-          username     =&gt; ...,
-          password     =&gt; ...,
-          post_connect =&gt; \&amp;_set_dbh_attributes,
-        );
+    Fey::DBIManager::Source-&gt;new(
+        dsn          =&gt; ...,
+        username     =&gt; ...,
+        password     =&gt; ...,
+        post_connect =&gt; \&amp;_set_dbh_attributes,
+    );
 
 sub _set_dbh_attributes {
     my $dbh = shift;
@@ -350,67 +336,16 @@ sub _set_dbh_attributes {
 <span class="incremental">use Fey::ORM::Schema;</span>
 
 {
-    my $source = Fey::DBIManager::Source->new( ... );
+    my $source = Fey::DBIManager::Source-&gt;new( ... );
 
     my $schema =
-        Fey::Loader->new( dbh => $source->dbh() )
-                   ->make_schema();
+        Fey::Loader-&gt;new( dbh =&gt; $source-&gt;dbh() )
+                   -&gt;make_schema();
 
     <span class="incremental">has_schema $schema;</span>
 
-    <span class="incremental">__PACKAGE__->DBIManager()->add_source($source);</span>
+    <span class="incremental">__PACKAGE__-&gt;DBIManager()-&gt;add_source($source);</span>
 }</code></pre>
-</div>
-
-<div class="slide">
-  <h1>MyApp::Schema methods</h1>
-
-  <ul>
-    <li><code>MyApp::Schema-&gt;Schema()</code> - returns a <code>Fey::Schema</code></li>
-  </ul>
-</div>
-
-<div class="slide">
-  <h1>MyApp::Schema methods</h1>
-
-  <ul>
-    <li><code>MyApp::Schema-&gt;DBIManager()</code> - returns a <code>Fey::DBIManager</code></li>
-    <li><code>MyApp::Schema-&gt;DBIManager()<br />-&gt;default_source()</code> - returns a <code>Fey::DBIManager::Source</code></li>
-    <li><code>MyApp::Schema-&gt;DBIManager()<br />-&gt;default_source()-&gt;dbh()</code> - returns a <code>DBI</code> handle</li>
-  </ul>
-</div>
-
-<div class="slide">
-  <h1>MyApp::Schema methods</h1>
-
-  <ul>
-    <li><code>MyApp::Schema-&gt;SQLFactoryClass()</code></li>
-    <li>By default, returns <code>'Fey::SQL'</code></li>
-    <li>Subclass it to return something else - <code>'Fey::SQL::Pg'</code> (this does not exist (yet))</li>
-    <li><code>MyApp::Schema-&gt;SQLFactoryClass()<br />-&gt;new_select()</code></li>
-    <li>Returns a <code>Fey::SQL::Select</code> object</li>
-  </ul>
-</div>
-
-<div class="slide">
-  <h1>MyApp::Schema methods</h1>
-
-  <ul>
-    <li><code>MyApp::Schema-&gt;EnableObjectCaches()</code></li>
-    <li><code>MyApp::Schema-&gt;DisableObjectCaches()</code></li>
-    <li><code>MyApp::Schema-&gt;ClearObjectCaches()</code></li>
-    <li>Affects caching for all table-based classes</li>
-    <li>Fairly dumb in-memory object cache</li>
-    <li>Sesigned to catch attempt to create same object &gt;1 time</li>
-  </ul>
-</div>
-
-<div class="slide">
-  <h1>MyApp::Schema methods</h1>
-
-  <ul>
-    <li><code>MyApp::Schema-&gt;RunInTransaction<br />&nbsp;&nbsp;&nbsp;&nbsp;( sub { ... } )</code></li>
-  </ul>
 </div>
 
 <div class="slide">
@@ -421,19 +356,19 @@ use MyApp::Schema;
 <span class="incremental">use Fey::ORM::Table;</span>
 
 {
-    my $schema = MyApp::Schema->Schema();
+    my $schema = MyApp::Schema-&gt;Schema();
 
-    <span class="incremental">has_t( $schema->table('Album') );</span>
+    <span class="incremental">has_table( $schema-&gt;table('Album') );</span>
 
-    <span class="incremental">has_one( $schema->table('Artist') );
+    <span class="incremental">has_one( $schema-&gt;table('Artist') );
 
-    has_many 'tracks' =>
-        ( table    => $schema->table('Track'),
-          order_by =>
-              [ $schema->table('Track') 
-                       ->column('track_number') ],
-          cache    => 1,
-        );</span>
+    has_many 'tracks' =&gt; (
+        table    =&gt; $schema-&gt;table('Track'),
+        order_by =&gt;
+            [ $schema-&gt;table('Track') 
+                     -&gt;column('track_number') ],
+        cache    =&gt; 1,
+    );</span>
 }</code></pre>
 
 </div>
@@ -458,15 +393,15 @@ transform 'release_date'
 
 <pre class="small"><code>package MyApp::Schema::Album;
 
-has_many 'artists' =&gt;
-    ( table       =&gt; $schema-&gt;table('Artist'),
-      # SELECT Artist.*
-      # FROM Track JOIN Artist USING (artist_id)
-      # WHERE Track.album_id = ?
-      select      =&gt; ..., # Fey::SQL::Select object
-      bind_params =&gt; sub { $_[0]-&gt;album_id() },
-      cache       =&gt; 1,
-    );</code></pre>
+has_many 'artists' =&gt; (
+    table       =&gt; $schema-&gt;table('Artist'),
+    # SELECT Artist.*
+    # FROM Track JOIN Artist USING (artist_id)
+    # WHERE Track.album_id = ?
+    select      =&gt; ..., # Fey::SQL::Select object
+    bind_params =&gt; sub { $_[0]-&gt;album_id() },
+    cache       =&gt; 1,
+);</code></pre>
 
 </div>
 
@@ -487,6 +422,64 @@ has_many 'artists' =&gt;
 </div>
 
 <div class="slide">
+  <h1>Constructors</h1>
+
+  <ul>
+    <li>Constructor works with any candidate key</li>
+  </ul>
+
+  <pre><code>my $album =
+    MyApp::Schema::Album-&gt;new(
+        album_id =&gt; 42 );</code></pre>
+</div>
+
+<div class="slide">
+  <h1>Constructors</h1>
+
+  <ul>
+    <li>Can define your own "load one row" logic</li>
+    <li>For example, load a user based on username and password</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>Constructors</h1>
+
+  <pre class="small"><code>sub _load_from_dbms {
+    my $self = shift;
+    my $p    = shift;
+
+    return unless exists $p-&gt;{password};
+
+    my $select = $self-&gt;_select_by_credentials();
+
+    return if
+        $self-&gt;_get_column_values(
+            $select,
+            [ $p-&gt;{username}, sha512( $p-&gt;{password} ) ],
+        );
+
+    die 'Invalid username or password';
+}</code></pre>
+
+</div>
+
+<div class="slide">
+  <h1>Insert, Update, Delete</h1>
+
+  <pre><code>
+my $album = MyApp::Schema::Album-&gt;insert(
+                title     =&gt; 'Realism',
+                year      =&gt; 2009,
+                artist_id =&gt; 42,
+            );
+
+$album-&gt;update( year =&gt; 2010 );
+
+$album-&gt;delete();</code></pre>
+</div>
+
+<div class="slide">
   <h1>Fey::ORM::Table + Moose</h1>
 
   <pre class="small"><code>package MyApp::Schema::Album;
@@ -494,11 +487,11 @@ has_many 'artists' =&gt;
 use Fey::ORM::Table;
 
 # Plain old Moose attributes
-has 'reverse_title' =&gt;
-    ( is      =&gt; 'ro',
-      isa     =&gt; 'Str',
-      default =&gt; sub { reverse $_[0]-&gt;title() },
-    );
+has 'reverse_title' =&gt; (
+    is      =&gt; 'ro',
+    isa     =&gt; 'Str',
+    default =&gt; sub { reverse $_[0]-&gt;title() },
+);
 
 # Plain old Moose roles
 with 'MyApp::Role::MusicCollection;
@@ -512,52 +505,79 @@ before 'update' =&gt; sub { ... };</code></pre>
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM::Table methods</h1>
+  <h1><code>Fey::Object::Iterator</code></h1>
 
   <ul>
-    <li><code>MyApp::Schema::Album-&gt;Table()</code> - returns a <code>Fey::Table</code></li>
+    <li>Uses DBI statement handles behind the scenes</li>
+    <li>Can return multiple objects in one <code>$iterator-&gt;next()</code> call - a join iterator</li>
+    <li>Use <code>Fey::SQL</code> in your model to build complex queries</li>
   </ul>
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM::Table methods</h1>
+  <h1>Custom Select</h1>
 
-  <ul>
-    <li><code>MyApp::Schema::Album<br />&nbsp;&nbsp;&nbsp;&nbsp;-&gt;new( album_id =&gt; 12 )</code></li>
-    <li>loads Album row from DBMS</li>
-    <li>can load one row based on any unique key</li>
-    <li>can also define alternate &#34;load one row&#34; logic in your class</li>
-    <li>for example, load user based on username &amp; hashed password</li>
-  </ul>
+  <pre class="small"><code>my $select = MyApp::Schema-&gt;SQLFactoryClass()-&gt;new_select();
+
+my $schema = MyApp::Schema-&gt;Schema();
+
+my $track_t = $schema-&gt;table('Track');
+
+$select-&gt;select($track_t)
+       -&gt;where( $track_t-&gt;column('album_id'),
+                '=', $self-&gt;album_id() )
+       -&gt;and  ( $track_t-&gt;column('has_been_played'),
+                '=', 0 )
+       -&gt;order_by( $track_t-&gt;column('title') );</code></pre>
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM::Table methods</h1>
+  <h1>Custom Select</h1>
 
-  <ul>
-    <li><code>$album-&gt;title()</code>, <code>$album-&gt;release_date()</code></li>
-    <li>one method per column</li>
-  </ul>
+  <pre class="small"><code>package MyApp::Schema::Album;
+
+sub unheard_tracks {
+    my $self = shift;
+
+    my $select = ...;
+
+    my $dbh =
+        MyApp::Schema-&gt;DBIManager()
+                     -&gt;source_for_sql($select)-&gt;dbh();
+
+    return Fey::Object::Iterator::FromSelect-&gt;new(
+        classes =&gt; ['MyApp::Schema::Track'],
+        select  =&gt; $select,
+        dbh =&gt; $dbh,
+        bind_params =&gt; [ $select-&gt;bind_params() ],
+    );
+}</code></pre>
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM::Table methods</h1>
+  <h1>Object Caching</h1>
 
-  <ul>
-    <li><code>MyApp::Schema::Album-&gt;insert()</code></li>
-    <li><code>$album-&gt;update<br />&nbsp;&nbsp;&nbsp;&nbsp;( title =&gt; 'Frozen Perl Rock' )</code></li>
-    <li><code>$album-&gt;delete()</code></li>
-  </ul>
+  <pre class="small"><code>MyApp::Schema-&gt;EnableObjectCaches();
+
+my $user1 = MyApp::Schema::User-&gt;new( user_id => 42 );
+my $user2 = MyApp::Schema::User-&gt;new( user_id => 42 );
+
+MyApp::Schema-&gt;ClearObjectCaches();
+
+my $user3 = MyApp::Schema::User-&gt;new( user_id => 42 );</code></pre>
+
 </div>
 
 <div class="slide">
-  <h1>Fey::ORM::Table methods</h1>
+  <h1>Transactions</h1>
 
-  <ul>
-    <li><code>MyApp::Schema::Album<br />&nbsp;&nbsp;&nbsp;&nbsp;-&gt;EnableObjectCache()</code></li>
-    <li><code>MyApp::Schema::Album<br />&nbsp;&nbsp;&nbsp;&nbsp;-&gt;DisableObjectCache()</code></li>
-    <li><code>MyApp::Schema::Album<br />&nbsp;&nbsp;&nbsp;&nbsp;-&gt;ClearObjectCache()</code></li>
-  </ul>
+  <pre class="small"><code>my $trans = sub {
+    $user-&gt;delete();
+
+    MyApp::Schema::Log-&gt;insert( message =&gt; 'deleted user' );
+};
+
+MyApp::Schema-&gt;RunInTransaction($trans);</code></pre>
 </div>
 
 <div class="slide">
@@ -566,16 +586,6 @@ before 'update' =&gt; sub { ... };</code></pre>
   <ul>
     <li>Tries very hard to be efficient</li>
     <li>Minimize # of SQL queries</li>
-  </ul>
-</div>
-
-<div class="slide">
-  <h1><code>Fey::Object::Iterator</code></h1>
-
-  <ul>
-    <li>Uses DBI statement handles behind the scenes</li>
-    <li>Can return multiple objects in one <code>$iterator-&gt;next()</code> call - a join iterator</li>
-    <li>Use <code>Fey::SQL</code> in your model to build complex queries</li>
   </ul>
 </div>
 
@@ -595,7 +605,7 @@ before 'update' =&gt; sub { ... };</code></pre>
   <ul>
     <li>Still a work in progress</li>
     <li>Will expand as I use it</li>
-    <li>Will probably need some DBMS-specific logic eventually</li>
+    <li>Needs more per-DBMS modules (like <code>Fey::SQL::Pg</code>)</li>
     <li>Either in <code>Fey::ORM</code>, <code>Fey::SQL</code>, or both</li>
   </ul>
 </div>
@@ -616,15 +626,16 @@ before 'update' =&gt; sub { ... };</code></pre>
 
 <pre class="small"><code>use MyApp::Schema;
 
-my $mock = Fey::ORM::Mock-&gt;new
-               ( schema_class =&gt; 'MyApp::Schema' )
+my $mock = Fey::ORM::Mock-&gt;new(
+               schema_class =&gt; 'MyApp::Schema' )
 
-$mock-&gt;seed_class( 'MyApp::Schema::Album' =&gt;
-                   { title  =&gt; 'Get Lost',
-                     artist =&gt; 'Magnetic Fields',
-                   },
-                   { ... },
-                 );
+$mock-&gt;seed_class(
+    'MyApp::Schema::Album' =&gt;
+        { title  =&gt; 'Get Lost',
+          artist =&gt; 'Magnetic Fields',
+        },
+        { ... },
+);
 
 # next select will see this data</code></pre>
 
@@ -635,8 +646,8 @@ $mock-&gt;seed_class( 'MyApp::Schema::Album' =&gt;
 
 <pre class="small"><code>use MyApp::Schema;
 
-my $mock = Fey::ORM::Mock-&gt;new
-               ( schema_class =&gt; 'MyApp::Schema' )
+my $mock = Fey::ORM::Mock-&gt;new(
+               schema_class =&gt; 'MyApp::Schema' );
 
 my $album = MyApp::Schema::Album-&gt;insert(...);
 $album-&gt;delete();
@@ -644,15 +655,6 @@ $album-&gt;delete();
 my $history =
     $mock-&gt;recorder()-&gt;actions_for('MyApp::Schema::Album');</code></pre>
 
-</div>
-
-<div class="slide">
-  <h1>Fey::Test</h1>
-
-  <ul>
-    <li>Shared test framework bits for other Fey distros</li>
-    <li>Please ignore this unless you want to hack on Fey</li>
-  </ul>
 </div>
 
 <div class="slide">
@@ -674,6 +676,7 @@ my $history =
 
 </div>
 
+<!--
 <div class="slide">
   <h1>What's wrong with Alzabo?</h1>
 
@@ -769,6 +772,7 @@ $schema-&gt;join
  </ul>
 
 </div>
+-->
 
 </div> 
 </body>
