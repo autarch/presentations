@@ -117,7 +117,7 @@ img#me05 {top: 43px;left: 36px;}
     <li>Extend the markup syntax</li>
     <li>Cache parsed data, but not result</li>
     <li>[Insert your invention here]</li>
-    <li>Markdent is a parse <strong>toolkit</strong></li>
+    <li>Markdent is a parsing <strong>toolkit</strong></li>
   </ul>
 </div>
 
@@ -234,10 +234,10 @@ extends 'Markdent::Dialect::Standard::SpanParser';
     $p{display_text} = $2
         if defined $2;
 
-    my $event = $self->_make_event
-        ( 'MyWiki::Event::WikiLink' => %p );
+    my $event = $self-&gt;_make_event(
+        'MyWiki::Event::WikiLink' => %p );
 
-    $self->_markup_event($event);</span>
+    $self-&gt;_markup_event($event);</span>
 
     return 1;
 }</code></pre>
@@ -285,10 +285,12 @@ extends 'Markdent::Dialect::Standard::SpanParser';
 <div class="slide">
   <h1>In the Box - Simple HTML Output</h1>
 
-  <pre><code>use Markdent::Simple;
+  <pre><code>use Markdent::Simple::Document;
 
-my $mds  = Markdent::Simple->new();
-my $html = $mss->markdown_to_html(
+my $msd  =
+    Markdent::Simple::Document-&gt;new();
+
+my $html = $msd-&gt;markdown_to_html(
     title    => 'My Document',
     markdown => $markdown,
 );</code></pre>
