@@ -1,0 +1,129 @@
+html>body {
+    background: none;
+    font-family: Verdana, Helvetica, sans-serif;
+}
+
+div.image-set {
+    margin-left: 6.5%;
+    margin-top: 1em;
+}
+
+div#header {
+    background: white;
+    border-bottom: 2px solid #ccc;
+    color: white;
+}
+
+div#footer {
+    color: black;
+    background: #eee;
+}
+
+div#license {
+    float: left;
+    font-size: 40%;
+    margin-left: 1em;
+    width: 40%;
+}
+
+.slide h1 {
+    background: white;
+    color: black;
+    text-transform: none;
+}
+
+span.date, span.uri {
+    font-size: 80%;
+}
+
+span.uri {
+    color: blue;
+}
+
+div.image-gallery {
+    text-align: center;
+}
+
+p.image-notes {
+    font-size: 40%;
+    font-style: italic;
+}
+
+img.for-slide {
+    float: right;
+}
+
+/* copied from pretty.css for ul */
+.slide ol {margin-left: 5%; margin-right: 7%;}
+
+.slide ul, .slide ul li ul, .slide ol {
+    line-height: 1.2em;
+}
+
+.slide li {
+    margin-top: 0.5em;
+}
+
+.slide pre {
+    font-size: 100%;
+    line-height: 110%;
+}
+
+.slide .current,
+.highlight {
+    color: #03c;
+}
+
+.delete {
+    text-decoration: line-through;
+    color: #eee;
+}
+
+.slide pre.small {
+    font-size: 33%;
+}
+
+.slide pre.medium {
+    font-size: 80%;
+}
+
+.slide table.side-by-side tr {
+    vertical-align: top;
+}
+
+.wrong {
+    color: #F00;
+}
+
+.right {
+    color: #090;
+}
+
+.slide h2 {
+    margin: 0.1em 0 0.1em 0;
+}
+
+.slide ul + h2,   
+.slide ul + pre {
+    margin-top: 0.5em;
+}
+
+.fake-slide0 {padding-top: 3.5em; font-size: 90%;}
+.fake-slide0 h1 {
+    background: transparent;
+    color: #000;
+    font: bold 2em Helvetica, sans-serif;
+    margin: 2em 0 0;
+    padding: 0;
+    position: static;
+    text-align: center;
+    white-space: normal;
+}
+
+.fake-slide0 h2 {
+    text-align: center;
+}
+
+.incremental, .incremental *, .incremental *:after { color: white; }
+
+.slide code { padding: 0; font-weight: bold; color: #533;}
