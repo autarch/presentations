@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<title>Fey, Another Freakin' ORM</title>
+<title>Fey and Fey::ORM</title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <!-- metadata -->
 <meta name="generator" content="S5" />
@@ -41,17 +41,17 @@ img#me05 {top: 43px;left: 36px;}
 <div id="footer">
   <div id="license">
     <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/"><img alt="Creative Commons License" style="border-width:0" src="ui/creative-commons.png" /></a>
-    <br /><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">Fey, Another Freakin' ORM</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">David Rolsky</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/">Creative Commons Attribution-Share Alike 3.0 United States License</a>.
+    <br /><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">Fey and Fey::ORM</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">David Rolsky</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/">Creative Commons Attribution-Share Alike 3.0 United States License</a>.
   </div>
 
-  <h2>Fey, Another Freakin' ORM</h2>
+  <h2>Fey and Fey::ORM</h2>
 </div>
 </div>
 
 <div class="presentation">
 
 <div class="slide">
-  <h1>Fey, Another Freakin' ORM</h1>
+  <h1>Fey and Fey::ORM</h1>
   <h2>Dave Rolsky</h2>
 </div>
 
@@ -62,6 +62,7 @@ img#me05 {top: 43px;left: 36px;}
     <li>Alzabo was <strong>really</strong> old crap</li>
     <li>But I still liked parts of it</li>
     <li>Wanted a similar but modern tool without the baggage</li>
+    <li>DBIC doesn't fit my brain</li>
   </ul>
 </div>
 
@@ -374,7 +375,7 @@ use MyApp::Schema;
 </div>
 
 <div class="slide">
-  <h1>MyApp::Schema::Album</h1>
+  <h1>Transform (Inflate/Deflate)</h1>
 
 <pre class="small"><code>package MyApp::Schema::Album;
 
@@ -389,7 +390,7 @@ transform 'release_date'
 </div>
 
 <div class="slide">
-  <h1>MyApp::Schema::Album</h1>
+  <h1>Has Many Via Select</h1>
 
 <pre class="small"><code>package MyApp::Schema::Album;
 
@@ -406,14 +407,9 @@ has_many 'artists' =&gt; (
 </div>
 
 <div class="slide">
-  <h1>MyApp::Schema::Album</h1>
+  <h1>Query Methods</h1>
 
-  <ul>
-    <li>&#34;Select-based&#34; attributes</li>
-  </ul>
-
-<pre><code>has 'track_count' =&gt; (
-    metaclass   =&gt; 'FromSelect',
+<pre><code>query 'track_count' =&gt; (
     select      =&gt; $select,
     bind_params =&gt;
         sub { $_[0]-&gt;album_id() },
