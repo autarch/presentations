@@ -11,12 +11,13 @@ div.image-set {
 div#header {
     background: white;
     border-bottom: 2px solid #ccc;
-    color: white;
+    color: black;
 }
 
 div#footer {
+    background: white;
+    border-top: 1px solid #ccc;
     color: black;
-    background: #eee;
 }
 
 div#license {
@@ -67,6 +68,7 @@ img.for-slide {
 .slide pre {
     font-size: 100%;
     line-height: 110%;
+    margin-left: 6%;
 }
 
 .slide .current,
@@ -123,7 +125,5 @@ img.for-slide {
 .fake-slide0 h2 {
     text-align: center;
 }
-
-.incremental, .incremental *, .incremental *:after { color: white; }
 
 .slide code { padding: 0; font-weight: bold; color: #533;}
