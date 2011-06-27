@@ -48,6 +48,29 @@ img#me05 {top: 43px;left: 36px;}
 </div>
 </div>
 
+
+<!--
+
+Subclassing - specialization
+Inheritance
+Overriding methods
+Method Resolution
+Polymorphism
+Encapsulation
+Roles
+Roles v Subclassing
+Role for Polymorphism
+Composition
+Delegation
+
+Advice
+When to Use OO - Damian's list
+Prototype OO
+Example code
+Writing code on the fly - Email?
+
+-->
+
 <div class="presentation">
 
 <div class="slide fake-slide0">
@@ -652,6 +675,20 @@ has title =&gt; ( is =&gt; 'ro' );
 </div>
 
 <div class="slide">
+  <h1>Polymorphism Versus If/Then</h1>
+
+  <pre><code>if ( $file->{type} eq 'mp3' ) {
+    # save file with title tag
+} else {
+    # save file
+}
+
+# Polymorphism lets us write ...
+$file-&gt;save();</code></pre>
+</div>
+    
+
+<div class="slide">
   <h1>Why Polymorphism Matters</h1>
 
   <ul>
@@ -692,6 +729,32 @@ has title =&gt; ( is =&gt; 'ro' );
     <li>Moose makes this easy</li>
   </ul>
 </div>
+
+<div class="slide">
+  <h1>Overloading</h1>
+
+  <ul>
+    <li><strong>Overloading</strong> lets objects respond to native Perl operators <code>+</code>, <code>-</code>, <code>""</code> (stringification), etc.</li>
+    <li>Be careful with this!</li>
+    <li>It's easy to make insane APIs with this</li>
+    <li>But overloading booleanification, stringification, and numification can be useful</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>Overloading Example</h1>
+
+  <pre><code>package File;
+use Moose;
+
+<span class="highlight">use overload q{""} =&gt; 'as_string';</span>
+
+sub as_string {
+    my $self = shift;
+
+    return 'File: ' . $self-&gt;path();
+}</code></pre>
+</div>    
 
 <div class="slide">
   <h1>Roles</h1>
@@ -849,27 +912,40 @@ print $file-&gt;last_mod()-&gt;ymd();</code></pre>
   </ul>
 </div>
 
+<div class="slide">
+  <h1>Delegation</h1>
 
-<!--
+  <ul>
+    <li><strong>Delegation</strong> is a way to hide composition</li>
+    <li>Delegating object passes method calls on to delegatee object</li>
+    <li>Moose builds this in to attribute declaration</li>
+  </ul>
+</div>
 
-Subclassing - specialization
-Inheritance
-Overriding methods
-Method Resolution
-Polymorphism
-Encapsulation
-Roles
-Roles v Subclassing
-Role for Polymorphism
-Composition
-Delegation
+<div class="slide">
+  <h1>Delegation Example</h1>
 
-Advice
-When to Use OO - Damian's list
-Example code
-Writing code on the fly - Email?
+  <pre><code>package File;
+use Moose;
 
--->
+has last_mod =&gt (
+    is      =&gt; 'ro',
+    isa     =&gt; 'DateTime',
+    <span class="highlight">handles =&gt; { last_mod_ymd =&gt; 'ymd' },</span>
+);
+
+print $file-&gt;last_mod_ymd();</code></pre>
+</div>
+
+<div class="slide">
+  <h1>Delegation Is Good</h1>
+
+  <ul>
+    <li>It reduces the number of APIs someone needs to use</li>
+    <li>Lets you rearrange internals and preserve the public API</li>
+    <li>Fewer objects for users of your code to learn about</li>
+  </ul>
+</div>
 
 <div class="slide">
   <h1>Advice</h1>
@@ -877,7 +953,67 @@ Writing code on the fly - Email?
   <ul>
     <li>Keep public APIs small</li>
     <li>Default to read-only attributes</li>
+    <li>Avoid multiple inheritance</li>
+    <li>Avoid inheritance - use roles instead</li>
   </ul>
+</div>
+
+<div class="slide">
+  <h1>When to Use OO</h1>
+
+  <ul>
+    <li>As published in Damian Conway's <em>Perl Best Practices</em>
+    (copyright 2004, Published by O'Reilly Media, Inc.)</li>
+    <li>The system being designed is large, or is likely to become large.</li>
+    <li>The data can be aggregated into obvious structures, especially if
+      there's a large amount of data in each aggregate.</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>When to Use OO</h1>
+
+  <ul>
+    <li>
+      The various types of data aggregate form a natural hierarchy that
+      facilitates the use of inheritance and polymorphism.
+      <ul>
+        <li>
+          Dave's Addendum: ... or the various types of data aggregate share
+          common behaviors that faciliate the use of roles.
+        </li>
+      </ul>
+    </li>
+    <li>You have a piece of data on which many different operations are applied.</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>When to Use OO</h1>
+
+  <ul>
+    <li>You need to perform the same general operations on related types of
+      data, but with slight variations depending on the specific type of data
+      the operations are applied to.</li>
+    <li>It's likely you'll have to add new data types later.</li>
+    <li>The typical interactions between pieces of data are best represented by
+      operators.</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>When to Use OO</h1>
+
+  <ul>
+    <li>The implementation of individual components of the system is likely to
+      change over time.</li>
+    <li>The system design is already object-oriented.</li>
+    <li>Large numbers of other programmers will be using your code modules.</li>
+  </ul>
+</div>
+
+<div class="slide fake-slide0">
+  <h1>Live (Clothed) Coding</h1>
 </div>
 
 <div class="slide fake-slide0">
@@ -890,6 +1026,8 @@ Writing code on the fly - Email?
   <ul>
     <li><a href="http://moose.perl.org/">http://moose.perl.org/</a></li>
     <li><a href="http://search.cpan.org/dist/Moose/lib/Moose/Manual.pod">Moose::Manual</a> and <a href="http://search.cpan.org/dist/Moose/lib/Moose/Cookbook.pod">Moose::Cookbook</a></li>
+    <li>Damian Conway's <em>Object Oriented Perl</em> - Chapter 1 only</li>
+    <li>A million other web pages and books</li>
   </ul>
 </div>
 
