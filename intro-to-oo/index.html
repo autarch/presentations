@@ -79,7 +79,7 @@ Writing code on the fly - Email?
 </div>
 
 <div class="slide">
-  <h1>Why Care?</h1>
+  <h1>What is OO For?</h1>
 
   <ul>
     <li>Code reuse?</li>
@@ -119,7 +119,7 @@ Writing code on the fly - Email?
 </div>
 
 <div class="slide">
-  <h1>Perl is a Multi-Paradigm Language</h1>
+  <h1>Perl is Multi-Paradigm</h1>
 
   <ul>
     <li>It is both possible and acceptable to mix paradigms</li>
@@ -167,6 +167,16 @@ Writing code on the fly - Email?
     <li>A member of a <strong>class</strong></li>
   </ul>
 </div>    
+
+<div class="slide">
+  <h1>Data + Operations</h1>
+
+  <ul>
+    <li>Objects bundle data and operations on that data together</li>
+    <li>Attributes are the data</li>
+    <li>Methods are the operations</li>
+  </ul>
+</div>
 
 <div class="slide">
   <h1>Class?</h1>
@@ -249,7 +259,7 @@ my $file =
   <ul>
     <li>Methods are called with <strong><code>-&gt;</code></strong></li>
     <li>The arrow operator</li>
-    <li>Calling a method is also referred to as invocation</li>
+    <li>Calling a method is also called <strong>invocation</strong></li>
   </ul>
 </div>
 
@@ -554,6 +564,10 @@ sub write {
 }</code></pre>
 </div>
 
+<div class="slide fake-slide0">
+  <h1>Intermission</h1>
+</div>
+
 <div class="slide">
   <h1>Inheritance, Roles, Polymorphism</h1>
 
@@ -723,7 +737,7 @@ $file-&gt;write();</code></pre>
   <h1>Encapsulation How-To</h1>
 
   <ul>
-    <li>Never treat the object like a Perl variable</li>
+    <li>Never treat the object like a Perl reference</li>
     <li>This applies even inside the class</li>
     <li>Always use accessor methods to get and set attributes</li>
     <li>Moose makes this easy</li>
@@ -737,7 +751,7 @@ $file-&gt;write();</code></pre>
     <li><strong>Overloading</strong> lets objects respond to native Perl operators <code>+</code>, <code>-</code>, <code>""</code> (stringification), etc.</li>
     <li>Be careful with this!</li>
     <li>It's easy to make insane APIs with this</li>
-    <li>But overloading booleanification, stringification, and numification can be useful</li>
+    <li>But overloading a few operators can be useful</li>
   </ul>
 </div>
 
@@ -753,7 +767,10 @@ sub as_string {
     my $self = shift;
 
     return 'File: ' . $self-&gt;path();
-}</code></pre>
+}
+
+print File-&gt;new( path =&gt; 'foo/bar' );
+# File: foo/bar</code></pre>
 </div>    
 
 <div class="slide">
