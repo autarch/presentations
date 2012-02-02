@@ -560,7 +560,7 @@ sub write {
   <ul>
     <li>What makes this different from imperative programming?</li>
     <li><code>write_file( $path, $content )</code></li>
-    <li>Inheritance, Roles, and Polymorphism is one of the big differences</li>
+    <li>Inheritance, Roles, and Polymorphism are some of the big differences</li>
   </ul>
 </div>
 
@@ -678,13 +678,13 @@ has title =&gt; ( is =&gt; 'ro' );
   <h1>Polymorphism Versus If/Then</h1>
 
   <pre><code>if ( $file->{type} eq 'mp3' ) {
-    # save file with title tag
+    # write file with title tag
 } else {
-    # save file
+    # write file
 }
 
 # Polymorphism lets us write ...
-$file-&gt;save();</code></pre>
+$file-&gt;write();</code></pre>
 </div>
     
 
@@ -883,7 +883,7 @@ else {
 
   <ul>
     <li>Objects can contain other objects</li>
-    <li>A <code>File</code> object may return it's last modified time as a <code>DateTime</code></li>
+    <li>A <code>File</code> object may return its last modified time as a <code>DateTime</code></li>
     <li>This is called <strong>composition</strong></li>
   </ul>
 </div>
