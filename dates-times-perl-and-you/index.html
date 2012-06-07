@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<!--
+  Google HTML5 slide template
+
+  Authors: Luke Mahé (code)
+           Marcin Wichary (code and design)
+           
+           Dominic Mazzoni (browser compatibility)
+           Charles Chen (ChromeVox support)
+
+  URL: http://code.google.com/p/html5slides/
+-->
+
+<html>
+  <head>
+    <title>Dates, Times, Perl, and You</title>
+
+    <meta charset='utf-8'>
+    <script src='slides.js'></script>
+  </head>
+  
+  <style>
+    /* Your individual styles here, or just use inline styles if that’s
+       what you want. */
+
+    article {
+        font-family: Arial;
+    }
+    
+    h3 {
+        font-size: 42px !important;
+    }
+
+    .bigger {
+        font-size: 140%;
+    }
+
+    ul ul:first-child {
+        margin-top: .5em;
+    }
+  </style>
+
+  <body style='display: none'>
+
+    <section class='slides layout-regular template-default'>
+      
+      <!-- Your slides (<article>s) go here. Delete or comment out the
+           slides below. -->
+        
+        
+      
+      <article>
+        <h1>Dates, Times, Perl, and You</h1>
+
+        <p>
+          Dave Rolsky
+          <br />
+          June 15, 2012
+          <br />
+          YAPC::NA 2012
+        </p>
+      </article>
+
+      <article>
+        <h3>Dates and Times are Insane</h3>
+
+        <ul>
+          <li>Calendars</li>
+          <li>Time Zones</li>
+          <li>Daylight Saving Time</li>
+          <li>Leap Seconds!</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Do Not Write Your Own Date and Time Manipulation Code!</h3>
+
+        <ul>
+          <li>Do Not Write Your Own Date and Time Manipulation Code!</li>
+          <li><strong>Do Not Write Your Own Date and Time Manipulation Code!</strong></li>
+          <li class="bigger"><strong>Do Not Write Your Own Date and Time Manipulation Code!</strong></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Seriously</h3>
+
+        <ul>
+          <li>Just don't</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Gregorian Calendar</h3>
+
+        <ul>
+          <li>Based only on earth's revolution around the sun</li>
+          <li>Current world standard</li>
+          <li>DateTime.pm == Gregorian</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Gregorian Calendar for Dummies</h3>
+
+        <ul>
+          <li>365 days in a regular year</li>
+          <li>366 in a leap year</li>
+          <li>Begins on January 1, year 1</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Gregorian Calendar for Dummies</h3>
+
+        <ul>
+          <li>Year 0 == 1 BC(E)</li>
+          <li>May need to tweak the leap year algorithm around year 3000</li>
+          <li>Earth is slowing down</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Simple Dates</h3>
+
+        <pre><code>use DateTime;
+my $dt = DateTime-&gt;new(
+    year   =&gt; 2012,
+    month  =&gt; 6,
+    day    =&gt; 15,
+);
+say $dt-&gt;date();       # 2012-06-15
+say $dt-&gt;month_name(); # June
+</code></pre>
+      </article>
+
+      <article>
+        <h3>Les Dates Simples</h3>
+
+        <pre><code>use DateTime;
+my $dt = DateTime-&gt;new(
+    year   =&gt; 2012,
+    month  =&gt; 6,
+    day    =&gt; 15,
+    locale =&gt; 'fr',
+);
+say $dt-&gt;date();       # 2012-06-15
+say $dt-&gt;month_name(); # Juin
+</code></pre>
+      </article>
+
+      <article>
+        <h3>Other Calendars</h3>
+        <pre><code>use DateTime;
+use DateTime::Calendar::Chinese;
+my $dt = DateTime-&gt;new(
+    year   =&gt; 2012,
+    month  =&gt; 6,
+    day    =&gt; 15,
+);
+my $chdt = DateTime::Calendar::Chinese-&gt;from_object( object =&gt; $dt );
+say $chdt-&gt;cycle();         # 78
+say $chdt-&gt;zodiac_animal(); # dragon
+say $chdt-&gt;celestial_stem(), $chdt-&gt;terrestrial_branch(); # 壬辰
+</code></pre>
+      </article>
+
+      <article>
+        <h3>Time for Dummies</h3>
+
+        <ul>
+          <li>Day length == 1 rotation of the Earth around its axis</li>
+          <li>1 day == 24 hours</li>
+          <li>First hour is hour 0</li>
+          <li>Last hour is hour 23</li>
+          <li>1 hour == 60 minutes</li>
+          <li>1 minute == 60 seconds (almost all of the time)</li>
+          <li>1 day == 86,400 seconds (more or less)</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Atomic Clocks</h3>
+
+        <ul>
+          <li>Ties length of second to physicsy stuff</li>
+          <li>Length of second never changes</li>
+          <li>TAI is the international atomic time standard</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Leap Seconds</h3>
+
+        <ul>
+          <li>AKA "The Devil", "A Really, Really Bad Idea"</li>
+          <li>The earth's rotation is slowing down</li>
+          <li>The length of a second is not</li>
+          <li>We need to resync midnight</li>
+          <li>Bam, leap second announced!</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>UTC</h3>
+
+        <ul>
+          <li>Coordinated Universal Time</li>
+          <li>Temps Universel Coordineé</li>
+          <li>UTC = TAI (atomic time) + leap seconds to date (34)</li>
+          <li>Current world standard</li>
+          <li>Based on time in Greenwich, England</li>
+          <li>Time zones are based on an offset from UTC</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Time Zone Warning</h3>
+
+        <ul>
+          <li>Time zones are political</li>
+          <li>Change all the time for dumb reasons</li>
+          <li>Last US change was pointless</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Time Zone Standards</h3>
+
+        <ul>
+          <li>Olson time zone database is the standard</li>
+          <li><a href="http://www.iana.org/time-zones">http://www.iana.org/time-zones</a></li>
+          <li>An open source data/software project</li>
+          <li>Microsoft does their own thing (of course)</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Time Zone 101</h3>
+
+        <ul>
+          <li>An offset in minutes and hours from UTC</li>
+          <li>Madison is currently at -05:00</li>
+          <li>Also has a name</li>
+          <li>Names are (mostly) continent or ocean + major city
+            <ul>
+              <li>America/Chicago</li>
+              <li>Asia/Taipei</li>
+              <li>Pacific/Fiji</li>
+              <li>America/Argentina/San_Juan</li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Time Zone 102</h3>
+
+        <ul>
+          <li>A named zone is a collection of rules</li>
+          <li>Rules define historical and future DST changes</li>
+          <li>Also define short names like CDT</li>
+          <li>Short names are not unique!</li>
+          <li>Only use short names for display</li>
+        </ul>
+      </article>
+          
+      <article>
+        <h3>Picking Time Zones</h3>
+
+        <ul>
+          <li>The Olson database inclues many historical zones</li>
+          <li>America/Chicago == America/Menominee</li>
+          <li>Menominee moved from Eastern to Central in 1973</li>
+          <li>No API for finding current time zones (yet?)</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>What Time is it There?</h3>
+
+        <pre><code>use DateTime;
+my $dt = DateTime-&gt;new(
+    year      =&gt; 2012,
+    month     =&gt; 6,
+    day       =&gt; 15,
+    hour      =&gt; 13,
+    minute    =&gt; 30,
+    time_zone =&gt; 'America/Chicago',
+);
+
+say $dt-&gt;datetime(); # 2012-06-15T13:30:00
+$dt-&gt;set_time_zone('Asia/Taipei');
+say $dt-&gt;datetime(); # 2012-06-16T02:30:00
+</code></pre>
+      </article>
+
+      <article>
+        <h3>The Floating Time Zone</h3>
+        <pre><code>use DateTime;
+my $dt = DateTime-&gt;now(
+    time_zone =&gt; 'floating',
+);
+</code></pre>
+
+        <ul>
+          <li>No time zone at all</li>
+          <li>No offset conversion when set to a real zone</li>
+          <li>No leap seconds</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>The Floating Time Zone</h3>
+
+        <pre><code>use DateTime;
+my $dt = DateTime-&gt;new(
+    year      =&gt; 2012,
+    month     =&gt; 6,
+    day       =&gt; 15,
+    time_zone =&gt; 'floating',
+);
+
+say $dt-&gt;datetime(); # 2012-06-15T13:30:00
+$dt-&gt;set_time_zone('Asia/Taipei');
+say $dt-&gt;datetime(); # 2012-06-15T13:30:00
+</code></pre>
+      </article>
+
+      <article>
+        <h3>Epochs and the Unix Epoch</h3>
+
+        <ul>
+          <li>An epoch is a reference point for a calendar's start date & time</li>
+          <li>The Unix epoch == 1970-01-01T00:00:00 UTC</li>
+          <li>Unix epoch is counted in seconds</li>
+          <li>Not really UTC since POSIX says we skip leap seconds</li>
+          <li>But not really TAI cause NTP is UTC-based</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Calculating the Epoch</h3>
+
+        <pre><code>use DateTime;
+my $dt = DateTime-&gt;new(
+    year      =&gt; 2012,
+    month     =&gt; 6,
+    day       =&gt; 15,
+    hour      =&gt; 13,
+    minute    =&gt; 30,
+    time_zone =&gt; 'America/Chicago',
+);
+
+say $dt-&gt;epoch(); # 1339792200
+</code></pre>
+      </article>
+
+      <article>
+        <h3>The y2.038k problem</h3>
+
+        <ul>
+          <li>The epoch will no longer fit in a 32-bit int</li>
+          <li>2038-01-19T03:14:07 UTC</li>
+          <li>A 30-year mortgage in 2012 ends in 2042</li>
+          <li>As of Perl 5.12, Perl always uses a 64-bit epoch</li>
+        </ul>
+      </article>
+
+
+      <article>
+        <h3>How to Do Math Safely</h3>
+
+        <p>
+          Use the add and subtract methods.
+        </p>
+
+        <p>
+          Not the set method!
+        </p>
+      </article>
+    </section>
+
+  </body>
+</html>
+<!--
+Gregorian Calendar
+* DateTime.pm
+* arithmetical, solar calendar
+* only based on the earth's rotation around the sun
+* ignores the moon
+* Created in the 16th century
+* The current world standard
+
+== The Gregorian calendar
+
+* 365 days in a regular year, 366 in a leap year
+* Begins on January 1, year 1 - its epoch
+* It does have a year 0
+** equivalent to 1 BC(E)
+* May need another leap year adjustment c. 3000
+** the earth's rotation around the sun is slowing down
+
+Many other calendars
+
+* DateTime::Calendar::Chinese
+* DateTime::Calendar::Julian
+* DateTime::Calendar::Discordian
+
+== UTC
+
+* "Coordinated Universal Time", or "Temps Universel Coordineé"
+* Basis for calculating current local time = UTC + time zone offset
+* An international standard based on atomic clocks
+* Before UTC, the length of a second was based on the earth's revolution
+** but that is slowing down
+* With atomic clocks, a second's length never changes
+
+
+== Leap Seconds
+
+* My personal nemesis
+** they make coding |DateTime.pm| quite difficult
+* As the earth slows down, days grow longer (> 86,400 seconds)
+** an occasional leap second syncs rotation and UTC clock
+
+
+== Time Zones
+
+* Time zones are *geo-political* entities
+** completely arbitrary, can change at a politician's whim
+* Canonical data source: the Olson time zone database
+* Arthur David Olson
+* Now an IANA project
+
+== Time Zones (cont)
+
+* A time zone has several attributes
+** an offset from UTC in minutes and hours
+** a name - usually continent or ocean plus city
+*** America/Toronto
+*** Europe/London
+*** some have three component names - America/Indiana/Knox
+** Also includes Daylight Saving Time rules
+*** when do switches happen
+** a short name for the zone, like EST
+
+== Time Zones (cont)
+
+* The canonical names are the long names!
+* Short names are *not* unique around the world
+* An app with users around the world should only use short names for display
+
+
+== "The" epoch
+
+* Just means the starting date and time for a calendar
+** Gregorian epoch is 0001-01-01 00:00:00
+** Unix epoch is 1970-01-01 00:00:00 UTC
+** Other OS's vary
+* Perl's |time()| uses the OS-native epoch
+* On many OS's, the epoch is a 32-bit signed int
+** Unix epochs can range from 1901-12-13 to 2038-01-19
+
+
+Recommendations and How-Tos
+
+== Convert from one tz to another
+
+== Epoch Bad
+
+* Epochs times are not portable
+* Epoch times have a limited range
+** just wait for the y2.038k bug
+** Or try calculating a 30 year mortgage starting in 2009
+* The POSIX epoch standard ignores leap seconds in a weird way
+
+
+== Dealing with Dates (and no Times)
+
+
+== How to do math correctly
+
+
+== Math gotchas - 23 & 25 hour days
+
+== Math gotchas - nonexistent local times
+
+
+== Math gotchas - month rollover
+
+
+== Math gotchas - commutability of operations
+
+
+
+== Use UTC for storage whenever possible
+
+== Present in local time zone
+
+== _OR_ store time zone with datetime
+
+== Faster object creation
+
+cache tz object
+don't use parser
+local $Params::Validate::NO_VALIDATION = 1;
+-->
