@@ -39,6 +39,10 @@
     ul ul:first-child {
         margin-top: .5em;
     }
+
+    .wrong {
+        color: red;
+    }
   </style>
 
   <body style='display: none'>
@@ -544,140 +548,171 @@ $dt-&gt;add( days =&gt; 1 ); # Throws an exception ...
       </article>
 
       <article>
+        <h3>Math Order Matters</h3>
+
+        <pre><code>my $dt = DateTime-&gt;new(
+    year      =&gt; 2011,
+    month     =&gt; 2,
+    day       =&gt; 28,
+);
+
+$dt-&gt;add( months =&gt; 1, days =&gt; 1 );
+say $dt; # 2011-04-01, not 2011-03-29
+</code></pre>
+      </article>
+
+      <article>
+        <h3>More math gotchas</h3>
+
+        <ul>
+          <li>Math is not always reversible
+            <ul>
+              <li>$dt1 - $dt2 = $dur</li>
+              <li>$dt2 + $dur != $dt1</li>
+            </ul>
+          </li>
+          <li>Math across DST changes is confusing
+            <ul>
+              <li>$dst_date - $non_dst_date = ?</li>
+              <li>Does the duration include the DST change's hour?</li>
+            </ul>
+          </li>
+          <li>Leap years</li>
+          <li>Leap seconds</li>
+        </ul>
+      </article>
+
+      <article>
         <h3>How to Do Math Safely</h3>
 
-        <p>
-          Use the add and subtract methods.
-        </p>
-
-        <p>
-          Not the set method!
-        </p>
+        <ul>
+          <li>Always use <code>add()</code>, <code>delta_days()</code>, <code>subtract()</code>, etc.</li>
+          <li>Never write something like this:<br/>
+            <code class="wrong">$dt-&gt;set( day =&gt; $dt-&gt;day() + 1 )</code></li>
+          <li>Use the floating time zone if you can</li>
+          <li>Use UTC if you can - UTC has no DST changes</li>
+        </ul>
       </article>
+
+      <article>
+        <h3>Ambiguous Local Times</h3>
+
+        <pre><code>my $dt = DateTime-&gt;new(
+    year      =&gt; 2003,
+    month     =&gt; 10,
+    day       =&gt; 26,
+    hour      =&gt; 1,
+    minute    =&gt; 30,
+    second    =&gt; 0,
+    time_zone =&gt; 'America/Chicago',
+);
+</code></pre>
+
+        <ul>
+          <li>Is this standard or DST time?</li>
+          <li>There is a DST change on 2003-10-26 from 01:59:59 (DST) to 01:00:00 (standard)</li>
+          <li>DateTime.pm always picks the latest UTC time</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Storage and Presentation</h3>
+
+        <ul>
+          <li>Store datetimes as floating or UTC whenever possible</li>
+          <li>Or store them as a datetime + time zone (Pg's <code>TIMESTAMP WITH TZ</code> type)</li>
+          <li>Don't store an epoch, store a datetime</li>
+          <li>Use time zones for presentation to users</li>
+          <li><bold>Never</bold> just store datetimes in the machine's current local time zone</li>
+          <li>What happens when you move?</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>(Stupid?) Performance tricks</h2>
+      </article>
+
+      <article>
+        <h3>My Rules of Optimization</h3>
+
+        <ol>
+          <li>Don't optimize</li>
+          <li>Don't optimize, I'm serious</li>
+          <li>Don't optimize without benchmarking first</li>
+          <li>Don't benchmark without profiling first</li>
+          <li>See rule #1</li>
+        </ol>
+      </article>
+
+      <article>
+        <h3>Cache the time zone object</h3>
+
+        <pre><code>my $dt = DateTime-&gt;new(
+    year      =&gt; 2012,
+    month     =&gt; 6,
+    day       =&gt; 15,
+    hour      =&gt; 13,
+    minute    =&gt; 30,
+    time_zone =&gt; 'America/Chicago',
+);
+</code></pre>
+
+        <pre><code>my $tz = DateTime::TimeZone-&gt;new( name =&gt; 'America/Chicago' );
+my $dt = DateTime-&gt;new(
+    year      =&gt; 2012,
+    month     =&gt; 6,
+    day       =&gt; 15,
+    hour      =&gt; 13,
+    minute    =&gt; 30,
+    time_zone =&gt; $tz,
+);
+</code></pre>
+      </article>
+
+      <article>
+        <h3>Don't Use a Parser</h3>
+
+        <ul>
+          <li>If your data only comes in one flavor</li>
+        </ul>
+
+        <pre><code>my $dt = DateTime::Format::Foo-&gt;parse_datetime($string);</code></pre>
+
+        <pre><code>my ( $y, $m, $d ) = $string =~ /^(\d{4})-(\d{2})-(\d{2})/;
+
+my $dt = DateTime-&gt;new(
+    year  =&gt $y,
+    month =&gt $m,
+    day   =&gt $d,
+);
+</code></pre>
+      </article>
+
+      <article>
+        <h3>Don't Validate</h3>
+
+        <ul>
+          <li>If your data is always valid</li>
+        </ul>
+
+        <pre><code>local $Params::Validate::NO_VALIDATION = 1;
+my $dt = DateTime-&gt;new(
+    year  =&gt $y,
+    month =&gt $m,
+    day   =&gt $d,
+);
+</code></pre>
+      </article>
+
+      <article>
+        <h2>Questions?</h2>
+      </article>
+
+      <article>
+        <h2>Thank You</h2>
+      </article>
+
     </section>
 
   </body>
 </html>
-<!--
-Gregorian Calendar
-* DateTime.pm
-* arithmetical, solar calendar
-* only based on the earth's rotation around the sun
-* ignores the moon
-* Created in the 16th century
-* The current world standard
-
-== The Gregorian calendar
-
-* 365 days in a regular year, 366 in a leap year
-* Begins on January 1, year 1 - its epoch
-* It does have a year 0
-** equivalent to 1 BC(E)
-* May need another leap year adjustment c. 3000
-** the earth's rotation around the sun is slowing down
-
-Many other calendars
-
-* DateTime::Calendar::Chinese
-* DateTime::Calendar::Julian
-* DateTime::Calendar::Discordian
-
-== UTC
-
-* "Coordinated Universal Time", or "Temps Universel Coordineé"
-* Basis for calculating current local time = UTC + time zone offset
-* An international standard based on atomic clocks
-* Before UTC, the length of a second was based on the earth's revolution
-** but that is slowing down
-* With atomic clocks, a second's length never changes
-
-
-== Leap Seconds
-
-* My personal nemesis
-** they make coding |DateTime.pm| quite difficult
-* As the earth slows down, days grow longer (> 86,400 seconds)
-** an occasional leap second syncs rotation and UTC clock
-
-
-== Time Zones
-
-* Time zones are *geo-political* entities
-** completely arbitrary, can change at a politician's whim
-* Canonical data source: the Olson time zone database
-* Arthur David Olson
-* Now an IANA project
-
-== Time Zones (cont)
-
-* A time zone has several attributes
-** an offset from UTC in minutes and hours
-** a name - usually continent or ocean plus city
-*** America/Toronto
-*** Europe/London
-*** some have three component names - America/Indiana/Knox
-** Also includes Daylight Saving Time rules
-*** when do switches happen
-** a short name for the zone, like EST
-
-== Time Zones (cont)
-
-* The canonical names are the long names!
-* Short names are *not* unique around the world
-* An app with users around the world should only use short names for display
-
-
-== "The" epoch
-
-* Just means the starting date and time for a calendar
-** Gregorian epoch is 0001-01-01 00:00:00
-** Unix epoch is 1970-01-01 00:00:00 UTC
-** Other OS's vary
-* Perl's |time()| uses the OS-native epoch
-* On many OS's, the epoch is a 32-bit signed int
-** Unix epochs can range from 1901-12-13 to 2038-01-19
-
-
-Recommendations and How-Tos
-
-== Convert from one tz to another
-
-== Epoch Bad
-
-* Epochs times are not portable
-* Epoch times have a limited range
-** just wait for the y2.038k bug
-** Or try calculating a 30 year mortgage starting in 2009
-* The POSIX epoch standard ignores leap seconds in a weird way
-
-
-== Dealing with Dates (and no Times)
-
-
-== How to do math correctly
-
-
-== Math gotchas - 23 & 25 hour days
-
-== Math gotchas - nonexistent local times
-
-
-== Math gotchas - month rollover
-
-
-== Math gotchas - commutability of operations
-
-
-
-== Use UTC for storage whenever possible
-
-== Present in local time zone
-
-== _OR_ store time zone with datetime
-
-== Faster object creation
-
-cache tz object
-don't use parser
-local $Params::Validate::NO_VALIDATION = 1;
--->
