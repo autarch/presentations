@@ -368,6 +368,180 @@ say $dt-&gt;epoch(); # 1339792200
         </ul>
       </article>
 
+      <article>
+        <h3>DateTime::* Ecosystem</h3>
+
+        <ul>
+          <li>Formatter/parsers</li>
+          <li>Other calendars</li>
+          <li>Event and recurrence modules</li>
+          <li>DateTimeX modules</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>Recommendations and Gotchas</h2>
+      </article>
+
+      <article>
+        <h3>There's no DateTime::Date Class</h3>
+
+        <ul>
+          <li>If I could do it all over again ...</li>
+          <li>Use the floating time zone</li>
+          <li>Use the <code>delta_md()</code> and <code>delta_days</code> methods for math</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Calculating the Difference Between Two Dates</h3>
+
+        <pre><code>my $dt1 = DateTime-&gt;new(
+    year      =&gt; 2012,
+    month     =&gt; 6,
+    day       =&gt; 15,
+    time_zone =&gt; 'floating',
+);
+
+my $dt2 = DateTime-&gt;new(
+    year      =&gt; 1973,
+    month     =&gt; 12,
+    day       =&gt; 6,
+    time_zone =&gt; 'floating',
+);
+
+my $duration = $dt1-&gt;delta_days($dt2);
+say $duration-&gt;in_units('days'); # 14071
+</code></pre>
+      </article>
+
+      <article>
+        <h3>DateTime::Duration Has a Terrible API</h3>
+
+        <ul>
+          <li>What moron created this?</li>
+          <li>Internally it stores months, days, minutes, seconds, and nanoseconds</li>
+          <li>Externally has <code>years()</code>, <code>months()</code>, <code>weeks()</code>, <code>days()</code>, etc. methods</li>
+          <li>When you call <code>$duration-&gt;days()</code> you days but not weeks</li>
+          <li>Use <code>$duration-&gt;in_units('days')</code> instead</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Say What, DateTime::Duration?</h3>
+
+        <pre><code>my $dt1 = DateTime-&gt;new(
+    year      =&gt; 2012,
+    month     =&gt; 6,
+    day       =&gt; 15,
+    time_zone =&gt; 'floating',
+);
+
+my $dt2 = DateTime-&gt;new(
+    year      =&gt; 1973,
+    month     =&gt; 12,
+    day       =&gt; 6,
+    time_zone =&gt; 'floating',
+);
+
+my $duration = $dt1-&gt;delta_days($dt2);
+say $duration-&gt;days();           # 1 ... WTF?
+say $duration-&gt;weeks()           # 2010
+say $duration-&gt;in_units('days'); # 14071
+</code></pre>
+      </article>
+
+      <article>
+        <h2>DateTime Math is Hard<br/>Let's Go Shopping</h2>
+      </article>
+
+      <article>
+        <h3>How Long is a Month?</h3>
+
+        <pre><code>my $dt = ...; # 2009-02-01
+$dt-&gt;add( days =&gt; 28 );
+say $dt; # 2009-03-01
+$dt-&gt;add( days =&gt; 28 );
+say $dt; # 2009-03-29
+</code></pre>
+      </article>
+
+      <article>
+        <h3>How Long is a Month??</h3>
+
+        <pre><code>my $dt = ...; # 2009-01-30
+$dt-&gt;add( months =&gt; 1 );
+say $dt; # 2009-03-02
+$dt-&gt;add( months =&gt; 1 );
+say $dt; # 2009-04-02
+</code></pre>
+      </article>
+
+      <article>
+        <h3>How Long is a Month??!</h3>
+
+        <pre><code>my $dt = ...; # 2009-01-30
+$dt-&gt;add( months =&gt; 1, end_of_month =&gt; 'limit' );
+say $dt; # 2009-02-28
+$dt-&gt;add( months =&gt; 1 );
+say $dt; # 2009-03-28
+</code></pre>
+      </article>
+
+      <article>
+        <h3>How Long is a Day?</h3>
+
+        <pre><code>my $dt = DateTime-&gt;new(
+    year      =&gt; 2012,
+    month     =&gt; 11,
+    day       =&gt; 4,
+    hour      =&gt; 0,
+    time_zone =&gt; 'America/Chicago',
+);
+
+say $dt; # 2012-11-04T00:00:00
+$dt-&gt;add( hours =&gt; 1 );
+say $dt; # 2012-11-04T01:00:00
+$dt-&gt;add( hours =&gt; 1 );
+say $dt; # 2012-11-04T01:00:00
+</code></pre>
+      </article>
+
+      <article>
+        <h3>How Long is a Day?</h3>
+
+        <pre><code>my $dt = DateTime-&gt;new(
+    year      =&gt; 2012,
+    month     =&gt; 3,
+    day       =&gt; 11,
+    hour      =&gt; 0,
+    time_zone =&gt; 'America/Chicago',
+);
+
+say $dt; # 2012-03-11T00:00:00
+$dt-&gt;add( hours =&gt; 1 );
+say $dt; # 2012-03-11T01:00:00
+$dt-&gt;add( hours =&gt; 1 );
+say $dt; # 2012-03-11T03:00:00
+</code></pre>
+      </article>
+
+      <article>
+        <h3>No 02:00 for You!</h3>
+
+        <pre><code>my $dt = DateTime-&gt;new(
+    year      =&gt; 2012,
+    month     =&gt; 3,
+    day       =&gt; 10,
+    hour      =&gt; 2,
+    time_zone =&gt; 'America/Chicago',
+);
+
+say $dt; # 2012-03-11T00:00:00
+$dt-&gt;add( days =&gt; 1 ); # Throws an exception ...
+# Invalid local time for date in time zone: America/Chicago
+</code></pre>
+      </article>
 
       <article>
         <h3>How to Do Math Safely</h3>
