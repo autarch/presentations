@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<!--
+  Google HTML5 slide template
+
+  Authors: Luke Mahé (code)
+           Marcin Wichary (code and design)
+           
+           Dominic Mazzoni (browser compatibility)
+           Charles Chen (ChromeVox support)
+
+  URL: http://code.google.com/p/html5slides/
+-->
+
+<html>
+  <head>
+    <title>Sh^WStuff I'm Working On</title>
+
+    <meta charset='utf-8'>
+    <script src='slides.js'></script>
+  </head>
+  
+  <style>
+    /* Your individual styles here, or just use inline styles if that’s
+       what you want. */
+
+    article {
+        font-family: Arial;
+    }
+    
+    h3 {
+        font-size: 42px !important;
+    }
+
+    .bigger {
+        font-size: 140%;
+    }
+
+    ul ul:first-child {
+        margin-top: .5em;
+    }
+
+    .wrong {
+        color: red;
+    }
+  </style>
+
+  <body style='display: none'>
+
+    <section class='slides layout-regular template-default'>
+      
+      <!-- Your slides (<article>s) go here. Delete or comment out the
+           slides below. -->
+        
+        
+      
+      <article>
+        <h1>Sh^WStuff I'm Working On</h1>
+
+        <p>
+          Dave Rolsky
+          <br />
+          June 15, 2012
+          <br />
+          YAPC::NA 2012
+        </p>
+      </article>
+
+      <article>
+        <h2>Database::Migrator</h2>
+      </article>
+
+      <article>
+        <h3>Simple Migration Toolkit</h3>
+
+        <ul>
+          <li>Create a database from a schema file</li>
+          <li>Apply migrations to an existing schema</li>
+          <li>You supply the migrations</li>
+          <li>A migration is 1+ SQL and/or Perl file(s)</li>
+          <li>Migrations are stored by name in the database</li>
+          <li>Migrations not in the database are run and inserted</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Migration Example</h3>
+
+        <pre><code>package MyApp::Migrator;
+use Moose;
+extends 'Database::Migrator::mysql';
+
+has '+database' =&gt; (
+    required =&gt; 0,
+    default  =&gt; 'MyApp',
+);
+</code></pre>
+
+        <div>bin/myapp-migrate</div>
+
+        <pre><code>use MyApp::Migrator;
+MyApp::Migrator-&gt;new_with_options()-&gt;run();
+</code></pre>
+      </article>
+
+      <article>
+        <h3>CLI Script is Optional</h3>
+
+        <pre><code>MyApp::Migrator-&gt;new(
+    migrations_dir =&gt; 'path/to/migrations',
+)-&gt;run();</code></pre>
+      </article>
+
+      <article>
+        <h3>Needs More Database Support</h3>
+
+        <ul>
+          <li>Right now only does MySQL</li>
+          <li>)':</li>
+          <li>Database support code is very trivial</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>Module::Implementation</h2>
+      </article>
+
+      <article>
+        <h3>XS vs PP, Win32 vs *nix, Etc.</h3>
+
+        <pre><code>package Class::Load;
+
+use Module::Implementation 0.04;
+
+{
+    my $loader = Module::Implementation::build_loader_sub(
+        implementations =&gt; [ 'XS', 'PP' ],
+        symbols         =&gt; ['is_class_loaded'],
+    );
+
+    $loader-&gt;();
+}
+</code></pre>
+      </article>
+
+      <article>
+        <h3>What it Does</h3>
+
+        <ul>
+          <li>Tries to load <code>Class::Load::XS</code>, <code>Class::Load::PP</code>, etc.</li>
+          <li>Stops when one loads</li>
+          <li>Copies symbols from the implementation class to the class which does the loading</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>Courriel</h2>
+      </article>
+
+      <article>
+        <h3>Qu'est ce que c'est?</h3>
+
+        <ul>
+          <li>Email parser and creator</li>
+          <li>With a (mostly?) sane API</li>
+          <li>I think others are actually using this</li>
+          <li>Not a psycho killer</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Parsing</h3>
+
+        <pre><code>my $email = Courriel-&gt;parse( text =&gt; $raw_email );
+ 
+say $email-&gt;subject();
+ 
+say $_-&gt;address() for $email-&gt;participants();
+ 
+say $email-&gt;datetime()-&gt;year();
+ 
+if ( my $part = $email-&gt;plain_body_part() ) {
+    say $part-&gt;content();
+}
+</code></pre>
+      </article>
+
+      <article>
+        <h3>Building</h3>
+
+        <pre><code>use Courriel::Builder;
+ 
+my $email = build_email(
+    subject('An email for you'),
+    from   ('joe@example.com'),
+    to     ( 'jane@example.com', 'alice@example.com' ),
+    header ( 'X-Generator' =&gt; 'MyApp' ),
+    plain_body($plain_text),
+    html_body(
+        $html,
+        attach('path/to/image.jpg'),
+        attach('path/to/other-image.jpg'),
+    ),
+    attach('path/to/spreadsheet.xls'),
+    attach($file_content),
+);
+</code></pre>
+      </article>
+
+      <article>
+        <h3>That's all</h3>
+
+        <ul>
+          <li>It's been a slow year</li>
+        </ul>
+      </article>
+
+    </section>
+
+  </body>
+</html>
