@@ -447,7 +447,7 @@ say $duration-&gt;in_units('days'); # 14071
           <li>What moron created this?</li>
           <li>Internally it stores months, days, minutes, seconds, and nanoseconds</li>
           <li>Externally has <code>years()</code>, <code>months()</code>, <code>weeks()</code>, <code>days()</code>, etc. methods</li>
-          <li>When you call <code>$duration-&gt;days()</code> you days but not weeks</li>
+          <li>When you call <code>$duration-&gt;days()</code> you get days but not weeks</li>
           <li>Use <code>$duration-&gt;in_units('days')</code> instead</li>
         </ul>
       </article>
@@ -562,7 +562,7 @@ say $dt; # 2012-03-11T03:00:00
     time_zone =&gt; 'America/Chicago',
 );
 
-say $dt; # 2012-03-11T00:00:00
+say $dt; # 2012-03-11T00:02:00
 $dt-&gt;add( days =&gt; 1 ); # Throws an exception ...
 # Invalid local time for date in time zone: America/Chicago
 </code></pre>
