@@ -76,7 +76,7 @@
           <br />
           IRC: autarch
           <br />
-          June 15, 2012
+          June 5, 2013
           <br />
           YAPC::NA 2013
         </p>
@@ -152,11 +152,11 @@
 
         <pre><code>use DateTime;
 my $dt = DateTime-&gt;new(
-    year   =&gt; 2012,
+    year   =&gt; 2013,
     month  =&gt; 6,
-    day    =&gt; 15,
+    day    =&gt; 5,
 );
-say $dt-&gt;date();       # 2012-06-15
+say $dt-&gt;date();       # 2013-06-05
 say $dt-&gt;month_name(); # June
 </code></pre>
       </article>
@@ -166,12 +166,12 @@ say $dt-&gt;month_name(); # June
 
         <pre><code>use DateTime;
 my $dt = DateTime-&gt;new(
-    year   =&gt; 2012,
+    year   =&gt; 2013,
     month  =&gt; 6,
-    day    =&gt; 15,
+    day    =&gt; 5,
     locale =&gt; 'fr',
 );
-say $dt-&gt;date();       # 2012-06-15
+say $dt-&gt;date();       # 2013-06-05
 say $dt-&gt;month_name(); # Juin
 </code></pre>
       </article>
@@ -181,14 +181,14 @@ say $dt-&gt;month_name(); # Juin
         <pre><code>use DateTime;
 use DateTime::Calendar::Chinese;
 my $dt = DateTime-&gt;new(
-    year   =&gt; 2012,
+    year   =&gt; 2013,
     month  =&gt; 6,
-    day    =&gt; 15,
+    day    =&gt; 5,
 );
 my $chdt = DateTime::Calendar::Chinese-&gt;from_object( object =&gt; $dt );
 say $chdt-&gt;cycle();         # 78
-say $chdt-&gt;zodiac_animal(); # dragon
-say $chdt-&gt;celestial_stem(), $chdt-&gt;terrestrial_branch(); # 壬辰
+say $chdt-&gt;zodiac_animal(); # snake
+say $chdt-&gt;celestial_stem(), $chdt->terrestrial_branch(); # 癸巳
 </code></pre>
       </article>
 
@@ -308,17 +308,17 @@ say $chdt-&gt;celestial_stem(), $chdt-&gt;terrestrial_branch(); # 壬辰
 
         <pre><code>use DateTime;
 my $dt = DateTime-&gt;new(
-    year      =&gt; 2012,
+    year      =&gt; 2013,
     month     =&gt; 6,
-    day       =&gt; 15,
-    hour      =&gt; 13,
+    day       =&gt; 5,
+    hour      =&gt; 9,
     minute    =&gt; 30,
     time_zone =&gt; 'America/Chicago',
 );
 
-say $dt-&gt;datetime(); # 2012-06-15T13:30:00
+say $dt-&gt;datetime(); # 2013-06-05T09:30:00
 $dt-&gt;set_time_zone('Asia/Taipei');
-say $dt-&gt;datetime(); # 2012-06-16T02:30:00
+say $dt-&gt;datetime(); # 2013-06-05T22:30:00
 </code></pre>
       </article>
 
@@ -342,15 +342,17 @@ my $dt = DateTime-&gt;now(
 
         <pre><code>use DateTime;
 my $dt = DateTime-&gt;new(
-    year      =&gt; 2012,
+    year      =&gt; 2013,
     month     =&gt; 6,
-    day       =&gt; 15,
+    day       =&gt; 5,
+    hour      =&gt; 9,
+    minute    =&gt; 30,
     time_zone =&gt; 'floating',
 );
 
-say $dt-&gt;datetime(); # 2012-06-15T13:30:00
+say $dt-&gt;datetime(); # 2013-06-05T09:30:00
 $dt-&gt;set_time_zone('Asia/Taipei');
-say $dt-&gt;datetime(); # 2012-06-15T13:30:00
+say $dt-&gt;datetime(); # 2013-06-05T09:30:00
 </code></pre>
       </article>
 
@@ -371,15 +373,15 @@ say $dt-&gt;datetime(); # 2012-06-15T13:30:00
 
         <pre><code>use DateTime;
 my $dt = DateTime-&gt;new(
-    year      =&gt; 2012,
+    year      =&gt; 2013,
     month     =&gt; 6,
-    day       =&gt; 15,
-    hour      =&gt; 13,
+    day       =&gt; 5,
+    hour      =&gt; 9,
     minute    =&gt; 30,
     time_zone =&gt; 'America/Chicago',
 );
 
-say $dt-&gt;epoch(); # 1339792200
+say $dt-&gt;epoch(); # 1370442600
 </code></pre>
       </article>
 
@@ -389,7 +391,7 @@ say $dt-&gt;epoch(); # 1339792200
         <ul>
           <li>The epoch will no longer fit in a 32-bit int</li>
           <li>2038-01-19T03:14:07 UTC</li>
-          <li>A 30-year mortgage in 2012 ends in 2042</li>
+          <li>A 30-year mortgage in 2013 ends in 2043</li>
           <li>As of Perl 5.12, Perl always uses a 64-bit epoch</li>
         </ul>
       </article>
@@ -423,9 +425,9 @@ say $dt-&gt;epoch(); # 1339792200
         <h3>Calculating the Difference Between Two Dates</h3>
 
         <pre><code>my $dt1 = DateTime-&gt;new(
-    year      =&gt; 2012,
+    year      =&gt; 2013,
     month     =&gt; 6,
-    day       =&gt; 15,
+    day       =&gt; 5,
     time_zone =&gt; 'floating',
 );
 
@@ -437,7 +439,7 @@ my $dt2 = DateTime-&gt;new(
 );
 
 my $duration = $dt1-&gt;delta_days($dt2);
-say $duration-&gt;in_units('days'); # 14071
+say $duration-&gt;in_units('days'); # 14426
 </code></pre>
       </article>
 
@@ -457,9 +459,9 @@ say $duration-&gt;in_units('days'); # 14071
         <h3>Say What, DateTime::Duration?</h3>
 
         <pre><code>my $dt1 = DateTime-&gt;new(
-    year      =&gt; 2012,
+    year      =&gt; 2013,
     month     =&gt; 6,
-    day       =&gt; 15,
+    day       =&gt; 5,
     time_zone =&gt; 'floating',
 );
 
@@ -471,9 +473,9 @@ my $dt2 = DateTime-&gt;new(
 );
 
 my $duration = $dt1-&gt;delta_days($dt2);
-say $duration-&gt;days();           # 1 ... WTF?
-say $duration-&gt;weeks()           # 2010
-say $duration-&gt;in_units('days'); # 14071
+say $duration-&gt;days();           # 6 ... WTF?
+say $duration-&gt;weeks();          # 2060
+say $duration-&gt;in_units('days'); # 14426
 </code></pre>
       </article>
 
@@ -670,10 +672,10 @@ say $dt; # 2011-04-01, not 2011-03-29
         <h3>Cache the time zone object</h3>
 
         <pre><code>my $dt = DateTime-&gt;new(
-    year      =&gt; 2012,
+    year      =&gt; 2013,
     month     =&gt; 6,
-    day       =&gt; 15,
-    hour      =&gt; 13,
+    day       =&gt; 5,
+    hour      =&gt; 9,
     minute    =&gt; 30,
     time_zone =&gt; 'America/Chicago',
 );
@@ -681,10 +683,10 @@ say $dt; # 2011-04-01, not 2011-03-29
 
         <pre><code>my $tz = DateTime::TimeZone-&gt;new( name =&gt; 'America/Chicago' );
 my $dt = DateTime-&gt;new(
-    year      =&gt; 2012,
+    year      =&gt; 2013,
     month     =&gt; 6,
-    day       =&gt; 15,
-    hour      =&gt; 13,
+    day       =&gt; 5,
+    hour      =&gt; 9,
     minute    =&gt; 30,
     time_zone =&gt; $tz,
 );
