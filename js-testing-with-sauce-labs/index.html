@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<!--
+  Google HTML5 slide template
+
+  Authors: Luke Mahé (code)
+           Marcin Wichary (code and design)
+           
+           Dominic Mazzoni (browser compatibility)
+           Charles Chen (ChromeVox support)
+
+  URL: http://code.google.com/p/html5slides/
+-->
+
+<html>
+  <head>
+    <title>Testing a JavaScript API in 50 Browser with Sauce Labs</title>
+
+    <meta charset='utf-8'>
+    <script src='slides.js'></script>
+  </head>
+  
+  <style>
+    /* Your individual styles here, or just use inline styles if that’s
+       what you want. */
+   
+    h3 {
+        font-size: 42px !important;
+    }
+
+    .bigger {
+        font-size: 140%;
+    }
+
+    ul ul:first-child {
+        margin-top: .5em;
+    }
+
+    div.image-block {
+        font-size: 40%;
+        font-style: italic;
+        position: absolute;
+        bottom: 0px;
+    }
+
+    div.image-block img {
+        display: block;
+    }
+
+    img.right {
+        float: right;
+    }
+
+    div.attribution {
+        color: #222;
+        font-size: 50%;
+        font-style: italic;
+        position: absolute;
+        bottom: 0px;
+    }
+
+    blockquote {
+        font-size: 80%;
+        margin-bottom: 0;
+    }
+
+    blockquote span.quote {
+        font-style: italic;
+    }
+
+    blockquote span.attribution {
+        font-size: 80%;
+    }
+
+    pre.equation {
+        font-size: 150%;
+        line-height: 1.2;
+    }
+  </style>
+
+  <body style='display: none'>
+
+    <section class='slides layout-regular template-default'>
+      
+      <!-- Your slides (<article>s) go here. Delete or comment out the
+           slides below. -->
+      
+      <article>
+        <h1>Testing a JavaScript API in 50 Browser with Sauce Labs</h1>
+
+        <p>Well, 50-ish, I didn't count</p>
+
+        <p style="font-size:70%">
+          Probably at least 30. It's a lot, anyway. Or a fair number. I guess
+          it depends on your perspective. But that's all beside the point. I
+          just picked 50 cause it's nice number.
+        </p>
+
+        <p>
+          Dave Rolsky
+          <br />
+          MaxMind
+        </p>
+      </article>
+
+      <article>
+        <h3>MaxMind GeoIP2 JS API</h3>
+
+        <br>
+        <img src="browsers.png">
+      </article>
+
+      <article>
+        <h3>The Challenge</h3>
+
+        <ul>
+          <li>
+            We say we support those browsers, but how do we know?
+          </li>
+          <li>
+            With tests, of course.
+          </li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>The Tests</h3>
+
+        <ul>
+          <li>
+            Tested with QUnit - <a href="http://qunitjs.com/">http://qunitjs.com/</a>
+          </li>
+        </ul>
+
+        <pre><code>deepEqual(
+    response,
+    expect,
+    "GeoIP2 Country response as seen by success callback"
+);
+equal(
+    request.urlParts.protocol,
+    "https",
+    "request protocol is https for modern browsers"
+);</code></pre>
+
+        <ul>
+          <li><strong>Ill-advised live demo!</strong></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Next Problem</h3>
+
+        <ul>
+          <li>QUnit reports results in the browser</li>
+          <li>I want these tests to run without a human</li>
+          <li>... and I need to report the results back to Jenkins</li>
+          <li>... and I need to run them in 50 (40? 30?) browsers</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>A Veritable Plethora of Browsers</h3>
+
+        <ul>
+          <li>Sauce Labs provides a "browser in a VM" service</li>
+          <li>Request a browser with the Selenium JSON Wire Protocol</li>
+          <li>Do stuff in the browser</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Reporting Back to Jenkins</h3>
+
+        <ul>
+          <li>Capture results from QUnit</li>
+        </ul>
+
+        <pre><code>document.results = {
+    assertions: [],
+    done: false
+};
+/* Called after each assertion (equal, deepEqual, etc.) */
+QUnit.log(
+    function(result) {
+        document.results.assertions.push(result);
+    }
+);
+/* Called after all the tests have run */
+QUnit.done(
+    function(results) {
+        document.results.done = true;
+    }
+);</code></pre>
+      </article>
+
+      <article>
+        <h3>Reporting Back to Jenkins</h3>
+
+        <ul>
+          <li>Use <code>Selenium::Remote::Driver</code> to ask the browser</li>
+        </ul>
+
+        <pre><code>$results = $driver->execute_script('return document.results');</code></pre>
+      </article>
+
+      <article>
+        <h3>Reporting Back to Jenkins</h3>
+
+        <ul>
+          <li>Replay the tests as TAP</li>
+        </ul>
+
+        <pre><code>for my $test ( @{ $results->{assertions} // [] } ) {
+    if ( $test->{fail} ) { ... }
+    elsif ( $test->{skip} ) { ... }
+
+    my $desc = $self->_test_description(...);
+
+    if ( ref $test->{expect} ) {
+        is_deeply( $test->{actual}, $test->{expect}, $desc );
+    }
+    elsif ( $test->{expect} ) {
+        is( $test->{actual}, $test->{expect}, $desc );
+    }
+    else {
+        ok( $test->{result}, $desc );
+    }
+}</code></pre>
+      </article>
+
+      <article>
+        <h3>Things I'm Glossing Over</h3>
+
+        <ul>
+          <li>Handling failure to start a browser</li>
+          <li>Handling the browser tests stopping all JS execution</li>
+          <li>Handling error responses from Sauce Labs</li>
+          <li>Basically all the hard parts</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Run the Tests in Parallel</h3>
+
+        <ul>
+          <li>Our Sauce Labs subscription plan allows 4 parallel browsers</li>
+          <li>I love <code>Parallel::ForkManager</code></li>
+        </ul>
+
+        <pre><code>my $pm = Parallel::ForkManager->new(4);
+
+for my $browser (@browsers) {
+    $pm->start() and next;
+
+    diag( $self->_browser_summary($browser) );
+    my $results = $self->_results_for_browser($browser);
+
+    $pm->finish( 0, { results => $results, browser => $browser } );
+}</code></pre>
+      </article>
+
+      <article>
+        <h3>Collect the Results in the Parent</h3>
+
+        <pre><code>$pm->run_on_finish(
+    sub {
+        my ( undef, undef, undef, undef, undef, $message ) = @_;
+
+        if ( $message->{results} ) {
+            $self->_run_results_as_tests(
+                $message->{results},
+                $message->{browser},
+            );
+        }
+        else { # handle weird failure }
+    }
+);</code></pre>
+      </article>
+
+      <article>
+        <h3>Weird <strike>Sh</strike>Stuff Happens</h3>
+
+        <ul>
+          <li>Get the results from the browser</li>
+          <li>The <code>QUnit.done</code> event was handled</li>
+          <li>Only have results for 5 tests instead of 41</li>
+          <li>Tests run fine if done manually</li>
+          <li>What ... the ... fork?</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Anyone Know What the <strike>Fu</strike>Heck is Happening?</h3>
+
+        <ul>
+          <li>Please come tell me what i'm doing wrong</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Summary</h3>
+
+        <ul>
+          <li>Test your JS</li>
+          <li>Test it in multiple browsers</li>
+          <li>Never do anything by hand that you can automate</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>Thank You</h2>
+      </article>
+
+    </section>
+  </body>
+</html>

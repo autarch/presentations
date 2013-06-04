@@ -1,0 +1,85 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+
+my %opts;
+GetOptions(
+    'verbose' => \$opts{verbose},
+    'open'    => \$opts{open},
+    'port:i'  => \$opts{port},
+);
+
+my $server = My::Server->new( $opts{port} || 9000 );
+$server->run();
+
+package My::Server;
+
+use base 'HTTP::Server::Simple';
+
+use DateTime;
+use File::Slurp qw( read_file );
+use MIME::Types;
+use Path::Class qw( file );
+
+my $CRLF;
+BEGIN { $CRLF = "\r\n"; }
+
+my %ok;
+BEGIN {
+    %ok = map { $_ => 1 } qw( 127.0.0.1 );
+}
+
+my $local_tz;
+BEGIN { $local_tz = DateTime::TimeZone->new( name => 'local' ) }
+
+my $Types;
+BEGIN { $Types = MIME::Types->new(); }
+
+sub setup {
+    my $self = shift;
+    my %req  = @_;
+
+    die "Bad client: $req{peername}"
+        unless $opts{open} || $ok{ $req{peername} };
+
+    if ( $opts{verbose} ) {
+        warn "\n", $req{peername}, "\n";
+        warn DateTime->now( time_zone => $local_tz )->datetime, "\n";
+    }
+
+    $self->{file} = $req{path};
+}
+
+sub handler {
+    my $self = shift;
+
+    my $request = $self->{file};
+    $request =~ s{^/}{};
+
+    my $file = file( '.', $request );
+
+    warn "$file\n" if $opts{verbose};
+
+    return _fnf() unless -f $file;
+
+    my $type = $Types->mimeTypeOf($file);
+    $type ||= $Types->type('text/html');
+
+    print "HTTP/1.0 200 OK$CRLF";
+    print "Content-Type: " . $type->type() . $CRLF;
+    # We don't want our test files cached
+    print "Cache-Control: no-cache, no-store, must-revalidate$CRLF";
+    print "Pragma: no-cache$CRLF";
+    print "Expires: 0$CRLF";
+    print $CRLF;
+
+    print read_file( $file->stringify() );
+}
+
+sub _fnf {
+    print "HTTP/1.0 404 NOT FOUND$CRLF$CRLF";
+}
+
