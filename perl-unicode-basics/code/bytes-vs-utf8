@@ -1,0 +1,13 @@
+use strict;
+use warnings;
+use v5.16;
+use Encode qw( decode );
+
+my $bytes = join q{}, map { chr($_) } 240, 159, 152, 184;
+say length $bytes;
+
+my $utf8 = decode('UTF-8', $bytes);
+say length $utf8;
+
+binmode STDOUT, ':encoding(UTF-8)';
+say $utf8;

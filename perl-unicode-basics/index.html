@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <title>Basics of Unicode in Perl</title>
+  <meta name="description" content="Basics of Unicode in Perl" />
+  <meta name="author" content="Dave Rolsky" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="css/reveal.min.css" />
+  <link rel="stylesheet" href="css/theme/basic.css" id="theme" />
+
+  <script>
+document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+  </script>
+  <!--[if lt IE 9]>
+      <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->
+
+  <style type="text/css">
+/*<![CDATA[*/
+  iframe.c4 {margin:0;overflow:hidden;border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px}
+  code.c3 {word-wrap: break-word;}
+  code.c2 {font-size: 18px; margin-top: 20px;}
+  img.c1 {-webkit-transform: rotate(180deg);}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="title-slide" data-state="title-slide">
+        <h1>Basics of Unicode in Perl</h1>
+        Dave Rolsky
+      </section>
+
+      <section>
+        <h2>Character Sets</h2>
+
+        <ul>
+          <li>Mapping of numbers to characters</li>
+          <li>ASCII - 0-127</li>
+          <li>Latin-1 (aka ISO-8859-1) - 0-255</li>
+          <li>Unicode - 0-2^32</li>
+        </ul>
+
+        <aside class="notes">
+          <ul>
+            <li>Unicode has about 110,000 characters right now</li>
+          </ul>
+        </aside>
+
+      </section>
+
+      <section>
+        <h2>Character Encoding</h2>
+
+        <ul>
+          <li>Mapping of byte patterns to characters</li>
+          <li>ASCII & Latin-1 use a single byte per character</li>
+          <li>Unicode is <em>not</em> a character encoding!</li>
+          <li>UTF-8, UTF-16, and UTF-32 are multibyte encodings for the Unicode set</li>
+        </ul>
+
+        <aside class="notes">
+          <ul>
+            <li>Byte patterns can be simple - a single 7-bit number for ASCII, 8-bit for Latin-1</li>
+            <li>Multibyte patterns are needed for languages with more than 256 characters</li>
+            <li>Unicode is a character set</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Encoding vs Set Confusion</h2>
+
+        <ul>
+          <li>Often used interchangeably</li>
+          <li>Set is abstract</li>
+          <li>Encoding defines a concrete representation</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Perl's Internals</h2>
+
+        <ul>
+          <li>Scalar contains bytes (0-255)</li>
+          <li>Bytes can be <em>interpreted</em> as UTF-8 characters</li>
+          <li>The "UTF-8 flag"</li>
+        </ul>
+        
+        <aside class="notes">
+          <ul>
+            <li>Interpretation affects all string operations - length, substr, regex matches, etc.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Bytes vs Characters</h2>
+
+        <pre><code>use strict;
+use warnings;
+use v5.16;
+use Encode qw( decode );
+
+my $bytes = join q{}, map { chr($_) } 240, 159, 152, 184;
+say length $bytes; # 4
+
+my $utf8 = decode('UTF-8', $bytes);
+say length $utf8; # 1
+
+binmode STDOUT, ':encoding(UTF-8)';
+say $utf8;</code></pre>
+
+        <aside class="notes">
+          <ul>
+            <li>$bytes and $utf8 contain an identical sequence of bytes</li>
+            <li>Using decode() tells Perl that we expect the output to be treated as characters</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Bytes vs Characters Output</h2>
+
+        <pre><code>$ perl code/bytes-vs-utf8 
+4
+1
+😸
+</code></pre>
+      </section>
+
+      <section>
+        <h2><code>decode()</code> and <code>encode()</code></h2>
+
+        <ul>
+          <li><code>decode()</code> - from any encoding to Perl's internal representation</li>
+          <li><code>encode()</code> - from Perl's internal representation to any encoding</li>
+        </ul>
+
+        <aside class="notes">
+          <ul>
+            <li>With UTF-8 data this is almost a no-op</li>
+            <li>Except that it tells Perl that we want this scalar to contain character or bytes</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>When to <code>decode()</code> and <code>encode()</code></h2>
+
+        <ul>
+          <li>Decode all incoming data</li>
+          <li>Encode all outgoing data</li>
+        </ul>
+
+        <aside class="notes">
+          <ul>
+            <li>Always decode/encode at boundaries - files, network, database, etc.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Handle (File) I/O</h2>
+
+        <pre><code>open my $fh, '&lt;:encoding(UTF-8)', $file;
+my $content = read_file( $file, binmode =&gt; ':encoding(UTF-8)' );</code></pre>
+
+        <pre><code>use open ':encoding(UTF-8)';</code></pre>
+
+        <pre><code>use open ':std', ':encoding(UTF-8)';</code></pre>
+
+      </section>
+
+      <section>
+        <h2>Web Pages & Services</h2>
+
+        <pre><code>my $ua = LWP::UserAgent-&gt;new();
+my $response = $ua-&gt;get($url);
+my $content = $response-&gt;decoded_content()</code></pre>
+
+        <pre><code>my $content = JSON-&gt;new()-&gt;utf8()-&gt;decode($json);</code></pre>
+      </section>
+      
+      <section>
+        <h2>Databases</h2>
+
+        <pre><code>use DBD::Pg 3.0;
+my $dbh = DBD::Pg->connect(...);</code></pre>
+
+        <aside class="notes">
+          <ul>
+            <li>Each driver has its own settings - some require explicit flags</li>
+            <li>Some drivers don't provide any help</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Unicode Characters in Your Code</h2>
+<pre><code>use strict;
+use warnings;
+use v5.16;
+my $bytes = "😸";
+say length $bytes; # 4
+
+use utf8;
+my $utf8 = "😸";
+say length $utf8; # 1</code></pre>
+
+      </section>
+
+      <section>
+        <h2>Unicode Characters in Your Code (Take Two)</h2>
+
+        <pre><code>use strict;
+use warnings;
+use v5.16;
+
+my $utf8_by_code = "\x{1f638}";
+say length $utf8_by_code;
+
+use charnames ':full';
+my $utf8_by_name = "\N{GRINNING CAT FACE WITH SMILING EYES}";
+say length $utf8_by_name;</code></pre>
+
+        <aside class="notes">
+          <ul>
+            <li>These are arguably better since they display cleanly in any font</li>
+            <li>The next person working on your code will not use the same fonts as you</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Regex Character Classes</h2>
+
+        <pre><code>use strict;
+use warnings;
+use v5.16;
+use open ':std', ':encoding(UTF-8)';
+
+
+my @strings = ( '12', "\x{ff11}\x{ff12}" );
+for my $string (@strings) {
+    if ( $string =~ /^\p{N}+$/ ) {
+        say "Unicode Number $string";
+    }
+
+    if ( $string =~ /^\d+$/a ) {
+        say "ASCII Number $string";
+    }
+}
+</code></pre>
+      </section>
+
+      <section>
+        <h2>Regex Character Classes Output</h2>
+
+        <pre><code>$ perl code/regex 
+Unicode Number 12
+ASCII Number 12
+Unicode Number １２</code></pre>
+
+        <aside class="notes">
+          <ul>
+            <li>Regex character classes like \d and \w match Unicode chars</li>
+            <li>Mostly matters for number - use /a modifier</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Advanced topics</h2>
+
+        <ul>
+          <li>Composing characters & normal forms</li>
+          <li>Sorting</li>
+          <li>Character properties</li>
+          <li>Unicode and fonts</li>
+        </ul>
+      </section>
+
+    </div>
+  </div>
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.min.js"></script>
+  <script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize(
+    {
+        maxScale: 2.0,
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+  </script>
+</body>
+</html>

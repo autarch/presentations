@@ -1,0 +1,16 @@
+use strict;
+use warnings;
+use v5.16;
+use open ':std', ':encoding(UTF-8)';
+
+
+my @strings = ( '12', "\x{ff11}\x{ff12}" );
+for my $string (@strings) {
+    if ( $string =~ /^\p{N}+$/ ) {
+        say "Unicode Number $string";
+    }
+
+    if ( $string =~ /^\d+$/a ) {
+        say "ASCII Number $string";
+    }
+}
