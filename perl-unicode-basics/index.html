@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link rel="stylesheet" href="css/reveal.min.css" />
-  <link rel="stylesheet" href="css/theme/basic.css" id="theme" />
+  <link rel="stylesheet" href="css/theme/simple.css" id="theme" />
 
   <script>
 document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
@@ -43,8 +43,8 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
         <ul>
           <li>Mapping of numbers to characters</li>
           <li>ASCII - 0-127</li>
-          <li>Latin-1 (aka ISO-8859-1) - 0-255</li>
-          <li>Unicode - 0-2^32</li>
+          <li>ISO-8859-1 (aka Latin-1) - 0-255</li>
+          <li>Unicode - 0-(2^32 - 1)</li>
         </ul>
 
         <aside class="notes">
@@ -60,14 +60,14 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
 
         <ul>
           <li>Mapping of byte patterns to characters</li>
-          <li>ASCII & Latin-1 use a single byte per character</li>
+          <li>ASCII & ISO-8859-1 use a single byte per character</li>
           <li>Unicode is <em>not</em> a character encoding!</li>
           <li>UTF-8, UTF-16, and UTF-32 are multibyte encodings for the Unicode set</li>
         </ul>
 
         <aside class="notes">
           <ul>
-            <li>Byte patterns can be simple - a single 7-bit number for ASCII, 8-bit for Latin-1</li>
+            <li>Byte patterns can be simple - a single 7-bit number for ASCII, 8-bit for ISO-8859-1</li>
             <li>Multibyte patterns are needed for languages with more than 256 characters</li>
             <li>Unicode is a character set</li>
           </ul>
@@ -103,7 +103,8 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
       <section>
         <h2>Bytes vs Characters</h2>
 
-        <pre><code>use strict;
+        <pre data-trim><code data-trim>
+use strict;
 use warnings;
 use v5.16;
 use Encode qw( decode );
@@ -115,7 +116,8 @@ my $utf8 = decode('UTF-8', $bytes);
 say length $utf8; # 1
 
 binmode STDOUT, ':encoding(UTF-8)';
-say $utf8;</code></pre>
+say $utf8;
+</code></pre>
 
         <aside class="notes">
           <ul>
@@ -128,11 +130,12 @@ say $utf8;</code></pre>
       <section>
         <h2>Bytes vs Characters Output</h2>
 
-        <pre><code>$ perl code/bytes-vs-utf8 
+        <pre><code data-trim>
+$ perl code/bytes-vs-utf8
 4
 1
 😸
-</code></pre>
+        </code></pre>
       </section>
 
       <section>
@@ -169,30 +172,42 @@ say $utf8;</code></pre>
       <section>
         <h2>Handle (File) I/O</h2>
 
-        <pre><code>open my $fh, '&lt;:encoding(UTF-8)', $file;
-my $content = read_file( $file, binmode =&gt; ':encoding(UTF-8)' );</code></pre>
+        <pre><code data-trim>
+open my $fh, '&lt;:encoding(UTF-8)', $file;
+my $content = read_file( $file, binmode =&gt; ':encoding(UTF-8)' );
+        </code></pre>
 
-        <pre><code>use open ':encoding(UTF-8)';</code></pre>
+        <pre><code data-trim>
+use open ':encoding(UTF-8)';
+        </code></pre>
 
-        <pre><code>use open ':std', ':encoding(UTF-8)';</code></pre>
+        <pre><code data-trim>
+use open ':std', ':encoding(UTF-8)';
+        </code></pre>
 
       </section>
 
       <section>
         <h2>Web Pages & Services</h2>
 
-        <pre><code>my $ua = LWP::UserAgent-&gt;new();
+        <pre><code data-trim>
+my $ua = LWP::UserAgent-&gt;new();
 my $response = $ua-&gt;get($url);
-my $content = $response-&gt;decoded_content()</code></pre>
+my $content = $response-&gt;decoded_content()
+        </code></pre>
 
-        <pre><code>my $content = JSON-&gt;new()-&gt;utf8()-&gt;decode($json);</code></pre>
+        <pre><code data-trim>
+my $content = JSON-&gt;new()-&gt;utf8()-&gt;decode($json);
+        </code></pre>
       </section>
       
       <section>
         <h2>Databases</h2>
 
-        <pre><code>use DBD::Pg 3.0;
-my $dbh = DBD::Pg->connect(...);</code></pre>
+        <pre><code data-trim>
+use DBD::Pg 3.0;
+my $dbh = DBD::Pg-&gt;connect(...);
+        </code></pre>
 
         <aside class="notes">
           <ul>
@@ -204,7 +219,9 @@ my $dbh = DBD::Pg->connect(...);</code></pre>
 
       <section>
         <h2>Unicode Characters in Your Code</h2>
-<pre><code>use strict;
+
+        <pre><code data-trim>
+use strict;
 use warnings;
 use v5.16;
 my $bytes = "😸";
@@ -212,14 +229,16 @@ say length $bytes; # 4
 
 use utf8;
 my $utf8 = "😸";
-say length $utf8; # 1</code></pre>
+say length $utf8; # 1
+        </code></pre>
 
       </section>
 
       <section>
         <h2>Unicode Characters in Your Code (Take Two)</h2>
 
-        <pre><code>use strict;
+        <pre><code data-trim>
+use strict;
 use warnings;
 use v5.16;
 
@@ -228,7 +247,8 @@ say length $utf8_by_code;
 
 use charnames ':full';
 my $utf8_by_name = "\N{GRINNING CAT FACE WITH SMILING EYES}";
-say length $utf8_by_name;</code></pre>
+say length $utf8_by_name;
+        </code></pre>
 
         <aside class="notes">
           <ul>
@@ -241,7 +261,8 @@ say length $utf8_by_name;</code></pre>
       <section>
         <h2>Regex Character Classes</h2>
 
-        <pre><code>use strict;
+        <pre><code data-trim>
+use strict;
 use warnings;
 use v5.16;
 use open ':std', ':encoding(UTF-8)';
@@ -257,16 +278,18 @@ for my $string (@strings) {
         say "ASCII Number $string";
     }
 }
-</code></pre>
+        </code></pre>
       </section>
 
       <section>
         <h2>Regex Character Classes Output</h2>
 
-        <pre><code>$ perl code/regex 
+        <pre><code data-trim>
+$ perl code/regex
 Unicode Number 12
 ASCII Number 12
-Unicode Number １２</code></pre>
+Unicode Number １２
+        </code></pre>
 
         <aside class="notes">
           <ul>
