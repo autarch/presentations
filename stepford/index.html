@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <title>Stepford Overview</title>
+  <meta name="description" content="Basics of Unicode in Perl" />
+  <meta name="author" content="Dave Rolsky" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="css/reveal.min.css" />
+  <link rel="stylesheet" href="css/theme/simple.css" id="theme" />
+
+  <script>
+document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+  </script>
+  <!--[if lt IE 9]>
+      <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->
+
+  <style type="text/css">
+/*<![CDATA[*/
+  iframe.c4 {margin:0;overflow:hidden;border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px}
+  code.c3 {word-wrap: break-word;}
+  code.c2 {font-size: 18px; margin-top: 20px;}
+  img.c1 {-webkit-transform: rotate(180deg);}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="title-slide" data-state="title-slide">
+        <h1>Stepford Overview</h1>
+        Dave Rolsky
+      </section>
+
+      <section>
+        <h2>Like Make<br>(and Rake and Cake and ...)</h2>
+
+        <ul>
+          <li>Declarative dependencies</li>
+          <li>Ask for a final outcome, it figures out how to get there</li>
+          <li>Knows how to skip steps which are up to date</li>
+        </ul>
+
+        <aside class="notes">
+          <ul>
+            <li>Similar at the conceptual level</li>
+          </ul>
+        </aside>
+
+      </section>
+
+      <section>
+        <h2>Totally Unlike Make<br>(and Rake and Cake and ...)</h2>
+
+        <ul>
+          <li>Each step is a unique Perl class</li>
+          <li>Dependencies are class attributes</li>
+          <li>Productions are also class attributes</li>
+          <li>No DSL</li>
+        </ul>
+
+        <aside class="notes">
+          <ul>
+            <li>Implementation is completely different</li>
+            <li>No shell code</li>
+            <li>No DSL</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Running Stepford</h2>
+
+        <pre data-trim><code data-trim>
+use Stepford::Planner;
+use My::Step::Prefix::DeployDatabase;
+
+my $planner = Stepford::Planner->new(
+    step_namespaces => 'My::Step::Prefix',
+    final_steps     => 'My::Step::Prefix::DeployDatabase',
+    # optional
+    logger          => Log::Dispatch->new(...),
+    jobs            => 4,
+);
+
+$planner->run( output_dir => '...' );
+</code></pre>
+
+        <aside class="notes">
+          <ul>
+            <li>Stepford finds and load all step classes starting with My::Step::Prefix</li>
+            <li>Step classes passed for final_steps param must already be loaded</li>
+            <li>Default is to run sequentially</li>
+            <li>
+              Arguments passed to run are passed to step class constructor if
+              that class has an attribute of the given name
+            </li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Dependencies and Productions</h2>
+
+        <ul>
+          <li>These are just regular Moose attributes</li>
+          <li>Can be any type of data (but should be serializable)</li>
+          <li>Dependency resolution matches attribute names</li>
+        </ul>
+
+        <aside class="notes">
+          <ul>
+            <li>Traits are used to say that an attribute is a dependency or production</li>
+            <li>The data needs to be serializable for parallel runs</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Step Classes</h2>
+
+        <ul>
+          <li>Can declare productions, dependencies, or both</li>
+          <li>A class <em>can</em> have multiple productions</li>
+          <li>Steps must consume the <code>Stepford::Role::Step</code> role
+            <ul>
+              <li>or <code>Stepford::Role::Step::FileGenerator</code></li>
+            </ul>
+          </li>
+        </ul>
+
+        <aside class="notes">
+          <ul>
+            <li>A class without productions or dependencies will be ignored</li>
+            <li>File generation is so common that it got its own role</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Step Classes Continued</h2>
+
+        <ul>
+          <li>Classes must define <code>run()</code> and <code>last_run_time()</code>
+            <ul>
+              <li><code>FileGenerator</code> role provides <code>last_run_time()</code></li>
+            </ul>
+          </li>
+          <li>The <code>run()</code> should do all heavy lifting, not builders!</li>
+        </ul>
+
+        <aside class="notes">
+          <ul>
+            <li>
+              The Stepford planner object will skip steps if their last run
+              time is greater than or equal to the last run time of their
+              dependencies
+            </li>
+            <li>
+              The last run time can be undefined, in which case the step is run
+            </li>
+            <li>
+              Step objects are always constructed, but the run method may be
+              skipped if the step is up to date compared to its
+              dependencies
+            </li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Simple Step Class</h2>
+
+        <pre data-trim><code data-trim>
+package Thing::Step::WriteDataFile;
+use File::Slurp::Tiny qw( write_file );
+use Moose;
+with 'Stepford::Role::Step::FileGenerator';
+
+has output_dir => (
+    traits   => ['StepDependency'],
+    is       => 'ro',
+    isa      => 'Dir',
+    required => 1,
+);
+
+has data_file => (
+    traits  => ['StepProduction'],
+    is      => 'ro',
+    isa     => 'File',
+    lazy    => 1,
+    default => sub { $_[0]->output_dir()->file('data') },
+);
+
+sub run {
+    my $self = shift;
+    write_file( $self->data_file, 'foo' );
+}
+</code></pre>
+
+        <aside class="notes">
+          <ul>
+            <li>last_run_time is based on the timestamp of the data_file attribute's file</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Creating a Stepford::Planner</h2>
+
+        <ol>
+          <li>Loads all your step classes</li>
+          <li>Calculates the dependency graph, throwing errors if ...
+            <ul>
+              <li>Two steps have productions of the same name</li>
+              <li>It finds a cycle in the dependencies</li>
+              <li>A step has a dependency that cannot be satisfied by an other step's productions</li>
+            </ul>
+          </li>
+        </ol>
+
+        <aside class="notes">
+          <ul>
+            <li>
+              Does not actually instantiate objects for your step classes or
+              really do much of anything
+            </li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2><span style="word-wrap: none">Stepford::Planner->run()</span></h2>
+
+        <ol>
+          <li>Calculates a concrete plan for the given final steps</li>
+          <li>Runs the plan by ...
+            <ol>
+              <li>Getting the next step class to run</li>
+              <li>
+                Creating an object for the class
+                <ul>
+                  <li>
+                    Parameters for the class can come from arguments passed
+                    to <code>run()</code> as well as relevant productions from
+                    previous steps
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Checking if a step is up to date and running it if needed
+                <ul>
+                  <li>Running may happen in a child process</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>All Done</h2>
+      </section>
+
+    </div>
+  </div>
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.min.js"></script>
+  <script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize(
+    {
+        maxScale: 2.0,
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+  </script>
+</body>
+</html>
