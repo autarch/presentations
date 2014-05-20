@@ -82,23 +82,27 @@ use My::Step::Prefix::DeployDatabase;
 
 my $planner = Stepford::Planner->new(
     step_namespaces => 'My::Step::Prefix',
-    final_steps     => 'My::Step::Prefix::DeployDatabase',
     # optional
     logger          => Log::Dispatch->new(...),
     jobs            => 4,
 );
 
-$planner->run( output_dir => '...' );
+$planner->run(
+    final_steps => 'My::Step::Prefix::DeployDatabase',
+    # optional
+    config      => {
+        output_dir => '...',
+    },
+);
 </code></pre>
 
         <aside class="notes">
           <ul>
             <li>Stepford finds and load all step classes starting with My::Step::Prefix</li>
-            <li>Step classes passed for final_steps param must already be loaded</li>
             <li>Default is to run sequentially</li>
             <li>
-              Arguments passed to run are passed to step class constructor if
-              that class has an attribute of the given name
+              Config hash key/values passed to run is passed to step class
+              constructor if that class has an attribute of the given name
             </li>
           </ul>
         </aside>
@@ -215,13 +219,7 @@ sub run {
 
         <ol>
           <li>Loads all your step classes</li>
-          <li>Calculates the dependency graph, throwing errors if ...
-            <ul>
-              <li>Two steps have productions of the same name</li>
-              <li>It finds a cycle in the dependencies</li>
-              <li>A step has a dependency that cannot be satisfied by an other step's productions</li>
-            </ul>
-          </li>
+          <li>Doesn't do anything else until you call <code>run()</code>
         </ol>
 
         <aside class="notes">
@@ -238,9 +236,16 @@ sub run {
         <h2><span style="word-wrap: none">Stepford::Planner->run()</span></h2>
 
         <ol>
+          <li>Calculates the dependency tree, throwing errors if ...
+            <ul>
+              <li>Two steps have productions of the same name</li>
+              <li>It finds a cycle in the dependencies</li>
+              <li>A step has a dependency that cannot be satisfied by an other step's productions</li>
+            </ul>
+          </li>
           <li>Calculates a concrete plan for the given final steps</li>
           <li>Runs the plan by ...
-            <ol>
+            <ol style="list-style-type: cjk-ideographic">
               <li>Getting the next step class to run</li>
               <li>
                 Creating an object for the class
