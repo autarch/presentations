@@ -267,7 +267,7 @@ say $chdt-&gt;celestial_stem(), $chdt->terrestrial_branch(); # 癸巳
 
         <ul>
           <li>An offset in minutes and hours from UTC</li>
-          <li>Austin is currently at -05:00</li>
+          <li>Orlando is currently at -04:00</li>
           <li>Also has a name</li>
           <li>Names are (mostly) continent or ocean + major city
             <ul>
@@ -645,6 +645,7 @@ say $dt; # 2011-04-01, not 2011-03-29
         <ul>
           <li>Store datetimes as floating or UTC whenever possible</li>
           <li>Or store them as a datetime + time zone (Pg's <code>TIMESTAMP WITH TZ</code> type)</li>
+          <li>Also store the named time zone if the database only stores an offset</li>
           <li>Don't store an epoch, store a datetime</li>
           <li>Use time zones for presentation to users</li>
           <li><bold>Never</bold> just store datetimes in the machine's current local time zone</li>
