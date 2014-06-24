@@ -76,13 +76,13 @@
           <br />
           IRC: autarch
           <br />
-          June 5, 2013
+          June 24, 2014
           <br />
-          YAPC::NA 2013
+          YAPC::NA 2014
         </p>
 
         <p class="license">
-          Copyright &copy; David Rolsky 2012-2013
+          Copyright &copy; David Rolsky 2012-2014
           <br /> 
           <span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">A Date with Perl</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">David Rolsky</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/">Creative Commons Attribution-Share Alike 3.0 United States License</a>.
         </p>
@@ -514,6 +514,16 @@ say $dt; # 2009-02-28
 $dt-&gt;add( months =&gt; 1 );
 say $dt; # 2009-03-28
 </code></pre>
+
+        <ul>
+          <li>End of month modes
+            <ul>
+              <li>wrap - default for adding months</li>
+              <li>preserve - default for subtracting months</li>
+              <li>limit</li>
+            </ul>
+          </li>
+        </ul>
       </article>
 
       <article>
@@ -568,6 +578,10 @@ say $dt; # 2012-03-11T03:00:00
 say $dt; # 2012-03-11T00:02:00
 $dt-&gt;add( days =&gt; 1 ); # Throws an exception ...
 # Invalid local time for date in time zone: America/Chicago
+
+# But this works
+$dt-&gt;add( hours =&gt; 24 );
+say $dt; # 2012-03-11T03:00:00
 </code></pre>
       </article>
 
@@ -582,6 +596,12 @@ $dt-&gt;add( days =&gt; 1 ); # Throws an exception ...
 
 $dt-&gt;add( months =&gt; 1, days =&gt; 1 );
 say $dt; # 2011-04-01, not 2011-03-29
+</code></pre>
+
+        <p>Want control? Make separate calls:</p>
+
+        <pre><code>$dt-&gt;add( months =&gt; 1 )->add( days =&gt; 1, );
+say $dt; # 2011-03-29
 </code></pre>
       </article>
 
