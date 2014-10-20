@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <title>RabbitMQ Overview</title>
+  <meta name="description" content="Basics of Unicode in Perl" />
+  <meta name="author" content="Dave Rolsky" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="css/reveal.min.css" />
+  <link rel="stylesheet" href="css/theme/simple.css" id="theme" />
+
+  <script>
+document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+  </script>
+  <!--[if lt IE 9]>
+      <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->
+
+  <style type="text/css">
+/*<![CDATA[*/
+  iframe.c4 {margin:0;overflow:hidden;border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px}
+  code.c3 {word-wrap: break-word;}
+  code.c2 {font-size: 18px; margin-top: 20px;}
+  img.c1 {-webkit-transform: rotate(180deg);}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="title-slide" data-state="title-slide">
+        <h1>RabbitMQ</h1>
+        Dave Rolsky
+      </section>
+
+      <section>
+        <h2>Message Queues</h2>
+
+        <ul>
+          <li>Pass arbitrary messages between processes
+            <ul>
+              <li>(or threads, or co-routines, or async callbacks, or ...)</li>
+            </ul>
+          </li>
+          <li>A message is just arbitrary data</li>
+          <li>The message queue doesn't care about message content</li>
+          <li>Messages can be language-specific (Storable), plain text, JSON, etc.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>RabbitMQ</h2>
+
+        <ul>
+          <li>Written in Erlang (but we don't care)</li>
+          <li>APIs in many languages</li>
+          <li>Runs as a daemon on each machine</li>
+          <li>Supports various clustering and federation schemes</li>
+          <li>For now, we just run one instance per machine
+            <ul>
+              <li>Messages are local to each machine</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Exchanges</h2>
+
+        <ul>
+          <li>Messages are published to exchanges</li>
+          <li>Exchanges have a name and a type</li>
+          <li>Our code uses one exchange named <strong>maxmind</strong></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Queues</h2>
+
+        <ul>
+          <li>Queues are "bound" to exchanges</li>
+          <li>Binding tells the exchange which messages are routed to the queue</li>
+          <li>Binding can be complex, but we use a simple system</li>
+          <li>Messages have a "routing key" which matches a queue name
+            <ul>
+              <li>For example: <strong>debits</strong> and <strong>web-service-usage-logs</strong></li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Message Persistence</h2>
+
+        <ul>
+          <li>Messages can be written to disk</li>
+          <li>Ensures survival across RabbitMQ crashes, server restarts, etc.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Delivery Guarantee</h2>
+
+        <ul>
+          <li>Persistent messages are delivered <strong>at least once</strong></li>
+          <li>Messages may be re-delivered - code must handle that</li>
+          <li>Either put a unique key in each message or check the message's "redelivered" flag</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Publish Example</h2>
+
+<pre data-trim><code data-trim>use Crixa;
+my $crixa    = Crixa-&gt;connect( host =&gt; 'localhost' );
+my $channel  = $crixa-&gt;new_channel();
+my $exchange = $channel-&gt;exchange(
+    name          =&gt; 'maxmind',
+    exchange_type =&gt; 'direct',
+    durable       =&gt; 1,
+    auto_delete   =&gt; 0,
+);
+$exchange-&gt;publish(
+    routing_key =&gt; 'debits',
+    body        =&gt; $json-&gt;encode( {@_} ),
+    props       =&gt; {
+        content_type  =&gt; 'application/json',
+        delivery_mode =&gt; 2, # persistent
+    },
+);</code></pre>
+      </section>
+
+      <section>
+        <h2>Receive Example</h2>
+
+<pre data-trim><code data-trim>use Crixa;
+my $crixa    = Crixa-&gt;connect( host =&gt; 'localhost' );
+my $channel  = $crixa-&gt;new_channel();
+my $exchange = ...;
+my $queue    = $exchange-&gt;queue(
+    name         =&gt; 'debits',
+    durable      =&gt; 1,
+    auto_delete  =&gt; 0,
+    routing_keys =&gt; ['debits'],
+);
+my $msg     = $queue-&gt;check_for_message( { no_ack =&gt; 1 } );
+my $type    = $msg-&gt;content_type;
+my $content = $msg-&gt;body;</code></pre>
+      </section>
+
+      <section>
+        <h2>How We Use RabbitMQ</h2>
+
+        <ul>
+          <li>Debit daemon (in Go) publishes debits and usage logs as messages</li>
+          <li>Worker processes (in Perl) pull off 100 messages at a time and batch update Pg</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>All Done</h2>
+      </section>
+
+    </div>
+  </div>
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.min.js"></script>
+  <script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize(
+    {
+        maxScale: 2.0,
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+  </script>
+</body>
+</html>
