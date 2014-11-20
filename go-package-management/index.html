@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <title>Go Package Management</title>
+  <meta name="description" content="Basics of Unicode in Perl" />
+  <meta name="author" content="Dave Rolsky" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="css/reveal.min.css" />
+  <link rel="stylesheet" href="css/theme/simple.css" id="theme" />
+
+  <script>
+document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+  </script>
+  <!--[if lt IE 9]>
+      <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->
+
+  <style type="text/css">
+/*<![CDATA[*/
+  iframe.c4 {margin:0;overflow:hidden;border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px}
+  code.c3 {word-wrap: break-word;}
+  code.c2 {font-size: 18px; margin-top: 20px;}
+  img.c1 {-webkit-transform: rotate(180deg);}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="title-slide" data-state="title-slide">
+        <h1>Go Package Management</h1>
+        Dave Rolsky
+      </section>
+
+      <section>
+        <h2><code>$GOPATH</code></h2>
+
+        <ul>
+          <li>All Go code lives under your <code>$GOPATH</code></li>
+          <li>Sort of like <code>@INC</code> but it includes <strong>all</strong> code</li>
+          <li>Includes your code and all libraries you import</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Go Imports</h2>
+
+<pre data-trim><code data-trim>import (
+	# Core library
+	"strings"
+
+	# External
+	"github.com/gorilla/mux"
+
+	# Semi-external
+	"github.maxmind.com/maxmind/mm_website.git/go/shared/daemon"
+)</code></pre>
+      </section>
+
+      <section>
+        <h2>Go Get</h2>
+
+        <ul>
+          <li>Fetches external dependencies if you don't have them locally</li>
+          <li><strong>No versioning whatsoever</strong></li>
+          <li>Always gets the latest commit to master</li>
+          <li>No way to make reproducible builds</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Enter Godep</h2>
+
+        <ul>
+          <li>Godep wraps the <code>go</code> binary to add versioning</li>
+          <li>Stores the commit we want in <code>./Godeps/Godeps.json</code></li>
+          <li>Running <code>godep get</code> gets the specified revisions, not master</li>
+          <li>Running <code>godep go build</code> makes sure we build with the right dependencies</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Our Go Layout</h2>
+
+        <ul>
+          <li>All Go code is under <code>mm_website.git/go</code></li>
+          <li>Each subdirectory is its own project
+            <ul>
+              <li>minFraud daemon(s)</li>
+              <li>credit daemon</li>
+              <li>shared libraries</li>
+            </ul>
+          <li>But we want to share deps between all projects</li>
+          <li>We symlink <code>go/$project/Godeps</code> to <code>go/Godeps</code></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Adding a Dependency</h2>
+
+        <ul>
+          <li>In your code: <code>import "github.com/new/dep"</code></li>
+          <li>Run <code>godep save ./...</code></li>
+          <li>All of the dependencies are checked into our repo</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Updating a dependency</h2>
+
+        <ul>
+          <li><code>go get -u github.com/some/dep</code></li>
+          <li><code>godep update github.com/some/dep</code></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Documentation</h2>
+
+        <ul>
+          <li><code>mm_website.git/doc/go/getting-started.md</code></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>All Done</h2>
+      </section>
+
+    </div>
+  </div>
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.min.js"></script>
+  <script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize(
+    {
+        maxScale: 2.0,
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+  </script>
+</body>
+</html>
