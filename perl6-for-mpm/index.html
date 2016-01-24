@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>A Very Brief Introduction to Perl 6</title>
+
+        <meta name="description" content="some interesting stuff in Perl 6">
+        <meta name="author" content="Dave Rolsky">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+        <style>
+          /* The default 400px cuts off some examples */
+          .reveal pre code { max-height: 450px }
+        </style>
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="reveal">
+
+          <div class="slides">
+            <section data-markdown>
+              <script type="text/template">
+                # A Very Brief Introduction to Perl 6
+
+                ## [Dave Rolsky](http://blog.urth.org)
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## An Even Briefer Summary of Changes from 5 to 6
+
+                Everything, more or less
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## Installing Perl 6
+
+                On Linux and OSX, use `rakudobrew`:
+
+                ```
+                git clone https://github.com/tadzik/rakudobrew ~/.rakudobrew
+                export PATH=~/.rakudobrew/bin:~/.rakudobrew/moar-nom/install/share/perl6/site/bin:$PATH
+                rakudobrew build moar 2015.12
+                rakudobrew build panda
+                ```
+
+                On Windows, Rakudo Star provides an MSI.
+
+                Note:
+                <ul>
+                  <li>rakudobrew is a lot like perlbrew for perl 5</li>
+                  <li>panda is a module installation tool - there is another called zef</li>
+                  <li>there is no Rakudo Star release available for the 6.c version of the language</li>
+                </ul>
+              </aside>
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## Perl 6 Definition
+
+                * Unlike Perl 5, Perl 6 is defined its test suite, not its implementation
+                * The test suite is named "roast"
+                * Any implementation that passes the tests is a valid Perl 6
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## The Language Release
+
+                * Version <code>6.c</code> of the language was released on Christmas
+                * This refers to the <strong>language</strong> definition as defined by roast
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                # Examples of 5 Versus 6
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## Counting Words - Perl 5
+
+                ```perl
+use v5.20;
+use strict;
+use warnings;
+use autodie;
+
+my $file = shift;
+open my $fh, '<', $file;
+my %words;
+while ( defined( my $line = <$fh> ) ) {
+    chomp $line;
+    $words{$_}++ for split /\s+/, $line;
+}
+
+say "$_: $words{$_}"
+    for sort {
+            $words{$b} <=> $words{$a}
+            or lc $a cmp lc $b
+        } keys %words;
+                ```
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## Counting Words - Perl 6
+
+                ```
+use v6;
+
+my $file = @*ARGS[0];
+my %words;
+for $file.IO.open.words -> $word {
+    %words{$word}++;
+}
+
+say "$_: %words{$_}"
+    for %words.keys.sort: {
+        %words{$^b} <=> %words{$^a}
+        or
+        $^a.lc cmp $^b.lc
+    };
+                ```
+
+                Note:
+                <ul>
+                  <li>Some of the differences include ...</li>
+                  <li>The @*ARGS global</li>
+                  <li>Everything is an object so we can write <code>$file.IO.open.words</code></li>
+                  <li><code>for</code> loop doesn't need parens</li>
+                  <li><code>for</code> is really an anonymous code block, <code>$word</code> is its signature</li>
+                  <li>Use of placeholder variables in sort sub</li>
+                </ul>
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## Questions?
+              </script>
+            </section>
+
+            <section>
+              <h2>Perl 6 Stack</h2>
+
+              <table style="border: 1px solid black; width: 60%;">
+                <tbody>
+                  <tr>
+                    <td style="text-align: center">
+                      Perl 6<br>
+                      <small>is compiled into VM ops with ...</small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="text-align: center">
+                      Rakudo<br>
+                      <small>which is written in Perl 6 and ...</small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="text-align: center">
+                      NQP (Not Quite Perl)<br>
+                      <small>which runs on ...</small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="text-align: center">
+                      A Virtual Machine<br>
+                      <small>MoarVM or the JVM (currently)</small>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+
+            <section>
+              <h2>Rakudo</h2>
+
+              <ul>
+                <li>The Perl 6 compiler and core libraries</li>
+                <li>Primarily written in Perl 6 and NQP</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2>Rakudo Star</h2>
+
+              <ul>
+                <li>The full Perl 6 stack plus some modules</li>
+                <li>All packaged conveniently in a tarball or MSI</li>
+              </ul>
+            </section>
+
+          </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+
+            // Full list of configuration options available at:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'fade', // none/fade/slide/convex/concave/zoom
+
+                // Optional reveal.js plugins
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true },
+                    { src: 'plugin/notes/notes.js', async: true }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
