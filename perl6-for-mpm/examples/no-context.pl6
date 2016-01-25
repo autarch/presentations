@@ -12,7 +12,7 @@ sub bar (--> Array:D) {
 
 my $foo = foo();
 say $foo.perl;
-say $_ for $foo.values;
+.say for $foo.values;
 
 my %bar = bar(); # implicitly calls %bar.STORE( bar() )
 say %bar.perl;

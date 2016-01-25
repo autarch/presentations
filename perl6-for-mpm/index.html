@@ -268,7 +268,7 @@ sub bar (--> Array:D) {
 
 my $foo = foo();
 say $foo.perl;
-say $_ for $foo.values;
+.say for $foo.values;
 
 my %bar = bar(); # implicitly calls %bar.STORE( bar() )
 say %bar.perl;
@@ -277,6 +277,7 @@ say %bar.perl;
                 Note:
                 <ul>
                   <li>--&gt; specifies the sub return value</li>
+                  <li>.say is using the implicit $_ var much like in Perl 5</li>
                   <li>Returning an array or hash is still returning a single item</li>
                   <li>Sort of like an implicit reference operation in Perl 5, but there are really no more references in Perl 6</li>
                   <li>The STORE method knows how to store anything with an iterator<li>
