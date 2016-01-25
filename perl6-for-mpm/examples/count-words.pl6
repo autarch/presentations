@@ -2,7 +2,7 @@ use v6;
 
 my $file = @*ARGS[0];
 my %words;
-for $file.IO.open.words -> $word {
+for open($file).words -> $word {
     %words{$word}++;
 }
 
