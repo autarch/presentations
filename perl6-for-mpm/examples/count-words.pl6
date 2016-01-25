@@ -10,5 +10,5 @@ say "$_: %words{$_}"
     for %words.keys.sort: {
         %words{$^b} <=> %words{$^a}
         or
-        $^a.lc cmp $^b.lc
+        $^a.fc cmp $^b.fc
     };
