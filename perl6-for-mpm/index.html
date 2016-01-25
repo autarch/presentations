@@ -49,6 +49,8 @@
                 # A Very Brief Introduction to Perl 6
 
                 ## [Dave Rolsky](http://blog.urth.org)
+
+                https://github.com/autarch/presentations (perl6-for-mpm)
               </script>
             </section>
 
@@ -162,10 +164,220 @@ say "$_: %words{$_}"
                 <ul>
                   <li>Some of the differences include ...</li>
                   <li>The @*ARGS global</li>
+                  <li>Methods are called with &quot;.&quot; instead of &quot;->&quot;</li>
                   <li>Everything is an object so we can write <code>$file.IO.open.words</code></li>
                   <li><code>for</code> loop doesn't need parens</li>
                   <li><code>for</code> is really an anonymous code block, <code>$word</code> is its signature</li>
                   <li>Use of placeholder variables in sort sub</li>
+                </ul>
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## JSON to CSV - Perl 5
+
+                ```perl
+use v5.20;
+use strict;
+use warnings;
+use autodie;
+
+use Getopt::Long;
+use Path::Class qw( file );
+use JSON::MaybeXS;
+use Text::CSV_XS;
+
+my ( $input, $output );
+GetOptions(
+    'input:s'  => \$input,
+    'output:s' => \$output,
+);
+die 'You must set --input and --output files'
+    unless $input && $output;
+
+my $csv = Text::CSV_XS->new( { binary => 1, eol => "\r\n" } );
+open my $fh, '>', $output;
+$csv->print( $fh, [qw( criminal_id name crime bounty )] );
+
+my $json = JSON::MaybeXS->new( utf8 => 1 );
+my $content = $json->decode( scalar file($input)->slurp );
+
+for my $id ( sort { $a <=> $b } keys %{$content} ) {
+    $csv->print(
+        $fh,
+        [
+            $id,
+            @{ $content->{$id} }{qw( name wanted-for bounty )}
+        ]
+    );
+}
+                ```
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## JSON to CSV - Perl 6
+
+                ```
+use v6;
+
+use JSON::Tiny;
+use Text::CSV;
+
+sub MAIN (Str:D :$input, Str:D :$output) {
+    my $csv = Text::CSV.new( :binary, eol => "\r\n" );
+    my $fh = $output.IO.open(:w);
+
+    $csv.say( $fh, < criminal_id name crime bounty > );
+    my $content = from-json( $input.IO.open(:r).slurp-rest );
+    for $content.keys.sort( { $^a <=> $^b } ) -> $id {
+        $csv.say(
+            $fh,
+            ( $id, $content{$id}< name wanted-for bounty > )
+        );
+    }
+}
+                ```
+
+                Note:
+                <ul>
+                  <li>sub MAIN accepts named arguments from the CLI</li>
+                  <li>No need to explicitly dereference array inside hash</li>
+                </ul>
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## No Context
+
+                ```
+use v6;
+
+sub foo (--> Array:D) {
+    my @foo = < a b c >;
+    return @foo;
+}
+
+sub bar (--> Array:D) {
+    my @bar = < key1 x key2 y >;
+    return @bar;
+}
+
+my $foo = foo();
+say $foo.perl;
+say $_ for $foo.values;
+
+my %bar = bar(); # implicitly calls %bar.STORE( bar() )
+say %bar.perl;
+                ```
+
+                Note:
+                <ul>
+                  <li>--&gt; specifies the sub return value</li>
+                  <li>Returning an array or hash is still returning a single item</li>
+                  <li>Sort of like an implicit reference operation in Perl 5, but there are really no more references in Perl 6</li>
+                  <li>The STORE method knows how to store anything with an iterator<li>
+                </ul>
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## Built-In OO
+
+                ```
+use v6;
+
+class File {
+    use File::LibMagic;
+
+    has Str $.filename;
+    has Str $.mime-type;
+    has Buf $.content;
+
+    method open ($class: Str:D $filename) {
+        my %info = File::LibMagic.new.from-filename($filename); 
+        return $class.new(
+            filename  => $filename,
+            mime-type => %info<mime-type>,
+            content   => $filename.IO.open(:r).slurp-rest(:bin),
+        );
+    }
+}
+
+my $file = File.open( $*PROGRAM-NAME );
+say $file.filename;
+say $file.mime-type;
+say $file.content.decode('UTF-8').lines[0];
+                ```
+
+                Note:
+                <ul>
+                  <li>class declaration takes a block</li>
+                  <li>has to declare attributes</li>
+                  <li>public attributes are available as get methods</li>
+                  <li>method signature uses var colon to declare invocant name</li>
+                  <li>default constructor takes named parameter</li>
+                </ul>
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## NativeCall Example
+
+                [File::LibMagic](https://github.com/autarch/perl6-File-LibMagic/blob/master/lib/File/LibMagic.pm6)
+
+                Note:
+                <ul>
+                  <li>unit X says that "the rest of this file is in this namespace"</li>
+                  <li>
+                    my class declares a class that cannot be accessed by other
+                    code so "my class X" is really declaring a private
+                    "File::LibMagic::X" class
+                  </li>
+                  <li>"is repr" to declare underlying type of ojbect</li>
+                  <li>use system-level types like int32 instead of Int</li>
+                  <li>"is native" to say that a sub is implemented in a native library</li>
+                </ul>
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## Grammars Example
+
+                [Config::MVP](https://github.com/autarch/perl6-Config-MVP/blob/master/lib/Config/MVP.pm)
+
+                Note:
+                <ul>
+                  <li>grammar is a special type of class</li>
+                  <li>can have an actions class - methods match tokens</li>
+                  <li>action use "make" to return a value that goes into the AST</li>
+                  <li>token and regex are grammar rules - token does not backtrack, regex does</li>
+                  <li>Can embed token or regex in another token with "<token-name>"</li>
+                  <li>Leading dot on embed makes the subrule noncapturing</li>
+                  <li>Parsing starts with TOP</li>
+                </ul>
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## Larger OO Example
+
+                [Test::Stream](https://github.com/autarch/perl6-Test-Stream)
+
+                Note:
+                <ul>
+                  <li>Test::Stream::Event defines a number of roles and classes</li>
+                  <li>call to "self.^name" calls a meta-method</li>
+                  <li>Use "submethod BUILD" to add additional specifications to parameters for object construction - in this case ensuring that some values are defined</li>
+                  <li>Test::Stream::Listener defines two roles - one requires all methods in consumers - one defines all empty stubs</li>
+                  <li>Use of multi methods dispatched on parameters</li>
                 </ul>
               </script>
             </section>

@@ -1,0 +1,17 @@
+{
+  "1": {
+    "name": "John Doe",
+    "bounty": "100,000 bitcoin",
+    "wanted-for": "stealing clown cars"
+  },
+  "7": {
+    "name": "Huey-Ling Chen",
+    "bounty": "5 Panamian balboa",
+    "wanted-for": "being too adorable"
+  },
+  "42": {
+    "name": "Arthur Dent",
+    "bounty": "2 Pan-Galactic Gargle Blasters",
+    "wanted-for": "criminal interference with demolition operations"
+  }
+}
