@@ -9,7 +9,7 @@ sub MAIN (Str:D :$input, Str:D :$output) {
 
     $csv.say( $fh, < criminal_id name crime bounty > );
     my $content = from-json( $input.IO.open(:r).slurp-rest );
-    for $content.keys.sort( { $^a <=> $^b } ) -> $id {
+    for $content.keys.sort(&infix:«<=>») -> $id {
         $csv.say(
             $fh,
             ( $id, $content{$id}< name wanted-for bounty > )
