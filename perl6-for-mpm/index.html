@@ -426,22 +426,51 @@ say $file.content.decode('UTF-8').lines[0];
               </table>
             </section>
 
-            <section>
-              <h2>Rakudo</h2>
+            <section data-markdown>
+              <script type="text/template">
+                ## Rakudo
 
-              <ul>
-                <li>The Perl 6 compiler and core libraries</li>
-                <li>Primarily written in Perl 6 and NQP</li>
-              </ul>
+                * The Perl 6 compiler and core libraries
+                * Primarily written in Perl 6 and NQP
+              </script>
             </section>
 
-            <section>
-              <h2>Rakudo Star</h2>
+            <section data-markdown>
+              <script type="text/template">
+                ## Rakudo Star
 
-              <ul>
-                <li>The full Perl 6 stack plus some modules</li>
-                <li>All packaged conveniently in a tarball or MSI</li>
-              </ul>
+                * The full Perl 6 stack plus some modules
+                * All packaged conveniently in a tarball or MSI
+              </script>
+            </section>
+
+            <section data-markdown>
+              <script type="text/template">
+                ## How Slow is Perl 6
+
+                ```sh
+$ time perl -E 'say 1'
+1
+
+real    0m0.004s
+user    0m0.000s
+sys     0m0.004s
+
+$ time perl6 -e 'say 1'
+1
+
+real    0m0.133s
+user    0m0.109s
+sys     0m0.024s
+
+$ time perl -MDateTime -MMoose -MPath::Class -MIO::Async -E 'say 1'
+1
+
+real    0m0.196s
+user    0m0.191s
+sys     0m0.004s
+                ```
+              </script>
             </section>
 
             <section data-markdown>
