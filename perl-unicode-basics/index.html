@@ -122,7 +122,7 @@ say $utf8;
         <aside class="notes">
           <ul>
             <li>$bytes and $utf8 contain an identical sequence of bytes</li>
-            <li>Using decode() tells Perl that we expect the output to be treated as characters</li>
+            <li>Using <code>decode</code> tells Perl that we expect the output to be treated as characters</li>
           </ul>
         </aside>
       </section>
@@ -139,23 +139,23 @@ $ perl code/bytes-vs-utf8
       </section>
 
       <section>
-        <h2><code>decode()</code> and <code>encode()</code></h2>
+        <h2><code>decode</code> and <code>encode</code></h2>
 
         <ul>
-          <li><code>decode()</code> - from any encoding to Perl's internal representation</li>
-          <li><code>encode()</code> - from Perl's internal representation to any encoding</li>
+          <li><code>decode</code> - from any encoding to Perl's internal representation</li>
+          <li><code>encode</code> - from Perl's internal representation to any encoding</li>
         </ul>
 
         <aside class="notes">
           <ul>
             <li>With UTF-8 data this is almost a no-op</li>
-            <li>Except that it tells Perl that we want this scalar to contain character or bytes</li>
+            <li>Except that it tells Perl that we want this scalar to contain characters or bytes</li>
           </ul>
         </aside>
       </section>
 
       <section>
-        <h2>When to <code>decode()</code> and <code>encode()</code></h2>
+        <h2>When to <code>decode</code> and <code>encode</code></h2>
 
         <ul>
           <li>Decode all incoming data</li>
@@ -191,14 +191,26 @@ use open ':std', ':encoding(UTF-8)';
         <h2>Web Pages & Services</h2>
 
         <pre><code data-trim>
-my $ua = LWP::UserAgent-&gt;new();
+my $ua = LWP::UserAgent-&gt;new;
 my $response = $ua-&gt;get($url);
-my $content = $response-&gt;decoded_content()
+my $content = $response-&gt;decoded_content
         </code></pre>
 
         <pre><code data-trim>
-my $content = JSON-&gt;new()-&gt;utf8()-&gt;decode($json);
+my $content = JSON-&gt;new-&gt;utf8-&gt;decode($json);
         </code></pre>
+
+        <ul>
+          <li>
+            Except that the <code>decoded_content</code> is kind of broken and
+            may or may not actually decode the content the way you'd expect,
+            depending on the content type.
+          </li>
+          <li>
+            It does for anything matching <code>m{^text/}</code>, but not for
+            other types.
+          </li>
+        </ul>
       </section>
       
       <section>
