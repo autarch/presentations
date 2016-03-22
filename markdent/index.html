@@ -178,7 +178,7 @@ Event Cache       HTML Output
   <pre class="small"><code>my $buffer = q{};
 open my $fh, '&gt;', \$buffer;
 
-<span class="incremental">my $capture = Markdent::Handler::CaptureEvents-&gt;new();<span class="annotation">
+<span class="incremental">my $capture = Markdent::Handler::CaptureEvents-&gt;new;<span class="annotation">
 ^ Event Cache</span></span>
 <span class="incremental">my $html = Markdent::Handler::HTMLStream( output =&gt; $fh );<span class="annotation">
 ^ HTML Output</span></span>
@@ -253,6 +253,20 @@ extends 'Markdent::Dialect::Standard::SpanParser';
 </div>
 
 <div class="slide">
+  <h1>In the Box - GitHub Dialect</h1>
+
+  <ul>
+    <li>Adds various GitHub extensions ...
+      <ul>
+        <li>Fenced code blocks (<code>```\n...\n```</code>)</li>
+        <li>Doesn't match underscores in words so <code>foo_bar_baz</code> does not italicize "bar"</li>
+        <li>Linkifies bare links in text</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<div class="slide">
   <h1>In the Box - Theory Dialect</h1>
 
   <ul>
@@ -288,7 +302,7 @@ extends 'Markdent::Dialect::Standard::SpanParser';
   <pre><code>use Markdent::Simple::Document;
 
 my $msd  =
-    Markdent::Simple::Document-&gt;new();
+    Markdent::Simple::Document-&gt;new;
 
 my $html = $msd-&gt;markdown_to_html(
     title    => 'My Document',
