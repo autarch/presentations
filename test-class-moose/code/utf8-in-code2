@@ -1,0 +1,10 @@
+use strict;
+use warnings;
+use v5.16;
+
+my $utf8_by_code = "\x{1f638}";
+say length $utf8_by_code;
+
+use charnames ':full';
+my $utf8_by_name = "\N{GRINNING CAT FACE WITH SMILING EYES}";
+say length $utf8_by_name;

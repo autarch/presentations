@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <title>Classy Testing with Test::Class::Moose</title>
+  <meta name="description" content="Using Test::Class::Moose to manage large test suites" />
+  <meta name="author" content="Dave Rolsky" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="css/reveal.min.css" />
+  <link rel="stylesheet" href="css/theme/simple.css" id="theme" />
+
+  <script>
+document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+  </script>
+  <!--[if lt IE 9]>
+      <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->
+
+  <style type="text/css">
+/*<![CDATA[*/
+  iframe.c4 {margin:0;overflow:hidden;border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px}
+  code.c3 {word-wrap: break-word;}
+  code.c2 {font-size: 18px; margin-top: 20px;}
+  img.c1 {-webkit-transform: rotate(180deg);}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="title-slide" data-markdown>
+        <script type="text/template">
+          # Classy Testing
+          ### (with `Test::Class::Moose`)
+
+          ### [Dave Rolsky](http://blog.urth.org)
+
+          https://github.com/autarch/presentations (test-class-moose)
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## What Problem Does It Solve?
+
+          * Big test suites
+          * Lots of setup and teardown
+          * Sharing *test* code between tests
+          * Slowness of starting `perl` over and over
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Tell Me More!
+
+          * Reporting
+          * Timing data for analyzing test peformance
+          * Write tests with [`Moose`](https://metacpan.org/release/Moose)!
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## A Very Simple Test Class
+
+```perl5
+package TestFor::MyApp::Model::User;
+
+use Test::Class::Moose;
+use MyApp::Model::User;
+
+sub test_user {
+    my $self = shift;
+
+    is( MyApp::Model::User->new->username, 'Joe',
+        'new user default name is Joe' );
+}
+```
+
+          Note:
+          <ul>
+            <li>When you use Test::Class::Moose, this is like using Moose</li>
+            <li>All the Moose helpers are included (has, with, etc)</li>
+            <li>Also get strict, warnings, Test::Most</li>
+          </ul>
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Test Methods
+
+          * Any method starting with `test_` is a test method
+          * A class can have many test methods
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Attributes
+
+          * Test classes are just Moose classes
+
+```perl
+package TestFor::MyApp::User;
+
+use Test::Class::Moose;
+use MyApp::User;
+
+has user => (
+    is => 'ro',
+    builder => '_build_user',
+);
+
+sub test_user_full_name {
+    my $self = shift;
+    is( $self->user->full_name, 'Joe Smith' );
+}
+```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Using Roles
+
+          * Let's assume we have many model classes which produce JSON output
+
+```perl
+package TestFor::MyApp::Model::Car;
+
+use Test::Class::Moose;
+
+with 'TestRole::JSONProducer';
+
+sub test_car {
+    my $self = shift;
+    my $car  = ...;
+    is( $car->name, ... );
+    $self->_test_json( $car->json );
+}
+```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Control Methods
+
+          * TCM also support "control" methods
+          * Specially named methods run at specific times
+          * **`test_startup`** - before any test methods in a class are run
+          * **`test_shutdown`** - after all test methods in a class
+          * **`test_setup`** - before each test method
+          * **`test_teardown`** - after each test method
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Uses for Control Methods
+
+          * Integration setup
+              * Populate databases, external files, etc.
+              * Start/stop external daemons
+          * Extra diagnostic output
+          * Skipping classes and methods
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Skipping an Entire Class
+
+```perl
+sub test_startup {
+    my $self = shift;
+
+    $self->test_skip('Skipping this class') if ...;
+
+    return;
+}
+```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Skipping a Single Method
+
+```perl
+sub test_setup {
+    my $self = shift;
+
+    my $method = $self->test_report->current_method;
+    $self->test_skip('Skipping this class')
+        if $method->name eq 'method_to_skip';
+
+    return;
+}
+```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## TODO Tests
+
+          * This works just like it always has:
+
+```perl
+sub test_something {
+    my $self = shift;
+
+    local $TODO = 'Broken until we implement proper flibberty gibberty';
+    is( $self->car->flibberty_gibberty, 42, ... );
+
+    return;
+}
+```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Running Your Test Classes
+
+          * You'll still need a small `run-my-classes.t` file
+          * One .t file can run all your tests
+
+```perl
+use strict;
+use warnings;
+
+use Test::Class::Moose::Load 't/lib';
+use Test::Class::Moose::Runner;
+Test::Class::Moose::Runner->new->runtests;
+```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## How Does it Know What To Run?
+
+          * It looks at all of your loaded Moose classes
+          * ... and finds the ones that subclass `Test::Class::Moose`
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Running Some Test Classes
+
+          * `Test::Class::Moose::Runner->new` accepts a `test_classes` agument
+          * `Test::Class::Moose::Runner->new( test_classes => 'TestFor::MyApp::Thing' )`
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Specifying Classes on the CLI
+
+          * Any arguments passed to `prove` after a `::` are passed to your `.t` file
+```
+$> prove -lv t/run-test-class-moose.t :: TestFor::MyApp::Thing
+```
+          * ... then in `t/run-test-class-moose.t`
+```perl
+...
+my @args = @ARGV ? ( test_classes => \@ARGV ) :();
+Test::Class::Moose::Runner->new(@args)->runtests;
+```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Running Test Classes in Parallel
+
+```perl
+use strict;
+use warnings;
+
+use Test::Class::Moose::Load 't/lib';
+use Test::Class::Moose::Runner;
+Test::Class::Moose::Runner->new( jobs => 4 )->runtests;
+```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Other Test Runner Options
+
+          * Randomize method and/or test class order
+          * Specify methods to include and exclude by regex or tag
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Test Reporting
+
+          * Caveat: fairly broken right now for parallel tests
+              * a fix is coming in a future release
+          * `my $report = Test::Class::Moose::Runner->new->runtests`
+          * Can use the report to get information about the test run
+              * pass/fail/skip
+              * how long each part of the test suite took
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Questions?
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Thank You
+        </script>
+      </section>
+
+    </div>
+  </div>
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.min.js"></script>
+  <script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize(
+    {
+        maxScale: 2.0,
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+  </script>
+</body>
+</html>
+
+<!--
+outline
+
+* Why use it
+* Basic test class
+* Multiple test methods in a class
+* Test methods in roles
+* Attributes in classes
+* Control methods
+* Skipping methods
+* Skipping classes
+* TODO tests
+* Running classes
+  * how does it know which classes are test classes?
+  * parallel running
+* Loading classes
+* Reporting, especially timing
+* Timing example from MaxMind
+* Parameterized classes
+-->

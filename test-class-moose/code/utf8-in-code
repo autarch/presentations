@@ -1,0 +1,10 @@
+use strict;
+use warnings;
+use v5.16;
+
+my $bytes = "😸";
+say length $bytes;
+
+use utf8;
+my $utf8 = "😸";
+say length $utf8;
