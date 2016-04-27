@@ -198,7 +198,7 @@ sub test_setup {
     my $self = shift;
 
     my $method = $self->test_report->current_method;
-    $self->test_skip('Skipping this class')
+    $self->test_skip('Skipping this method')
         if $method->name eq 'method_to_skip';
 
     return;
@@ -257,7 +257,7 @@ Test::Class::Moose::Runner->new->runtests;
         <script type="text/template">
           ## Running Some Test Classes
 
-          * `Test::Class::Moose::Runner->new` accepts a `test_classes` agument
+          * `Test::Class::Moose::Runner->new` accepts a `test_classes` argument
           * `Test::Class::Moose::Runner->new( test_classes => 'TestFor::MyApp::Thing' )`
         </script>
       </section>
@@ -376,5 +376,11 @@ outline
 * Loading classes
 * Reporting, especially timing
 * Timing example from MaxMind
+
+mention skipping rest of class
+mention how exceptions are handled
+does it know number of tests?
+- show explicit plans
 * Parameterized classes
+
 -->
