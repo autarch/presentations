@@ -4,6 +4,6 @@ class Log {
     method say-level { say $!level }
 }
 
-Log.new( level => 42 ).say-level;
-say Log.new( level => 1 ).level;
+Log.new.say-level;
+say Log.new.level;
 # end-sample

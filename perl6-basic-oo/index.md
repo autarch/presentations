@@ -76,7 +76,7 @@ True
 
 ## Class modifiers
 
-* You can subclass a class with `is`:
+* You can subclass a class with `is`
 
 <pre><code class="lang-perl sample" sample="examples/class-2.pl6#main"></code></pre>
 
@@ -125,7 +125,7 @@ Log.new
 
 ## `BUILD` Arguments
 
-* `BUILD` sees all the arguments passed to `new`:
+* `BUILD` sees all the arguments passed to `new`
 
 <pre><code class="lang-perl sample" sample="examples/class-with-build-2.pl6#main"></code></pre>
 
@@ -140,7 +140,7 @@ Name = foo
 
 ## Methods
 
-* Methods are defined with `method`:
+* Methods are defined with `method`
 
 ```perl
 method foo { ... }
@@ -236,7 +236,7 @@ my @lengths = map { .length } @strings;
 ## Attributes
 
 * A chunk of data owned by an object
-* Declared with `has`:
+* Declared with `has`
 
 ```perl
 class Log {
@@ -347,10 +347,9 @@ Method 'level' not found for invocant of class 'Log'
 ## Setting Private Attributes Publicly
 
 * I want to set private attributes via the constructor!
+* `$!name` in `BUILD` refers to the attribute, not an accessor
 
 <pre><code class="lang-perl sample" sample="examples/class-attributes-7.pl6#main"></code></pre>
-
-* Note - `$!name` in `BUILD` refers to the underlying attribute, not the public method
 
 ------
 
