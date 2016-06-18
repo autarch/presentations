@@ -15,7 +15,6 @@ https://github.com/autarch/presentations (perl6-basic-oo)
   * constructor
   * method
   * inheritance
-  * I'll also cover roles but I'll explain those
 * You can read basic Perl 6 syntax
   * (don't worry, it's a lot like Perl 5)
 
@@ -376,6 +375,12 @@ Type check failed in assignment to $!level; expected Int but got Str ("the answe
 
 ------
 
+## Time for Bonus Slides?
+
+* Check the clock
+
+------
+
 # Questions?
 
 ------
@@ -384,5 +389,124 @@ Type check failed in assignment to $!level; expected Int but got Str ("the answe
 
 ------
 
-* roles
-* method modifiers?
+## Roles
+
+* A role is a chunk of code consumed by one or more classes
+* Can be:
+  * An interface definition
+  * A partial implementation
+  * A complete implementation
+
+------
+
+## Roles in Perl 6
+
+* Created with the `role` keyword
+* Consumed with `does`
+
+<pre><code class="lang-perl sample" sample="examples/roles-1.pl6#main"></code></pre>
+
+----
+
+```none
+foo
+bar
+woof
+```
+
+------
+
+## Roles in Perl 6
+
+* When a class consumes a role it gets all of that roles methods & attributes
+* Role can consume roles as well
+
+------
+
+## Roles Can Require Methods
+
+<pre><code class="lang-perl sample" sample="examples/roles-2.pl6#main"></code></pre>
+
+----
+
+```none
+Method 'loggable-string' must be implemented by Dog
+because it is required by a role
+```
+
+------
+
+## Roles Can Require Methods
+
+<pre><code class="lang-perl sample" sample="examples/roles-3.pl6#main"></code></pre>
+
+----
+
+```none
+The Dog Said Bow-Wow
+```
+
+------
+
+## Roles in Type Signature
+
+* Roles are types, just like classes
+* You can use them in type signatures
+
+------
+
+## Roles in Type Signature
+
+<pre><code class="lang-perl sample" sample="examples/roles-4.pl6#main"></code></pre>
+
+----
+
+```none
+The Dog Said Bow-Wow
+Type check failed in binding $thing; expected Logs but got Int (42)
+  in sub log-it at ./examples/roles-4.pl6 line 12
+  in block <unit> at ./examples/roles-4.pl6 line 16
+```
+
+------
+
+## Crazy Meta-Madness
+
+* You can change how Perl 6 OO works by ...
+* ... writing Perl 6 OO code
+
+<pre><code class="lang-perl sample" sample="examples/meta-1.pl6#main"></code></pre>
+
+----
+
+```none
+Thank you for calling bark!
+woof
+```
+
+------
+
+## Meta Can Do Nearly Anything
+
+* Add more behavior to attributes and their accessors
+* Change how role application works
+* Change how a class's constructor works
+* &lt;Insert behavior here&gt;
+
+------
+
+## Meta Docs
+
+* Still a work in progress
+* Generally it involves digging through:
+  * doc.perl6.org
+  * design.perl6.org
+  * `src/Perl6/Metamodel/` in the rakudo repo
+
+------
+
+# Questions?
+
+------
+
+# Thank You
