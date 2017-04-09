@@ -78,16 +78,16 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
         <h2>Running Stepford</h2>
 
         <pre data-trim><code data-trim>
-use Stepford::Planner;
+use Stepford::Runner;
 
-my $planner = Stepford::Planner->new(
+my $runner = Stepford::Runner->new(
     step_namespaces => 'My::Step::Prefix',
     # optional
     logger          => Log::Dispatch->new(...),
     jobs            => 4,
 );
 
-$planner->run(
+$runner->run(
     final_steps => 'My::Step::Prefix::DeployDatabase',
     # optional
     config      => {
@@ -161,7 +161,7 @@ $planner->run(
         <aside class="notes">
           <ul>
             <li>
-              The Stepford planner object will skip steps if their last run
+              The Stepford runner object will skip steps if their last run
               time is greater than or equal to the last run time of their
               dependencies
             </li>
@@ -215,7 +215,7 @@ sub run {
       </section>
 
       <section>
-        <h2>Creating a Stepford::Planner</h2>
+        <h2>Creating a Stepford::Runner</h2>
 
         <ol>
           <li>Loads all your step classes</li>
@@ -233,7 +233,7 @@ sub run {
       </section>
 
       <section>
-        <h2><span style="word-wrap: none">Stepford::Planner->run()</span></h2>
+        <h2><span style="word-wrap: none">Stepford::Runner->run</span></h2>
 
         <ol>
           <li>Calculates the dependency tree, throwing errors if ...
