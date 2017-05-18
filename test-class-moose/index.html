@@ -237,9 +237,9 @@ sub test_something {
 use strict;
 use warnings;
 
-use Test::Class::Moose::Load 't/lib';
-use Test::Class::Moose::Runner;
-Test::Class::Moose::Runner->new->runtests;
+use Test::Class::Moose::CLI;
+
+Test::Class::Moose::CLI->new_with_options->run;
 ```
         </script>
       </section>
@@ -248,6 +248,7 @@ Test::Class::Moose::Runner->new->runtests;
         <script type="text/template">
           ## How Does it Know What To Run?
 
+          * The CLI module uses `TCM::Load` to load classes
           * It looks at all of your loaded Moose classes
           * ... and finds the ones that subclass `Test::Class::Moose`
         </script>
@@ -257,39 +258,18 @@ Test::Class::Moose::Runner->new->runtests;
         <script type="text/template">
           ## Running Some Test Classes
 
-          * `Test::Class::Moose::Runner->new` accepts a `test_classes` argument
-          * `Test::Class::Moose::Runner->new( test_classes => 'TestFor::MyApp::Thing' )`
-        </script>
-      </section>
-
-      <section data-markdown>
-        <script type="text/template">
-          ## Specifying Classes on the CLI
-
-          * Any arguments passed to `prove` after a `::` are passed to your `.t` file
 ```
-$> prove -lv t/run-test-class-moose.t :: TestFor::MyApp::Thing
-```
-          * ... then in `t/run-test-class-moose.t`
-```perl
-...
-my @args = @ARGV ? ( test_classes => \@ARGV ) :();
-Test::Class::Moose::Runner->new(@args)->runtests;
+prove -lv t/run-tcm.t :: --classes Some::Class
 ```
         </script>
       </section>
 
       <section data-markdown>
         <script type="text/template">
-          ## Running Test Classes in Parallel
+          ## Running in Parallel
 
 ```perl
-use strict;
-use warnings;
-
-use Test::Class::Moose::Load 't/lib';
-use Test::Class::Moose::Runner;
-Test::Class::Moose::Runner->new( jobs => 4 )->runtests;
+prove -lv t/run-tcm.t :: --jobs 4
 ```
         </script>
       </section>
@@ -307,9 +287,7 @@ Test::Class::Moose::Runner->new( jobs => 4 )->runtests;
         <script type="text/template">
           ## Test Reporting
 
-          * Caveat: fairly broken right now for parallel tests
-              * a fix is coming in a future release
-          * `my $report = Test::Class::Moose::Runner->new->runtests`
+          * `Test::Class::Moose::Report` class
           * Can use the report to get information about the test run
               * pass/fail/skip
               * how long each part of the test suite took
