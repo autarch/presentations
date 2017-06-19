@@ -15,16 +15,6 @@
 
 # Started Applying
 
-Note:
-* The hiring process was pretty terrible!
-* Unprepared interviewers
-* Pointless questions
-* Lots of time wasting
-* Not nearly enough courtesy
-* Not nearly enough evaluation of my actual skills
-* And **slow** in many cases
-
-
 ------
 
 # <span style='font-family: "Noto Sans Kannada"'>(ノಠ益ಠ)ノ彡┻━┻</span>
@@ -135,7 +125,6 @@ Note:
     * technologies
     * interaction with non-technical folks
 * Remote or Not
-* Include a salary range - stop jerking people around
 
 ------
 
@@ -176,21 +165,34 @@ Note:
 Note:
 * Should not take more than 3 hours to complete
 * Do the homework yourself - ask a few other folks on the team to do it too
-* Make sure you have a rubric for evaluating the homework
-* Write very detailed instructions for the homework
-    * If someone does something different from what you expected check the instructions
-* Should every applicant must do the homework, or if you're okay with code samples
-    * Only substantial libraries or apps
-    * PRs are a plus, but it's not the same as their own work
-    * Okay to have every do the homework, but this will cause attrition
+
+------
+
+# Prepare to Evaluate the Homework
+
+https://github.com/maxmind/dev-hire-homework
 
 ------
 
 # Homework Instructions Must Be Detailed
 
+Note:
+* If someone does something different from what you expected check the instructions
+
 ------
 
 # Code Samples Must Be Substantial
+
+Note:
+* Only substantial libraries or apps
+* PRs are a plus, but it's not the same as their own work
+
+------
+
+# Should Everyone Do the Homework?
+
+Note:
+* Okay to have everyone do the homework, but this will cause attrition
 
 ------
 
