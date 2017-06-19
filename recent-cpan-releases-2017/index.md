@@ -9,7 +9,9 @@
 * Travis and AppVeyor file management
 
 ```
-$ setup-travis-yml.pl --dir ./DateTime.pm/
+$ setup-travis-yml.pl --dir .
+DateTime-Locale/.travis.yml
+DateTime-TimeZone/.travis.yml
 DateTime.pm/.travis.yml
 
 $ setup-travis-yml.pl --dir . --create
@@ -33,6 +35,13 @@ Created .travis.yml
 ------
 
 ## Meta-Grapher-Moose
+
+```
+$ graph-meta.pl \
+  --package='My::Package::Name' \
+  --output='diagram.png' \
+  --renderer=plantuml
+```
 
 ------
 
