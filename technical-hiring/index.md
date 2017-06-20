@@ -4,6 +4,12 @@
 
 ------
 
+## I Work at ActiveState
+
+## But All Opinions Are Mine Alone
+
+------
+
 # Looking for a Job
 
 ------
@@ -76,6 +82,10 @@
 ------
 
 # Bad Hiring Turns Candidates Off
+
+------
+
+# Hiring Is the Most Important Thing You Do!
 
 ------
 
@@ -399,6 +409,10 @@ Note:
 
 ------
 
+# Agree on Evaluation Criteria
+
+------
+
 # Don't waste your time
 
 ------
@@ -407,12 +421,8 @@ Note:
 
 ------
 
-# Agree on Evaluation Criteria
-
-------
-
 # Suck At Least 20% Less
 
 ------
 
-# Questions?
+# Thank You
