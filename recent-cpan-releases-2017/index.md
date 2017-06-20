@@ -24,6 +24,13 @@ Created .travis.yml
 
 * Convert all your RT tickets to GitHub issues
 
+```
+$ cd Some-GH-Repo
+$ rt-to-github.pl 
+GitHub user: [autarch] 
+...
+```
+
 ------
 
 ## Params-ValidationCompiler
