@@ -255,7 +255,7 @@ say $chdt-&gt;celestial_stem(), $chdt->terrestrial_branch(); # 癸巳
         <h3>Time Zone Standards</h3>
 
         <ul>
-          <li>Olson time zone database is the standard</li>
+          <li>IANA (née Olson) time zone database is the standard</li>
           <li><a href="http://www.iana.org/time-zones">http://www.iana.org/time-zones</a></li>
           <li>An open source data/software project</li>
           <li>Microsoft does their own thing (of course)</li>
@@ -267,7 +267,7 @@ say $chdt-&gt;celestial_stem(), $chdt->terrestrial_branch(); # 癸巳
 
         <ul>
           <li>An offset in minutes and hours from UTC</li>
-          <li>Orlando is currently at -04:00</li>
+          <li>Washington, DC is currently at -04:00</li>
           <li>Also has a name</li>
           <li>Names are (mostly) continent or ocean + major city
             <ul>
@@ -392,7 +392,7 @@ say $dt-&gt;epoch(); # 1370442600
           <li>The epoch will no longer fit in a 32-bit int</li>
           <li>2038-01-19T03:14:07 UTC</li>
           <li>A 30-year mortgage in 2013 ends in 2043</li>
-          <li>As of Perl 5.12, Perl always uses a 64-bit epoch</li>
+          <li>As of Perl 5.12, Perl always uses a large-enough epoch</li>
         </ul>
       </article>
 
@@ -664,7 +664,7 @@ say $dt; # 2011-03-29
 
         <ul>
           <li>Store datetimes as floating or UTC whenever possible</li>
-          <li>Or store them as a datetime + time zone (Pg's <code>TIMESTAMP WITH TZ</code> type)</li>
+          <li>Or store them as a datetime + time zone (Pgs's <code>TIMESTAMP WITH TZ</code> type)</li>
           <li>Also store the named time zone if the database only stores an offset</li>
           <li>Don't store an epoch, store a datetime</li>
           <li>Use time zones for presentation to users</li>
@@ -731,26 +731,6 @@ my $dt = DateTime-&gt;new(
     day   =&gt $d,
 );
 </code></pre>
-      </article>
-
-      <article>
-        <h3>Don't Validate</h3>
-
-        <ul>
-          <li>If your data is always valid</li>
-        </ul>
-
-        <pre><code>local $Params::Validate::NO_VALIDATION = 1;
-my $dt = DateTime-&gt;new(
-    year  =&gt $y,
-    month =&gt $m,
-    day   =&gt $d,
-);
-</code></pre>
-      </article>
-
-      <article>
-        <h2>Questions?</h2>
       </article>
 
       <article>
