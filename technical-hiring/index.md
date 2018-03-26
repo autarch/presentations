@@ -180,7 +180,7 @@ Note:
 
 # Prepare to Evaluate the Homework
 
-https://github.com/maxmind/dev-hire-homework
+https://github.com/ActiveState/homework
 
 ------
 
@@ -203,6 +203,7 @@ Note:
 
 Note:
 * Okay to have everyone do the homework, but this will cause attrition
+* Okay to accept alternatives, like FOSS contributions
 
 ------
 
