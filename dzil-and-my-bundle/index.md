@@ -9,17 +9,22 @@ https://github.com/autarch/presentations
 
 # What is Dist::Zilla?
 
+Note:
+* A tool to automate distro maintenance for CPAN authors
+
 ------
 
 # Take a Step Back First
 
 ------
 
-## What Is in a Perl Module?
+# What's in a CPAN Distribution?
 
+Note:
 * Code
 * Docs
-* META info
+* Installer code
+* Metadata
 * Other stuff
 
 ------
@@ -30,25 +35,28 @@ From `DateTime::Format::Strptime`:
 
 ------
 
-## What Goes Into a New Release?
+# What Goes Into a New Release?
 
+Note:
 * Update `$VERSION`
 * Update Changes
-* Make sure meta-info is up to date
+* Make sure metadata is up to date
 * Include important files like `Makefile.PL`
 * Include useful files like `cpanfile` or `perltidyrc`
 
 ------
 
-## Dist::Zilla Automates Away Boilerplate
+# Dist::Zilla Automates Away Boilerplate
 
+Note:
 * `Makefile.PL` and other files
 * Standard POD sections - `SUPPORT`, `COPYRIGHT`, etc.
 
 ------
 
-## Dist::Zilla Standardizes All Your Releases
+# Dist::Zilla Standardizes All Your Releases
 
+Note:
 * I want every distro to include:
   * POD syntax tests
   * POD spelling tests
@@ -59,26 +67,77 @@ From `DateTime::Format::Strptime`:
 
 ------
 
-## What's in My Bundle?
+# What's in My Bundle?
 
-* **A lot!**
+------
+
+# A lot!
+
+Note:
 * About 50 plugins
 
 ------
 
-## What's in My Bundle?
+# What's My Bundle Do?
 
+Note:
 * Generates standard tests
 * Generates common files
 * Determines module prereqs
-* Includes useful meta-info like bug tracker, etc.
+* Includes useful metadata like bug tracker, etc.
 * Generates lots of POD
 * Generates many author tests (kwalitee type things)
 
 ------
 
-## What's in My Bundle?
+# Custom Makefile.PL Generator
 
+Note:
+* Ensures dzil runs tests in parallel
+* Adds `-Wall` and `-Werror` to XS code when I'm running tests
+
+------
+
+# AutoPrereqs
+
+Note:
+* Scans code for prereqs
+
+------
+
+# GitHub Integration
+
+Note:
+* Sets some metadata like repo from GitHub info
+* Updates GitHub to point to link to metacpan
+
+------
+
+# Many, Many Test Generators
+
+Note:
+* Pod syntax test
+* Pod coverage test
+* Mojibake test
+* Clean namespaces
+* Format of Changes file
+* Test that the `META.json` file follows the CPAN Meta spec
+* EOL/whitespace test
+* No tabs
+* Filename portability
+* Synopsis
+* Tidyall
+* Compilation
+* A "test" that reports prereqs
+* Check that versions are sane in all modules
+
+------
+
+## What Else?
+
+Note:
+* File generation (Contribution and Install guides)
+* Doc generation
 * Runs all tests before a release
 * Does some other release checks
   * Is Changes updated?
@@ -90,8 +149,9 @@ From `DateTime::Format::Strptime`:
 
 ------
 
-## What's in My Bundle?
+# And What Else?
 
+Note:
 * Does the release itself
 * Tags release in git
 * Copies generated files back to the repo
@@ -103,8 +163,12 @@ From `DateTime::Format::Strptime`:
 
 ------
 
-## Integration with Pod::Weaver
+# Integration with Pod::Weaver
 
+Note:
+* Pod::Weaver is dzil for Pod
+  * Pod munging and generation
+  * Lots of plugins
 * This is insane
 * `Pod::Weaver` also supports bundles
 * `Dist::Zilla` can be configured to invoke `Pod::Weaver`
@@ -112,7 +176,7 @@ From `DateTime::Format::Strptime`:
 
 ------
 
-## The Insane Way
+# The Insane Way
 
 ```perl
 use PadWalker qw( peek_sub );
@@ -131,6 +195,44 @@ sub configure {
         = $zilla->plugin_named( $bundle_prefix
             . '/DROLSKY::WeaverConfig' );
 ```
+
+------
+
+# Bonus Slides
+
+## What's In My `Pod::Weaver` Bundle?
+
+Note:
+* Ensure an `=encoding UTF-8` at the start of Pod
+* Handle `:list` and `:verbatim` sections
+* Place the header at the top
+* Generates `Name` and `Version` sections
+* Inserts `:prelude` section, if any
+* `SYNOPSIS`, `DESCRIPTION`, `OVERVIEW`
+* `=attr`, `=method`, `=func`, and `=type`
+
+------
+
+# Bonus Slides
+
+## What's In My `Pod::Weaver` Bundle?
+
+* Inserts `:postlude` section, if any
+* Generates a `SUPPORT` section if none is already there
+* Generates a `SOURCE` section
+* Generates a `DONATIONS` section if I'm the distro's copyright holder
+* Generates `AUTHORS`, `CONTRIBUTORS`, and `LEGAL` sections.
+* Inserts `:footer` section, if any
+
+------
+
+# Other Bundles to Check Out
+
+* [`Dist::Zilla::PluginBundle::Author::ETHER`](https://metacpan.org/release/Dist-Zilla-PluginBundle-Author-ETHER)
+* [`Dist::Zilla::PluginBundle::YANICK`](https://metacpan.org/pod/Dist::Zilla::PluginBundle::YANICK)
+
+Note:
+* Do not use mine or anyone else's directly unless you love risk
 
 ------
 
