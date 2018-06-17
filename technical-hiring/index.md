@@ -361,6 +361,7 @@ Note:
 * You're not actually testing them on anything like real work.
 * It's very stressful and cruel
 * Note that sketching out a system architecture or something on a whiteboard is fine. That's what whiteboards are for, and that's like doing real work!
+* So is pseudocode
 
 ------
 
