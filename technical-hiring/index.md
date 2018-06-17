@@ -140,6 +140,9 @@ Note:
 
 # Include A Salary Range
 
+Note:
+* I've yet to win this battle at ActiveState
+
 ------
 
 # Pre-Interview Screening
@@ -266,7 +269,9 @@ Note:
 
 ------
 
-> Our goal is to learn more about you and for you to learn more about us and the position. We will not be asking stumper-type technical questions, nor are we looking for someone who fits a specific mold. If you have any questions during the interview please feel free to ask them as they occur to you. We’ll also make sure to leave time at the end of the interview for you to ask questions.
+> Our goal is to learn more about you and for you to learn more about us and the position. We will not be asking stumper-type technical questions, nor are we looking for someone who fits a specific mold.
+
+> If you have any questions during the interview please feel free to ask them as they occur to you. We’ll also make sure to leave time at the end of the interview for you to ask questions.
 
 ------
 
@@ -282,7 +287,7 @@ Note:
 
 ------
 
-# Do they care about technical stuff, but not **too much**?
+# Do they care about technical stuff, but not _too much_?
 
 ------
 
