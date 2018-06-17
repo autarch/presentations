@@ -330,11 +330,11 @@ Note:
 
 Note:
 * This is a very nebulous term.
+* Focus on values and how you work.
 * Break this down into narrower things you can more easily evaluate:
-    * spoken communication skills
-    * interest in technology (or specific technologies)
     * work/life balance goals
-    * etc.
+    * will they like the way we work (pairing or not, remote or not, code ownership, etc.)
+    * preferred communication (video chat vs slack vs email)
 
 ------
 
