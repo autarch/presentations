@@ -217,6 +217,7 @@ Note:
 
 ## What's In My `Pod::Weaver` Bundle?
 
+Note:
 * Inserts `:postlude` section, if any
 * Generates a `SUPPORT` section if none is already there
 * Generates a `SOURCE` section
