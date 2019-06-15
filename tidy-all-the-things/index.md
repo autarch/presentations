@@ -1,4 +1,4 @@
-# Tidy All the Things
+![](img/tidy-all-the-things.jpg)
 
 ## Dave Rolsky
 
@@ -100,6 +100,32 @@ File selection options. Caching options. Verbosity, etc.
 
 ------
 
+## File Selection Options
+
+* `tidyall -a`
+* `tidyall -g`
+* `tidyall -r ./path`
+* `tidyall ./just/One/File.pm`
+
+Note:
+* All
+* Git added/modified
+* Recursive
+
+------
+
+## Parallel Jobs
+
+* `tidyall -j N`
+
+------
+
+## Disable Caching
+
+* `tidyall --no-cache`
+
+------
+
 ## Git Hooks
 
 ```
@@ -115,12 +141,44 @@ in `.git/hooks/pre-commit`
 
 ------
 
+# Generic Transformer / Validator
+
+Note:
+* Allows you to add new tidiers & linters by specifying the executable, the
+  flags to pass, and the exit codes to expect.
+
+------
+
+# Plugin Classes
+
+Note:
+* Can also write new plugin classes to provide new tidiers & linters. This a
+  bit faster if the new thing is in Perl and you don't need to fork a process,
+  especially when working on many files.
+
+------
+
 ## Available Plugins
 
 Note:
 
 PerlTidy, Perl Critic, JSON, JS Hint & Lint, Pod files, Line sorting, gofmt
 and go vet. Fairly easy to write more.
+
+------
+
+# Precious 💍
+
+One code quality tool to rule them all
+
+https://github.com/houseabsolute/precious-rs
+
+Note:
+* My new tidyall replacement
+* Why write this?
+* Wanted to learn Rust
+* Tidyall does not play well with Go - operates on files but Go packages are
+  directories. Very hard to fix this in tidyall.
 
 ------
 
