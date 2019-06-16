@@ -47,6 +47,7 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
         <script type="text/template">
           ## What Problem Does It Solve?
 
+          Note:
           * Big test suites
           * Lots of setup and teardown
           * Sharing *test* code between tests
@@ -58,6 +59,7 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
         <script type="text/template">
           ## Tell Me More!
 
+          Note:
           * Reporting
           * Timing data for analyzing test peformance
           * Write tests with [`Moose`](https://metacpan.org/release/Moose)!
@@ -152,12 +154,14 @@ sub test_car {
         <script type="text/template">
           ## Control Methods
 
-          * TCM also support "control" methods
-          * Specially named methods run at specific times
           * **`test_startup`** - before any test methods in a class are run
           * **`test_shutdown`** - after all test methods in a class
           * **`test_setup`** - before each test method
           * **`test_teardown`** - after each test method
+
+          Note:
+          * TCM also support "control" methods
+          * Specially named methods run at specific times
         </script>
       </section>
 
@@ -165,6 +169,7 @@ sub test_car {
         <script type="text/template">
           ## Uses for Control Methods
 
+          Note:
           * Integration setup
               * Populate databases, external files, etc.
               * Start/stop external daemons
@@ -248,6 +253,7 @@ Test::Class::Moose::CLI->new_with_options->run;
         <script type="text/template">
           ## How Does it Know What To Run?
 
+          Note:
           * The CLI module uses `TCM::Load` to load classes
           * It looks at all of your loaded Moose classes
           * ... and finds the ones that subclass `Test::Class::Moose`
@@ -278,7 +284,9 @@ prove -lv t/run-tcm.t :: --jobs 4
         <script type="text/template">
           ## Other Test Runner Options
 
+          Note:
           * Randomize method and/or test class order
+          * Run just one or a few classes
           * Specify methods to include and exclude by regex or tag
         </script>
       </section>
@@ -288,9 +296,22 @@ prove -lv t/run-tcm.t :: --jobs 4
           ## Test Reporting
 
           * `Test::Class::Moose::Report` class
+
+          Note:
           * Can use the report to get information about the test run
               * pass/fail/skip
               * how long each part of the test suite took
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Timing Report
+
+          Note:
+
+          * Can get detailed information about timing of each class and each
+          method.
         </script>
       </section>
 
