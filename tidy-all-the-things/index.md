@@ -13,6 +13,17 @@ A linter and prettifier for files in any language, from JS to Perl to JSON.
 
 ------
 
+## Created by Jon Swartz
+
+------
+
+## Why Code::TidyAll?
+
+Note:
+My OCD
+
+------
+
 ## Plugin- and Config-Based
 
 Note:
@@ -141,20 +152,20 @@ in `.git/hooks/pre-commit`
 
 ------
 
-# Generic Transformer / Validator
-
-Note:
-* Allows you to add new tidiers & linters by specifying the executable, the
-  flags to pass, and the exit codes to expect.
-
-------
-
 # Plugin Classes
 
 Note:
 * Can also write new plugin classes to provide new tidiers & linters. This a
   bit faster if the new thing is in Perl and you don't need to fork a process,
   especially when working on many files.
+
+------
+
+# Generic Transformer / Validator
+
+Note:
+* Allows you to add new tidiers & linters by specifying the executable, the
+  flags to pass, and the exit codes to expect.
 
 ------
 
