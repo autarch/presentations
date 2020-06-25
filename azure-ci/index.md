@@ -772,4 +772,11 @@ Note:
 
 ------
 
+## More Info
+
+* [My New CI Helpers for Perl](https://blog.urth.org/2019/11/18/my-new-ci-helpers-for-perl/)
+  * About the helpers project and my CI research
+
+------
+
 ## Questions?
