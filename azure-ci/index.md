@@ -41,7 +41,7 @@ Note:
 
 [github.com/autarch/ci-perl-helpers](https://github.com/autarch/ci-perl-helpers/)
 
-* Templates and tools for Perl testing
+* Templates and tools for testing Perl projects
 * Inspired by Graham Knop's [travis-perl/helpers](https://github.com/travis-perl/helpers)
 
 ------
@@ -761,14 +761,11 @@ Note:
   * Use different deployment strategies
 * Secret variables
 * Triggers to define when Pipeline runs
-  * For certain branchess
+  * For certain branches
   * On a schedule (cron job!)
 * Run local agents
 * Parallel jobs for test suite splitting
 * Even more but I'm running out of space
-
-Note:
-* I use a scheduled trigger to check for new Perl releases and build new Docker images for those releases.
 
 ------
 
