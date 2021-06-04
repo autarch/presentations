@@ -87,13 +87,13 @@ Note:
 * Includes useful metadata like bug tracker, etc.
 * Generates lots of POD
 * Generates many author tests (kwalitee type things)
+* Adds various bits of tooling like linter/tidier config, dev tool installer, etc.
 
 ------
 
 # Custom Makefile.PL Generator
 
 Note:
-* Ensures dzil runs tests in parallel
 * Adds `-Wall` and `-Werror` to XS code when I'm running tests
 
 ------
@@ -126,7 +126,7 @@ Note:
 * No tabs
 * Filename portability
 * Synopsis
-* Tidyall
+* Precious
 * Compilation
 * A "test" that reports prereqs
 * Check that versions are sane in all modules
@@ -136,7 +136,7 @@ Note:
 ## What Else?
 
 Note:
-* File generation (Contribution and Install guides)
+* File generation (Contribution and Install guides + Code of Conduct)
 * Doc generation
 * Runs all tests before a release
 * Does some other release checks
