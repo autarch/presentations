@@ -11,6 +11,7 @@ https://github.com/autarch/presentations
 
 Note:
 * A tool to automate distro maintenance for CPAN authors
+* But what does that mean?
 
 ------
 
@@ -21,9 +22,10 @@ Note:
 # What's in a CPAN Distribution?
 
 Note:
-* Code
+* The code itself
 * Docs
-* Installer code
+* Test code
+* Installer code, like `Makefile.PL`
 * Metadata
 * Other stuff
 
@@ -63,7 +65,50 @@ Note:
   * Compilation tests
   * Up to date dependency information
 * I don't want to copy these files between distros
-  * I *definitely* don't want to update 50 distros when I change how my POD syntax tests work
+* I *definitely* don't want to update 50 distros when I change how my POD syntax tests work
+
+------
+
+# How to Use It?
+
+------
+
+# Make a New Distro
+
+```sh
+$> dzil new My-Distro
+$> cd My-Distro
+```
+
+Note:
+* Makes a new distro with some default files
+
+------
+
+# Hack, Hack, Hack
+
+```sh
+$> dzil test --all
+```
+
+Note:
+* All tests means the tests you intend others to run, as well as author-only
+  tests.
+* Author-only tests might include:
+  * POD syntax tests
+  * Testing to make sure you used spaces instead of tabs because you're not a monster
+  * Testing that your Changes file is up to date when doing a release
+  * Lots more stuff
+
+------
+
+# We Have Some Code to Release
+
+```sh
+$> dzil release
+```
+
+Note:
 
 ------
 
@@ -79,15 +124,6 @@ Note:
 ------
 
 # What's My Bundle Do?
-
-Note:
-* Generates standard tests
-* Generates common files
-* Determines module prereqs
-* Includes useful metadata like bug tracker, etc.
-* Generates lots of POD
-* Generates many author tests (kwalitee type things)
-* Adds various bits of tooling like linter/tidier config, dev tool installer, etc.
 
 ------
 
@@ -105,11 +141,20 @@ Note:
 
 ------
 
+# Adds extra prereqs
+
+Note:
+* If my distro uses `Test2` it requires a `Test::More` with `Test2`
+* Otherwise it requires a `Test::More` with `subtest` support
+* Adds linting modules as develop phase requirements
+
+------
+
 # GitHub Integration
 
 Note:
 * Sets some metadata like repo from GitHub info
-* Updates GitHub to point to link to metacpan
+* Updates GitHub to link to MetaCPAN
 
 ------
 
@@ -126,7 +171,7 @@ Note:
 * No tabs
 * Filename portability
 * Synopsis
-* Precious
+* Runs precious to check that all files pass linting checks
 * Compilation
 * A "test" that reports prereqs
 * Check that versions are sane in all modules
@@ -141,10 +186,10 @@ Note:
 * Runs all tests before a release
 * Does some other release checks
   * Is Changes updated?
-  * Do I have the newest prereqs installed
+  * Do I have the newest versions of my prereqs installed
   * Are all my prereqs on CPAN?
-  * Are there merge conflict markers?
-  * Is this the master branch?
+  * Are there and merge conflict markers in my source?
+  * Is this the master branch (for stable releases)?
 * Updates Changes with a release date
 
 ------
@@ -155,7 +200,7 @@ Note:
 * Does the release itself
 * Tags release in git
 * Copies generated files back to the repo
-  * So contributors don't need dzil
+  * So casual contributors don't need dzil
 * Commits generated files
 * Bumps `$VERSION` in all modules
 * Commits `$VERSION` bump
@@ -200,7 +245,9 @@ sub configure {
 
 # Bonus Slides
 
-## What's In My `Pod::Weaver` Bundle?
+------
+
+# What's In My `Pod::Weaver` Bundle?
 
 Note:
 * Ensure an `=encoding UTF-8` at the start of Pod
@@ -213,9 +260,7 @@ Note:
 
 ------
 
-# Bonus Slides
-
-## What's In My `Pod::Weaver` Bundle?
+# What Else Is In My `Pod::Weaver` Bundle?
 
 Note:
 * Inserts `:postlude` section, if any
