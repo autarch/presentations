@@ -27,7 +27,7 @@ Note:
 
 # But ...
 
-* The parser just returns a JSON string!
+* The parser just returns JSON!
 
 ```json
 [
@@ -327,61 +327,54 @@ Note:
 ## The Node for `SELECT`
 
 
-```rust
-pub struct SelectStmt {
-    // NULL, list of DISTINCT ON exprs, or
-    // lcons(NIL,NIL) for all (SELECT DISTINCT)
-    #[serde(rename = "distinctClause")]
-    pub distinct_clause: Option<Vec<Option<Node>>>,
-    // target for SELECT INTO
-    #[serde(rename = "intoClause")]
-    pub into_clause: Option<IntoClauseWrapper>,
-    // the target list (of ResTarget)
-    #[serde(rename = "targetList")]
-    pub target_list: Option<List>,
-    // the FROM clause
-    #[serde(rename = "fromClause")]
-    pub from_clause: Option<List>,
-    // WHERE qualification
-    #[serde(rename = "whereClause")]
-    pub where_clause: Option<Box<Node>>,
-    // GROUP BY clauses
-    #[serde(rename = "groupClause")]
-    pub group_clause: Option<List>,
-    // HAVING conditional-expression
-    #[serde(rename = "havingClause")]
-    pub having_clause: Option<Box<Node>>,
-    // WINDOW window_name AS (...), ...
-    #[serde(rename = "windowClause")]
-    pub window_clause: Option<List>,
-    // untransformed list of expression lists
-    #[serde(rename = "valuesLists")]
-    pub values_lists: Option<Vec<List>>,
-    // sort clause (a list of SortBy's)
-    #[serde(rename = "sortClause")]
-    pub sort_clause: Option<Vec<SortByWrapper>>,
-    // # of result tuples to skip
-    #[serde(rename = "limitOffset")]
-    pub limit_offset: Option<Box<Node>>,
-    // # of result tuples to return
-    #[serde(rename = "limitCount")]
-    pub limit_count: Option<Box<Node>>,
-    // FOR UPDATE (list of LockingClause's)
-    #[serde(rename = "lockingClause")]
-    pub locking_clause: Option<Vec<LockingClauseWrapper>>,
-    // WITH clause
-    #[serde(rename = "withClause")]
-    pub with_clause: Option<WithClauseWrapper>,
-    // type of set op
-    pub op: SetOperation,
-    // ALL specified?
-    #[serde(default)]
-    pub all: bool,
-    // left child
-    pub larg: Option<Box<SelectStmtWrapper>>,
-    // right child
-    pub rarg: Option<Box<SelectStmtWrapper>>,
-}
+```c
+typedef struct SelectStmt
+{
+	NodeTag		type;
+
+	/*
+	 * These fields are used only in "leaf" SelectStmts.
+	 */
+	List	   *distinctClause; /* NULL, list of DISTINCT ON exprs, or
+								 * lcons(NIL,NIL) for all (SELECT DISTINCT) */
+	IntoClause *intoClause;		/* target for SELECT INTO */
+	List	   *targetList;		/* the target list (of ResTarget) */
+	List	   *fromClause;		/* the FROM clause */
+	Node	   *whereClause;	/* WHERE qualification */
+	List	   *groupClause;	/* GROUP BY clauses */
+	Node	   *havingClause;	/* HAVING conditional-expression */
+	List	   *windowClause;	/* WINDOW window_name AS (...), ... */
+
+	/*
+	 * In a "leaf" node representing a VALUES list, the above fields are all
+	 * null, and instead this field is set.  Note that the elements of the
+	 * sublists are just expressions, without ResTarget decoration. Also note
+	 * that a list element can be DEFAULT (represented as a SetToDefault
+	 * node), regardless of the context of the VALUES list. It's up to parse
+	 * analysis to reject that where not valid.
+	 */
+	List	   *valuesLists;	/* untransformed list of expression lists */
+
+	/*
+	 * These fields are used in both "leaf" SelectStmts and upper-level
+	 * SelectStmts.
+	 */
+	List	   *sortClause;		/* sort clause (a list of SortBy's) */
+	Node	   *limitOffset;	/* # of result tuples to skip */
+	Node	   *limitCount;		/* # of result tuples to return */
+	LimitOption limitOption;	/* limit type */
+	List	   *lockingClause;	/* FOR UPDATE (list of LockingClause's) */
+	WithClause *withClause;		/* WITH clause */
+
+	/*
+	 * These fields are used only in upper-level SelectStmts.
+	 */
+	SetOperation op;			/* type of set op */
+	bool		all;			/* ALL specified? */
+	struct SelectStmt *larg;	/* left child */
+	struct SelectStmt *rarg;	/* right child */
+	/* Eventually add fields for CORRESPONDING spec here */
+} SelectStmt;
 ```
 
 ------
@@ -737,3 +730,8 @@ a_expr:     c_expr  { $$ = $1; }
 * Format PL/pgSQL too
 * Upgrade everything to Pg 13
 
+------
+
+## Rust BOF?
+
+* Let's discuss on Slack
