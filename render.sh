@@ -12,9 +12,10 @@ rsync \
     --exclude '**/package.json' \
     --exclude '.git/**' \
     --exclude '.venv/**' \
+    --exclude '/p' \
+    --exclude '/render.sh' \
+    --exclude '/reveal.js' \
+    --exclude '/reveal4' \
     --exclude 'node_modules/**' \
-    --exclude 'p' \
-    --exclude 'render.sh' \
-    --exclude 'reveal4' \
     -a --copy-links --delete \
     ./ ./p/
