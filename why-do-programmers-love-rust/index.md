@@ -59,19 +59,21 @@ Note:
 ## "Systems" language
 
 Note:
-* Used for everything from embedded and kernels to CLI programs to services to games to frontend dev
+* But it's used for everything from embedded and kernels to CLI programs to
+  services to games to frontend dev
 
 ------
 
 ## Compiled and Statically linked
 
-Except libc
-
-Except when you statically link musl
+Note:
+* Except libc
+    * Except when you statically link musl
+* Compiler builds on top of LLVM.
 
 ------
 
-## Strongly and Statically Typed
+## Type-Checked at Compile Time
 
 Note:
 * With a very powerful type system
@@ -84,7 +86,9 @@ Note:
 But no manual memory allocation either
 
 Note:
-* You can control whether the stack or heap is used
+* Most things go on the stack by default
+* But you can put things on the heap
+* You can even replace the global allocator
 
 ------
 
@@ -106,7 +110,7 @@ Note:
 
 # So Why?
 
-## [Recent Reddit Thread on Why Rust Is So Loved](https://www.reddit.com/r/rust/comments/uboyeq/why_is_rust_the_most_loved_programming_language/](https://www.reddit.com/r/rust/comments/uboyeq/why_is_rust_the_most_loved_programming_language/)
+## [Reddit Thread on Why Rust Is So Loved](https://www.reddit.com/r/rust/comments/uboyeq/why_is_rust_the_most_loved_programming_language/](https://www.reddit.com/r/rust/comments/uboyeq/why_is_rust_the_most_loved_programming_language/)
 
 Note:
 * There was a recent /r/rust Reddit thread on why Rust is the most loved
@@ -186,7 +190,7 @@ fn main() {
     returns_pointer();
 }
 
-fn returns_pointer() -> &u64 {
+fn returns_pointer<'a>() -> &'a u64 {
     let val = 42;
     return &val;
 }
@@ -196,7 +200,7 @@ fn returns_pointer() -> &u64 {
 
 ## Memory Safety
 
-![](img/pointer-to-stack.png)
+![](img/memory-safety.png)
 
 ------
 
@@ -284,9 +288,9 @@ fn main() {
 ```
 
 Note:
-* The `Arc` is an atomically reference counted wrapper.
-* It allows for thread-safe shared ownership of a the value it wraps.
-* An `Arc` is read-only.
+* An `Arc` is an atomically reference counted wrapper.
+    * It allows for thread-safe shared ownership of a the value it wraps.
+    * An `Arc` is read-only.
 * The `Mutex` allows us to write to the shared data in a safe way.
 
 ------
@@ -369,7 +373,7 @@ Note:
 * Many built-in traits that implement basic features like comparison, debug output, etc.
 * You can write your own.
 * You can implement *your own* traits on foreign types.
-* This is only in scope when you import the implementation!
+    * This is only in scope when you import the implementation!
 
 ------
 
@@ -386,9 +390,9 @@ println!("{}", Size::Medium);
 ```
 
 Note:
+* Example of a manual implementation of a trait that cannot be derived.
 * The `Display` trait is how the curly braces in format string `{}` are implemented.
 * It calls the `fmt` method on the thing in question.
-* Manual implementation of a trait that cannot be derived.
 
 ------
 
@@ -411,10 +415,11 @@ impl<T: Copy> Reverse for Vec<T> {
 ```
 
 Note:
+* Defines and implements a trait named `Reverse`.
+    * Implemented on a foreign type, `Vec` is part of the std lib.
 * Also using generics.
     * For any type `T` which implements the `Copy` trait.
-* Implemented on a foreign type, `Vec` is part of the std lib.
-* Adds a method named `reverse`.
+* Adds a method named `reverse` to those `Vec`s.
 
 ------
 
@@ -454,6 +459,7 @@ let map2: HashMap<MyStruct, Vec<u64>> = HashMap::new();
 Note:
 * The `HashMap` type is generic over both keys and values.
 * The keys must implement the `Eq` and `Hash` traits.
+* Since `MyStruct` implements those traits we can use it as a `HasMap` key.
 
 ------
 
@@ -480,7 +486,7 @@ Note:
 ## Type System - Generics
 
 ```rust
-#[derive(Default)]
+#[derive(Copy, Default)]
 struct Collection<T: Copy> {
     items: Vec<T>,
     counter: u64,
@@ -589,7 +595,7 @@ Note:
 * Fallible operations return a `Result`.
 * We have to check that it's `Ok` before using it.
 * The question marks are shorthand for that check.
-* Note that our `open_file` function _also_ returns a `Result`.s
+* Note that our `open_file` function _also_ returns a `Result`.
 
 ------
 
@@ -733,11 +739,11 @@ Note:
 Note:
 * Declarative versus procedural is based on how it's implemented, not just how
   they're used.
-* Declarative macros are defined using a syntax sort of like pattern matching
-  and generate new code.
+* Declarative macros are defined using a syntax sort of like pattern matching.
+    * They generate a code using something like variable interpolation.
 * Procedural macros take a raw token stream in and generate a new stream of
   tokens.
-* We've seen a number of macros so far, like `vec!`, `println!`, `derive`,
+* We've seen a number of macros so far, like `vec!`, `println!`, `#derive[]`,
   etc.
 
 ------
@@ -776,15 +782,14 @@ Note:
 ```
 $> rustup update
 
-$> rustup component add clippy
-
 $> rustup component add rustfmt
 ```
 
 Note:
 * Will install the latest stable release.
-    * The compiler, `cargo`, and docs.
-* Can also install optional components like `clippy`.
+    * The compiler, `cargo`, docs, `clippy`, and `rustfmt`.
+* Can install multiple releases of Rust and switch between them easily.
+* Can install toolchains for other architectures to support cross-compilation.
 
 ------
 
@@ -794,10 +799,19 @@ Note:
 $> cargo new some-program
 
 $> cargo new --lib some-lib
+
+$> cargo build
+
+$> cargo test
+
+$> cargo run
 ```
 
 Note:
 * This makes a new crate, which can be an executable or a library.
+    * The default is an executable.
+* You also use cargo to build and test code.
+* And you can run code with cargo and pretend Rust is a scripting language.
 
 ------
 
@@ -901,7 +915,7 @@ Note:
 * Embedded docs, just like perldoc.
 * Uses Markdown.
 * `rustdoc` generates HTML docs.
-* Tests code embedded in docs by default.
+* When you run `cargo test` it tests code embedded in docs by default.
 
 ------
 
@@ -914,6 +928,7 @@ Note:
 [doc.rs](https://docs.rs/)
 
 Note:
+* "Crates" are Rust's name for packages, both libraries and executables.
 * crates.io is the official package repo
     * Like CPAN.
 * lib.rs has a much better search system
@@ -931,6 +946,8 @@ Note:
 * Various Discord servers
 * Zulip chat
 * This Week in Rust
+* My experience with the Rust community has been very positive. People are
+  friendly and welcoming, and bad behavior is not tolerated.
 
 ------
 
