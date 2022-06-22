@@ -2,10 +2,20 @@
 
 ## Dave Rolsky
 
-https://github.com/autarch/presentations/why-do-programmers-love-rust
+https://bit.ly/love-rust
 
 Note:
 * Check out the repo for all example code
+
+------
+
+![](img/qr-slides.png)
+
+https://bit.ly/love-rust
+
+Note:
+* I encourage you to follow along on your own device. Some slides have
+  detailed error messages that may be hard to read from afar.
 
 ------
 
