@@ -11,7 +11,9 @@ Note:
 
 ![](img/mongodb-logo.png)
 
-Thanks for sending me here
+Note:
+* Thanks for sending me here.
+* We are hiring, including a number of remote engineering positions.
 
 ------
 
