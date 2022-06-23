@@ -36,7 +36,7 @@ Note:
 
 ## 2021 Stack Overflow Survey
 
-![](img/most-loved.png)
+[![](img/most-loved.png)](img/most-loved.png)
 
 <small>blue is love, purple is dread</small>
 
@@ -45,7 +45,7 @@ Note:
 
 ------
 
-## Also 2016-2020
+## Also 2016-2020 and 2022
 
 Note:
 * People *really* love Rust
@@ -212,7 +212,7 @@ fn returns_pointer<'a>() -> &'a u64 {
 
 ## Memory Safety
 
-![](img/memory-safety.png)
+[![](img/memory-safety.png)](img/memory-safety.png)
 
 ------
 
@@ -245,7 +245,7 @@ fn main() {
 
 ## Memory Safety
 
-![](img/write-while-reading.png)
+[![](img/write-while-reading.png)](img/write-while-reading.png)
 
 ------
 
@@ -276,7 +276,7 @@ Note:
 
 ## Fearless Concurrency
 
-![](img/threads-with-shared-data.png)
+[![](img/threads-with-shared-data.png)](img/threads-with-shared-data.png)
 
 ------
 
@@ -350,7 +350,7 @@ pub fn match_size(size: Size) {
 
 ## Type System - Enums
 
-![](img/enum-match-error.png)
+[![](img/enum-match-error.png)](img/enum-match-error.png)
 
 Note:
 * Tells me which variant I missed, where I missed it, and where the enum is defined.
@@ -516,7 +516,7 @@ Note:
 
 ## Type System - Generics
 
-![](img/generic-trait-bounds-error.png)
+[![](img/generic-trait-bounds-error.png)](img/generic-trait-bounds-error.png)
 
 Note:
 * The `String` type does not implement copy.
@@ -545,7 +545,7 @@ fn next_value(v: u64) -> Option<u64> {
 
 ## Type System - No Nil Values
 
-![](img/option-instead-of-int.png)
+[![](img/option-instead-of-int.png)](img/option-instead-of-int.png)
 
 Note:
 * The compiler doesn't let us treat an `Option` as an integer.
@@ -586,7 +586,7 @@ Note:
 
 ## Type System - No Nil Values
 
-![](img/write-to-file-result.png)
+[![](img/write-to-file-result.png)](img/write-to-file-result.png)
 
 ------
 
