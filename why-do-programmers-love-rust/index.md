@@ -2,11 +2,6 @@
 
 ## Dave Rolsky
 
-https://bit.ly/love-rust
-
-Note:
-* Check out the repo for all example code
-
 ------
 
 ![](img/qr-slides.png)
@@ -16,6 +11,15 @@ https://bit.ly/love-rust
 Note:
 * I encourage you to follow along on your own device. Some slides have
   detailed error messages that may be hard to read from afar.
+
+------
+
+## The Repo
+
+https://bit.ly/that-repo
+
+Note:
+* Check out the repo for all example code
 
 ------
 
