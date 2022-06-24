@@ -6,6 +6,8 @@
 
 **`powerline-go`**
 
+https://github.com/justjanne/powerline-go
+
 In my `.bash_profile`:
 
 ```sh
@@ -21,6 +23,8 @@ PS1="$( powerline-go \
 ------
 
 **`ubi`**
+
+https://github.com/houseabsolute/precious
 
 Universal Binary Installer
 
@@ -93,6 +97,8 @@ alias ls="exa --color=always"
 ------
 
 **`precious`**
+
+https://github.com/houseabsolute/precious
 
 * My replacement for `tidyall`
 * Runs many linters and/or tidiers
