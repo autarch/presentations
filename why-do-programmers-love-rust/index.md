@@ -756,7 +756,7 @@ Note:
 * Declarative versus procedural is based on how it's implemented, not just how
   they're used.
 * Declarative macros are defined using a syntax sort of like pattern matching.
-    * They generate a code using something like variable interpolation.
+    * They generate code using something like variable interpolation.
 * Procedural macros take a raw token stream in and generate a new stream of
   tokens.
 * We've seen a number of macros so far, like `vec!`, `println!`, `#derive[]`,
@@ -783,7 +783,7 @@ let sql = sql!(SELECT * FROM person WHERE name = 'Bob');
 ```
 
 Note:
-* Writing macros is a fairly advanced topic I won't get into.
+* Writing macros is a fairly advanced topic I won't get into it.
 
 ------
 
