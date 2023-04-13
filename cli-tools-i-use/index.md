@@ -24,7 +24,7 @@ PS1="$( powerline-go \
 
 **`ubi`**
 
-https://github.com/houseabsolute/precious
+https://github.com/houseabsolute/ubi
 
 Universal Binary Installer
 
