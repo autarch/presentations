@@ -20,6 +20,12 @@ PS1="$( powerline-go \
             -newline )"
 ```
 
+Note:
+* A much fancier shell prompt.
+* You can configure it to do many different things.
+* It _does_ require installing some custom fonts that you must use in your
+  terminal for the full fancy look.
+
 ------
 
 **`ubi`**
@@ -42,6 +48,12 @@ $> curl --silent --location \
 
 Also has a Powershell boostrap script.
 
+Note:
+* A single-file binary tool I wrote designed to install any single-file binary
+  release on GitHub.
+* Lots of Go and Rust tools release as a single binary. This lets you easily
+  install them from the CLI.
+
 ------
 
 **`delta`**
@@ -50,7 +62,7 @@ Also has a Powershell boostrap script.
 
 In your `.gitconfig`:
 
-```toml
+```plaintext
 [core]
 	pager = delta --light
 [delta]
@@ -60,6 +72,9 @@ In your `.gitconfig`:
 [interactive]
     diffFilter = delta --color-only --light
 ```
+
+Note:
+* A pretty, language-aware replacement for diff.
 
 ------
 
@@ -100,7 +115,7 @@ alias ls="exa --color=always"
 
 https://github.com/houseabsolute/precious
 
-* My replacement for `tidyall`
+* **One code quality tool to rule them all**
 * Runs many linters and/or tidiers
 
 ------
