@@ -23,14 +23,6 @@ Note:
 
 ------
 
-![](img/mongodb-logo.png)
-
-Note:
-* Thanks for sending me here.
-* We are hiring, including a number of remote engineering positions.
-
-------
-
 ## This Is Not a Rust Tutorial
 
 Note:
@@ -129,8 +121,7 @@ Note:
 ## [Reddit Thread on Why Rust Is So Loved](https://www.reddit.com/r/rust/comments/uboyeq/why_is_rust_the_most_loved_programming_language/](https://www.reddit.com/r/rust/comments/uboyeq/why_is_rust_the_most_loved_programming_language/)
 
 Note:
-* There was a recent /r/rust Reddit thread on why Rust is the most loved
-  language.
+* An /r/rust Reddit thread on why Rust is the most loved language.
 * Here's what they mentioned, all of which agrees with what I like about Rust.
 
 ------
@@ -599,7 +590,7 @@ Note:
 ```rust
 use std::{fs::File, io::{self, Write}};
 
-fn open_file() -> io::Result<()> {
+fn write_file() -> io::Result<()> {
     let mut file = File::options().write(true)
         .open("/path/to/file")?;
     file.write("content".as_bytes())?;
@@ -611,7 +602,7 @@ Note:
 * Fallible operations return a `Result`.
 * We have to check that it's `Ok` before using it.
 * The question marks are shorthand for that check.
-* Note that our `open_file` function _also_ returns a `Result`.
+* Note that our `write_file` function _also_ returns a `Result`.
 
 ------
 
@@ -619,7 +610,7 @@ Note:
 
 ```rust
 use std::{fs::File, io::{self, Write}};
-fn open_file() -> io::Result<()> {
+fn write_file() -> io::Result<()> {
     let file = File::options().write(true)
         .open("/path/to/file");
     let mut file = match file {
@@ -634,7 +625,8 @@ fn open_file() -> io::Result<()> {
 ```
 
 Note:
-* Here's the longer version of what the question mark does.
+* Here's the longer version of what the question mark does, with some type
+  conversion stuff omitted.
 
 ------
 
@@ -659,6 +651,7 @@ fn returns_option(v: bool) -> Option<&'static str> {
 Note:
 * We already saw several `match` examples, but pattern matching can be used in
   other expressions.
+* The `val` variable will contain `&str`, not an `Option`.
 
 ------
 
@@ -783,7 +776,8 @@ let sql = sql!(SELECT * FROM person WHERE name = 'Bob');
 ```
 
 Note:
-* Writing macros is a fairly advanced topic I won't get into it.
+* Writing macros is a fairly advanced topic I won't get into, but it's very
+  powerful.
 
 ------
 
@@ -893,7 +887,7 @@ $> cargo upgrade
 
 Note:
 * One of my favorite cargo add-ons.
-* Will be added to the core at some point in the future (I think).
+* Some of its functionality has been added to the core already.
 
 ------
 
