@@ -118,7 +118,7 @@ Note:
 
 # So Why?
 
-## [Reddit Thread on Why Rust Is So Loved](https://www.reddit.com/r/rust/comments/uboyeq/why_is_rust_the_most_loved_programming_language/](https://www.reddit.com/r/rust/comments/uboyeq/why_is_rust_the_most_loved_programming_language/)
+## [Reddit Thread on Why Rust Is So Loved](https://www.reddit.com/r/rust/comments/uboyeq/why_is_rust_the_most_loved_programming_language/)
 
 Note:
 * An /r/rust Reddit thread on why Rust is the most loved language.
